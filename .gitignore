@@ -1,0 +1,6 @@
+# 原版 Superpowers 克隆，仅作为参考，不纳入当前仓库
+/superpowers/
+.idea/
+.codex/
+.superpowers/
+*.log
