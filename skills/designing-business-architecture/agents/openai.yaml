@@ -1,0 +1,7 @@
+interface:
+  display_name: "设计业务架构"
+  short_description: "围绕业务负载比较计算、存储、接口、迁移与系统架构方案"
+  default_prompt: "使用 $designing-business-architecture 为这个业务能力比较架构方案并形成可批准的决定。"
+
+policy:
+  allow_implicit_invocation: false

@@ -1,337 +1,191 @@
-# 14 个中文 Skill 的调用链路
+# Easypower 工作流
 
-本文说明当前仓库中 14 个 skill 的职责、触发时机和相互关系。它描述的是推荐工作流，不代表每个任务都必须经过全部节点。
+本文描述 Easypower 当前已完成的第一条业务驱动开发主流程。后续正式 Skill 会继续加入 `skills/`，但不会因为来源仓库存在某个 Skill 就机械复制。
 
-## 一、总览
+完整 Skill 边界和建设顺序见 [Easypower Skill 能力地图](SKILL-MAP.md)。
 
-Skill 的关系可以分成四类：
+## 一、目标
 
-1. **启动引导**：识别当前请求应该使用哪些 skill。
-2. **开发主链路**：从需求澄清进入计划、实现、评审、验证和收尾。
-3. **条件分支**：遇到并行任务、缺陷、代码评审意见时才进入。
-4. **元工作流**：创建或修改 skill 时使用，不属于普通功能开发链路。
+Easypower 面向需要先审核 Spec 和 Plan、再交给 Code Agent 或子代理持续执行的业务开发任务。
+
+它以可验收的业务结果作为控制单位：
+
+- Spec 固定业务目标和验收契约；
+- 主 Plan 固定业务切片、依赖和自治边界；
+- 子 Plan 在进入执行前沿时按最新代码展开；
+- Agent 在批准范围内自主实现，重大变化升级给用户；
+- 完成结论由业务证据支持，而不是由测试数量支持。
+
+## 二、默认入口
+
+当前第一个正式入口是 [business-driven-development](skills/business-driven-development/SKILL.md)。
+
+该 Skill 禁止隐式调用。用户需要通过 `$business-driven-development` 或等价的显式 Skill 调用启动完整流程。普通问答、简单修改和状态检查不自动进入该工作流。
 
 ```mermaid
 flowchart TD
-    A[开始对话] --> B[using-superpowers\n发现适用 Skill]
-    B --> C{需要设计或创造性工作?}
-    C -- 是 --> D[brainstorming\n澄清需求并取得设计批准]
-    C -- 否 --> E{已有实现计划?}
-    D --> F[writing-plans\n编写实现计划]
-    E -- 否且任务多步骤 --> F
-    E -- 是 --> G[using-git-worktrees\n确认隔离工作区]
-    F --> G
-    G --> H{平台支持子代理?}
-    H -- 是 --> I[subagent-driven-development\n逐任务实现与双阶段评审]
-    H -- 否 --> J[executing-plans\n顺序执行计划]
-    I --> K[test-driven-development\n每个行为走 RED-GREEN-REFACTOR]
-    J --> K
-    K --> L{存在两个以上独立任务?}
-    L -- 是 --> M[dispatching-parallel-agents\n并行调度]
-    L -- 否 --> N[继续实现]
-    M --> N
-    N --> O[requesting-code-review\n发起代码评审]
-    O --> P{收到评审意见?}
-    P -- 是 --> Q[receiving-code-review\n验证并处理意见]
-    Q --> K
-    P -- 否 --> R[verification-before-completion\n完成前验证]
-    R --> S[finishing-a-development-branch\n决定合并、PR、保留或丢弃]
-
-    N -.遇到缺陷或测试失败.-> T[systematic-debugging\n追踪根因]
-    T --> K
-    B -.创建或修改 Skill.-> U[writing-skills\n编写和测试 Skill]
+    A[用户显式调用 Skill] --> B[调查仓库和业务事实]
+    B --> C[讨论业务 Spec]
+    C --> D{重要问题能否靠讨论解决?}
+    D -- 外部事实或运行验证 --> E[Research / Prototype]
+    D -- 重要架构取舍 --> E2[designing-business-architecture]
+    E --> C
+    E2 --> C
+    D -- 是 --> F[用户批准 Spec]
+    F --> G[编写主 Plan 和首个子 Plan]
+    G --> H[用户批准主 Plan]
+    H --> I[执行核心业务闭环 P01]
+    I --> J{业务验收通过?}
+    J -- 否 --> K[诊断并修复或升级审批]
+    K --> I
+    J -- 是 --> L[更新执行前沿]
+    L --> M[按需展开增强子 Plan]
+    M --> N[串行或并行执行增强]
+    N --> O[增强验收并回归核心闭环]
+    O --> P{仍有 Ready 切片?}
+    P -- 是 --> L
+    P -- 否 --> Q[生成业务交付报告]
 ```
 
-## 二、14 个 Skill 的角色
+## 三、Spec
 
-| Skill | 角色 | 在链路中的位置 |
+Spec 是业务事实来源，回答：
+
+- 为什么做；
+- 谁使用；
+- 最小业务闭环是什么；
+- 哪些业务规则和不变量必须成立；
+- 哪些增强能力纳入本次交付；
+- 如何判断每项业务结果正确；
+- 哪些内容明确不做。
+
+仓库或数据中能够查明的事实由 Agent 调查。业务口径、范围和取舍由 Agent 提出推荐，用户确认。
+
+业务方没有提供目标文件时，Agent 应通过输入输出样例、决策表、权限矩阵、状态转换、业务不变量或用户可观察结果构造验收契约。
+
+详细规则见 [Spec 协议](skills/business-driven-development/references/spec-protocol.md)。
+
+## 四、决策分支
+
+只有重要未知项无法通过普通讨论可靠解决时，才使用以下分支：
+
+| 分支 | 适用问题 | 产物 |
 |---|---|---|
-| `using-superpowers` | 启动引导和能力发现 | 每次对话最先检查 |
-| `brainstorming` | 把想法整理成已确认的设计 | 写代码前 |
-| `using-git-worktrees` | 创建或确认隔离工作区 | 修改代码前 |
-| `writing-plans` | 把设计拆成可执行任务 | 实现前 |
-| `subagent-driven-development` | 用子代理逐任务实现和评审 | 有子代理能力时执行计划 |
-| `executing-plans` | 在没有子代理时顺序执行计划 | 无子代理能力时执行计划 |
-| `test-driven-development` | 用测试驱动每个行为的实现 | 实现过程中 |
-| `dispatching-parallel-agents` | 并行处理相互独立的问题 | 有 2 个以上独立任务时 |
-| `systematic-debugging` | 从现象追踪到根因 | 出现缺陷或异常时 |
-| `requesting-code-review` | 发起独立代码评审 | 任务或功能完成后 |
-| `receiving-code-review` | 判断和处理评审反馈 | 收到反馈后 |
-| `verification-before-completion` | 用实际输出证明完成 | 最终声明前 |
-| `finishing-a-development-branch` | 处理分支整合和清理 | 验证通过后 |
-| `writing-skills` | 创建、修改和测试 skill | 元工作流，不属于普通开发主链路 |
+| Research | 依赖官方文档、规范或外部事实 | 有来源的结论 |
+| Prototype | 状态、计算或交互需要运行后判断 | 一次性原型和验证结论 |
+| `designing-business-architecture` | 公共接口、数据模型、计算、存储或迁移架构难以逆转 | 业务负载、多个方案、取舍、迁移和批准决定 |
 
-## 三、启动阶段：`using-superpowers`
+分支产物用于消除决策歧义，不直接替代生产实现。
 
-入口文件：[skills/using-superpowers/SKILL.md](skills/using-superpowers/SKILL.md)
+## 五、渐进式 Plan
 
-每次新请求先检查所有 skill 的 `name` 和 `description`，判断哪些可能适用，再读取对应正文。它的作用是“发现和选择”，不是替代其他 skill 的具体流程。
-
-典型判断：
-
-- 新功能、组件或行为变化：进入 `brainstorming`；
-- 已有规格和多步骤计划：进入 `writing-plans` 或执行 skill；
-- 测试失败、异常行为：进入 `systematic-debugging`；
-- 收到代码评审意见：进入 `receiving-code-review`；
-- 创建或修改 skill：进入 `writing-skills`。
-
-如果多个 skill 同时适用，先遵守有硬门禁的前置流程，再进入实现流程。
-
-## 四、开发主链路
-
-### 1. 需求和设计：`brainstorming`
-
-入口文件：[skills/brainstorming/SKILL.md](skills/brainstorming/SKILL.md)
-
-适用于创造性工作和行为变化。它完成：
-
-1. 检查项目上下文；
-2. 逐个澄清目的、约束和验收标准；
-3. 比较 2-3 种方案；
-4. 分段展示设计；
-5. 等待用户批准；
-6. 写入设计文档。
-
-**关键门禁：**设计获得批准前不得写实现代码或调用实现类 skill。
-
-设计通过后进入 `writing-plans`。如果任务不需要设计，例如纯查询、简单状态检查或用户已经给出完整方案，可以跳过此节点，但不能因此跳过必要验证。
-
-### 2. 编写计划：`writing-plans`
-
-入口文件：[skills/writing-plans/SKILL.md](skills/writing-plans/SKILL.md)
-
-将需求拆成 2-5 分钟可理解和开始执行的任务。每项任务要说明：
-
-- 文件路径和代码边界；
-- 依赖和执行顺序；
-- 测试先行步骤；
-- 实现逻辑和错误处理；
-- 验收标准和验证命令。
-
-计划未经用户批准，不应直接进入实现。
-
-### 3. 工作区隔离：`using-git-worktrees`
-
-入口文件：[skills/using-git-worktrees/SKILL.md](skills/using-git-worktrees/SKILL.md)
-
-它负责确认当前工作区是否已经隔离；没有隔离时创建 worktree 或使用平台原生工作区能力。推荐位置是设计批准后、开始执行计划前。
-
-它不会替代 `writing-plans`，也不会负责实现功能。它只解决“在哪里安全地改”的问题。
-
-### 4. 选择计划执行器
-
-计划批准并准备好工作区后，根据平台能力二选一：
-
-#### 有子代理能力：`subagent-driven-development`
-
-入口文件：[skills/subagent-driven-development/SKILL.md](skills/subagent-driven-development/SKILL.md)
-
-对计划中的每个任务：
-
-1. 提取最小任务上下文；
-2. 调度新的实现代理；
-3. 做规格符合性评审；
-4. 做代码质量评审；
-5. 通过后进入下一任务；
-6. 全部完成后做一次完整分支评审。
-
-#### 没有子代理能力：`executing-plans`
-
-入口文件：[skills/executing-plans/SKILL.md](skills/executing-plans/SKILL.md)
-
-按计划顺序执行任务，在每个检查点运行验证。遇到计划缺口、测试失败或指令不清时停止并报告，不要假装已经完成子代理评审。
-
-这两个 skill 是**互斥的计划执行器**，通常不应同时使用。
-
-### 5. 实现过程：`test-driven-development`
-
-入口文件：[skills/test-driven-development/SKILL.md](skills/test-driven-development/SKILL.md)
-
-TDD 是实现阶段的横切流程，不是一次性节点。每个可观察行为都遵循：
+Plan 使用三层结构：
 
 ```text
-RED：先写测试并观察它因预期原因失败
-  -> GREEN：写让测试通过的最小实现
-  -> REFACTOR：保持绿色后清理结构
+Spec
+  -> 主 Plan：全局执行地图
+      -> 子 Plan：当前业务切片的实现与验收
+          -> Agent Brief：单个执行代理的最小上下文
 ```
 
-因此，`subagent-driven-development` 或 `executing-plans` 负责“任务怎么推进”，`test-driven-development` 负责“每项行为怎么实现”。
+主 Plan 保持短小，包含：
 
-## 五、条件分支
+- 业务切片及其验收摘要；
+- 依赖图和执行前沿；
+- 核心业务闭环里程碑；
+- 并行与所有权边界；
+- 全局回归要求；
+- 自治、停止和恢复规则。
 
-### 1. 并行任务：`dispatching-parallel-agents`
+大型功能不在最初写完所有子 Plan。主 Plan 批准时确定所有切片的目标、依赖和验收；某个切片进入执行前沿时，再根据最新代码展开详细子 Plan。
 
-入口文件：[skills/dispatching-parallel-agents/SKILL.md](skills/dispatching-parallel-agents/SKILL.md)
+Plan 可以包含少量代码。只有删除片段会导致执行者对重要业务或架构决定产生不同理解时，才保留公式、伪代码、Schema、状态机、公共接口或性能关键逻辑。普通实现留给执行 Agent。
 
-只有在两个或更多问题满足以下条件时才进入：
+详细规则见 [Plan 协议](skills/business-driven-development/references/plan-protocol.md)。
 
-- 根因或任务边界相互独立；
-- 不共享正在编辑的文件或资源；
-- 不存在顺序依赖；
-- 可以分别验证后再整合。
+## 六、业务切片
 
-它通常由计划执行阶段调用，是 `subagent-driven-development` 的可选分支，不是所有任务的固定步骤。相关问题、共享状态或探索性调查不应强行并行。
+每个切片交付一条可独立验收的端到端业务能力。数据库、后端、前端和测试通常是同一切片中的实施步骤，而不是四个互不产生业务结果的任务。
 
-### 2. 缺陷和异常：`systematic-debugging`
+推荐顺序：
 
-入口文件：[skills/systematic-debugging/SKILL.md](skills/systematic-debugging/SKILL.md)
+1. P01 完成最小核心业务闭环；
+2. P01 取得直接业务证据；
+3. 计算、展示、存储或运行增强进入执行前沿；
+4. 独立增强在所有权不冲突时并行；
+5. 每项增强验收后回归 P01；
+6. 所有切片完成后进行适合影响范围的集成验证。
 
-任何测试失败、构建错误、竞态、污染或异常行为都进入该分支：
+## 七、测试和验证
 
-1. 观察并稳定复现；
-2. 追踪数据和控制流；
-3. 提出并证伪单一假设；
-4. 写回归测试、修复根因并验证。
+测试服务于业务判断，不作为工作量指标。
 
-修复完成后回到 `test-driven-development` 或当前任务执行器，而不是直接声称完成。
+| 变化 | 推荐验证 |
+|---|---|
+| 文档、文案、低风险配置 | 格式、差异或针对性检查 |
+| 普通业务切片 | 切片验收和核心闭环回归 |
+| 金额、权限、状态、数据一致性 | 代表性场景、关键边界和集成验证 |
+| 公共接口、迁移、基础设施 | 受影响消费者、构建、回滚和更广回归 |
+| 性能增强 | 结果等价和固定工作负载下的前后基准 |
 
-### 3. 发起代码评审：`requesting-code-review`
+优先在最高稳定的业务接口验证。同一业务结果已有高层证据时，不在每个内部代码层重复测试。复杂公式、算法、状态转换和历史回归可以保留针对性单元测试。
 
-入口文件：[skills/requesting-code-review/SKILL.md](skills/requesting-code-review/SKILL.md)
+## 八、自主执行
 
-在重要任务、主要功能或合并前调用。它准备基线提交、当前提交、需求和评审模板，调度只读评审者。
+只有 Spec 和主 Plan 都获得明确批准，才进入无人值守执行。
 
-评审是质量门禁，不等于最终验证。评审者的结论必须对照实际 diff 和测试输出检查。
+Agent 可以自主：
 
-### 4. 接收评审反馈：`receiving-code-review`
+- 展开不改变已批准契约的子 Plan；
+- 选择可逆的等价实现；
+- 修复局部实现缺陷；
+- 调度依赖已满足且所有权不冲突的任务；
+- 在失败后继续其他独立执行前沿。
 
-入口文件：[skills/receiving-code-review/SKILL.md](skills/receiving-code-review/SKILL.md)
+Agent 必须升级审批：
 
-收到反馈后进入：
+- 改变业务范围、验收标准或不变量；
+- 改变公共接口、数据模型或关键架构；
+- 出现多个合理但证据无法区分的业务解释；
+- 需要新的外部权限、生产操作或不可恢复动作；
+- 主 Plan 未覆盖的系统性风险使原授权不再充分。
 
-```text
-完整阅读 -> 重述要求 -> 对照代码验证 -> 技术评估
-    -> 确认或提出异议 -> 逐项实现 -> 逐项测试
-```
+详细规则见 [executing-business-plans](skills/executing-business-plans/SKILL.md)。
 
-它可能回到 `test-driven-development`，也可能回到 `systematic-debugging`。评审意见不是无需核验的命令；不清楚时先暂停并询问。
+## 九、交付报告
 
-## 六、完成和收尾
+最终报告按 Spec 逐项说明：
 
-### 1. 完成前验证：`verification-before-completion`
+- 哪个业务目标完成；
+- 使用了什么输入和运行方式；
+- 预期结果与实际结果如何比较；
+- 每个增强带来了什么变化；
+- 核心业务闭环是否持续成立；
+- 计划发生了哪些经批准或未解决的偏差；
+- 代码、数据、截图、日志和基准等证据位于哪里。
 
-入口文件：[skills/verification-before-completion/SKILL.md](skills/verification-before-completion/SKILL.md)
+“测试通过”可以成为证据的一部分，但不能替代业务结论。
 
-在最终回复、提交或创建 PR 前调用。必须运行新鲜的验证命令，阅读完整输出，并将结果与需求逐项对照。
+## 十、参考源与后续 Skill
 
-它是所有成功链路的共同前置：
+旧 Superpowers 中文译版已经移动到 `references/superpowers-zh/skills/`，仅用于研究、比较和逐步吸收成熟机制：
 
-```text
-实现完成
-  -> 代码评审已处理
-  -> verification-before-completion
-  -> 才能声称完成
-```
+- `using-superpowers`
+- `brainstorming`
+- `writing-plans`
+- `test-driven-development`
+- `subagent-driven-development`
+- 其余调试、评审、验证和分支管理 Skill
 
-“代码看起来正确”“之前测试过”“应该可以”都不能替代当前验证证据。
+这些目录不属于 Skill 发布路径，不应安装或参与自动发现。
 
-### 2. 分支收尾：`finishing-a-development-branch`
+后续每个 Easypower Skill 都应满足：
 
-入口文件：[skills/finishing-a-development-branch/SKILL.md](skills/finishing-a-development-branch/SKILL.md)
+1. 对应一个独立、可重复出现的实际工作问题；
+2. 触发条件足够窄，不因普通对话频繁启动；
+3. 明确它与业务目标、主流程和其他 Skill 的关系；
+4. 先观察没有该 Skill 时的失败行为；
+5. 编写最小 Skill 后使用相同场景前向验证；
+6. 验证通过后才加入 `skills/`。
 
-只有测试和最终验证通过后进入。它先识别普通仓库、命名分支 worktree 或 detached HEAD，再向用户提供：
-
-1. 本地合并；
-2. 推送并创建 PR；
-3. 保留当前分支；
-4. 丢弃工作。
-
-丢弃必须获得精确确认；清理 worktree 前必须确认它确实由当前流程创建。
-
-## 七、异常回路
-
-### 测试失败
-
-```text
-当前任务 -> systematic-debugging
-          -> 找到根因
-          -> 补回归测试
-          -> test-driven-development
-          -> 继续当前任务
-```
-
-### 评审发现问题
-
-```text
-requesting-code-review
-          -> receiving-code-review
-          -> 明确反馈
-          -> TDD 或 systematic-debugging
-          -> 再次评审
-          -> verification-before-completion
-```
-
-### 计划不可执行
-
-```text
-executing-plans / subagent-driven-development
-          -> 停止
-          -> 返回用户澄清或回到 writing-plans
-          -> 更新并重新批准计划
-```
-
-## 八、创建或修改 Skill 的独立链路
-
-入口文件：[skills/writing-skills/SKILL.md](skills/writing-skills/SKILL.md)
-
-当任务本身是创建或修改 skill 时，使用 `writing-skills`，而不是把普通功能开发链路套在文档上。推荐流程：
-
-```text
-明确真实使用例
-  -> 设计触发条件和资源
-  -> 先做无 Skill 基线测试（RED）
-  -> 写最小 SKILL.md（GREEN）
-  -> 用真实任务和压力场景验证
-  -> 关闭合理化漏洞（REFACTOR）
-  -> 校验 frontmatter、引用和脚本
-```
-
-`writing-skills` 可以引用 `test-driven-development` 的思想，但它是元工作流，通常不与 `brainstorming`、`writing-plans` 和普通实现链路串联。
-
-## 九、最常见的完整调用示例
-
-用户提出：“为现有项目增加一个带权限控制的导出功能。”
-
-推荐调用顺序：
-
-1. `using-superpowers`：发现这是功能和行为变化。
-2. `brainstorming`：确认用户、权限、导出范围和失败行为，取得设计批准。
-3. `writing-plans`：拆分权限、接口、导出器、测试和回归任务。
-4. `using-git-worktrees`：创建隔离分支并确认基线测试。
-5. 选择 `subagent-driven-development` 或 `executing-plans`。
-6. 每个任务内部使用 `test-driven-development`。
-7. 如果权限和导出器任务彼此独立，可使用 `dispatching-parallel-agents`。
-8. 完成主要任务后使用 `requesting-code-review`。
-9. 评审意见进入 `receiving-code-review`，必要时回到 TDD 或系统化调试。
-10. 使用 `verification-before-completion` 运行完整验证。
-11. 使用 `finishing-a-development-branch` 选择合并、PR、保留或丢弃。
-
-## 十、使用边界
-
-- 不是每个请求都需要 14 个 skill；由 `using-superpowers` 根据触发条件选择。
-- `brainstorming` 防止未经确认就实现；`writing-plans` 防止没有可执行拆分就编码；两者解决的问题不同。
-- `subagent-driven-development` 与 `executing-plans` 通常二选一。
-- `dispatching-parallel-agents` 只处理真正独立的任务。
-- `systematic-debugging` 先找根因，不是快速叠加补丁的工具。
-- `requesting-code-review` 和 `receiving-code-review` 分别对应发起和处理评审。
-- `verification-before-completion` 是证据门禁；`finishing-a-development-branch` 是整合和清理流程。
-- `writing-skills` 只在 skill 本身需要创建、修改或测试时使用。
-
-## 十一、文件索引
-
-每个 skill 的具体规则仍以对应入口文件为准：
-
-- [brainstorming](skills/brainstorming/SKILL.md)
-- [dispatching-parallel-agents](skills/dispatching-parallel-agents/SKILL.md)
-- [executing-plans](skills/executing-plans/SKILL.md)
-- [finishing-a-development-branch](skills/finishing-a-development-branch/SKILL.md)
-- [receiving-code-review](skills/receiving-code-review/SKILL.md)
-- [requesting-code-review](skills/requesting-code-review/SKILL.md)
-- [subagent-driven-development](skills/subagent-driven-development/SKILL.md)
-- [systematic-debugging](skills/systematic-debugging/SKILL.md)
-- [test-driven-development](skills/test-driven-development/SKILL.md)
-- [using-git-worktrees](skills/using-git-worktrees/SKILL.md)
-- [using-superpowers](skills/using-superpowers/SKILL.md)
-- [verification-before-completion](skills/verification-before-completion/SKILL.md)
-- [writing-plans](skills/writing-plans/SKILL.md)
-- [writing-skills](skills/writing-skills/SKILL.md)
+`business-driven-development` 是第一项成果，不代表 Easypower 最终只包含一个 Skill。

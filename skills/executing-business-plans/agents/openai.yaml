@@ -1,0 +1,7 @@
+interface:
+  display_name: "执行业务计划"
+  short_description: "按批准的业务计划持续调度子代理、恢复状态并交付业务证据"
+  default_prompt: "使用 $executing-business-plans 执行已经批准的业务 Spec 和主 Plan。"
+
+policy:
+  allow_implicit_invocation: false
