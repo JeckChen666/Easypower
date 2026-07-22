@@ -1,0 +1,7 @@
+interface:
+  display_name: "研究业务决策"
+  short_description: "基于第一方来源调查外部事实并形成可引用的业务决策证据"
+  default_prompt: "使用 $researching-decisions 调查这个决策依赖的外部事实并留下来源。"
+
+policy:
+  allow_implicit_invocation: false

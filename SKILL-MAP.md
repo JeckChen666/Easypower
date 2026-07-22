@@ -23,7 +23,7 @@ Easypower 不提供“每轮对话都先运行”的全局路由 Skill。Skill �
 | `diagnosing-business-failures` | 质量保障 | 已完成 | 用户或执行流程显式调用 | 从业务失败证据建立反馈循环、定位根因并防止回归 |
 | `reviewing-business-delivery` | 质量保障 | 已完成 | 用户或执行流程显式调用 | 分别审查业务契约符合度和工程风险，并汇总交付证据 |
 | `prototyping-decisions` | 决策支持 | 已完成 | 用户或主流程显式调用 | 用一次性逻辑或 UI 原型回答无法靠文字解决的问题 |
-| `researching-decisions` | 决策支持 | P2 | 用户或主流程显式调用 | 基于第一方资料调查事实并留下可引用结论 |
+| `researching-decisions` | 决策支持 | 已完成 | 用户或主流程显式调用 | 基于第一方资料调查事实并留下可引用结论 |
 | `modeling-business-domain` | 决策支持 | P2 | 用户或主流程显式调用 | 统一业务语言、具体场景和少量真正必要的 ADR |
 | `wayfinding-large-work` | 主流程入口 | P2 | 用户显式调用 | 为超过一个上下文的大型模糊工作维护决策地图和未知前沿 |
 | `triaging-business-requests` | 需求入口 | P3 | 用户显式调用 | 验证外部需求或缺陷，并形成可交给 Agent 的业务 Brief |
@@ -130,7 +130,9 @@ flowchart TD
 
 `prototyping-decisions` 已完成业务逻辑口径、现有页面 UI 方案和供应商能力工具选择三个隔离前向场景。它只回答必须运行后才能判断的一个问题，并将外部事实显式交给 `$researching-decisions`。
 
-下一步依次建设 `researching-decisions`、`modeling-business-domain` 和 `wayfinding-large-work`。顺序由最常出现的真实问题决定。
+`researching-decisions` 已完成供应商能力、未指定框架升级和具体 Excel 算法等价三个隔离前向场景。它固定对象坐标、优先一手来源并严格区分事实、推论、建议和未知项。
+
+下一步依次建设 `modeling-business-domain` 和 `wayfinding-large-work`。顺序由最常出现的真实问题决定。
 
 ### P3：扩展团队入口
 
