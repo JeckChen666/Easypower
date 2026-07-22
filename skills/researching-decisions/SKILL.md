@@ -3,13 +3,13 @@ name: researching-decisions
 description: Use when the user or another Easypower skill explicitly asks to investigate external facts from primary sources, official documentation, source code, specifications, or first-party APIs so a business, architecture, or implementation decision can cite reliable evidence
 ---
 
-# 研究业务决策
+# 调研决策依据
 
 ## 核心原则
 
-研究只为一个待决问题收集足够的一手事实。固定对象和适用范围，逐条保存可追溯来源，并严格分开官方事实、项目事实、推论、建议和未知项。搜索摘要、博客和模型记忆只能发现线索，不能成为决策证据。
+Research（资料调研）只为一个待决问题收集足够的一手事实。先明确对象和适用范围，逐条保存可追溯来源，并分开记录官方事实、项目事实、推论、建议和 Unknown（未知项）。搜索摘要、博客和模型记忆只能帮助发现线索，不能作为决策证据。
 
-## 1. 固定研究坐标
+## 1. 明确调研范围
 
 写明：
 
@@ -24,7 +24,7 @@ description: Use when the user or another Easypower skill explicitly asks to inv
 **停止条件：**
 ```
 
-缺少会改变答案的坐标时先从仓库、锁文件或用户获取。不要用自己熟悉的框架、地区或版本替代未知对象。用户暂时不在时，可以调查不受缺失坐标影响的共同事实，但必须把具体结论保持为 Unknown。
+缺少会改变答案的适用条件时，先从仓库、锁文件或用户获取。不要用自己熟悉的框架、地区或版本替代未知对象。用户暂时不在时，可以调查不受缺失信息影响的共同事实，但具体结论必须保持为 Unknown。
 
 ## 2. 判断是否应研究
 
@@ -34,11 +34,11 @@ description: Use when the user or another Easypower skill explicitly asks to inv
 
 ## 3. 建立来源计划
 
-读取 [source-evidence.md](references/source-evidence.md)。优先级通常是：正式规范/法规与官方 API 参考、版本化官方文档和 release notes、第一方源代码/类型/包元数据、第一方支持答复与可复现实验。社区内容只用于找到一手入口。
+读取 [source-evidence.md](references/source-evidence.md)。优先级通常是：正式规范/法规与官方 API 参考、版本化官方文档和 Release Notes（发布说明）、第一方源代码/类型/包元数据、第一方支持答复与可复现实验。社区内容只用于找到一手入口。
 
-将独立事实域并行调查仅用于范围较大且来源互不依赖的研究；小问题直接顺序完成。协调 Agent 负责统一坐标、处理冲突和写最终结论，不拼接多个代理摘要冒充综合判断。
+只有调研范围较大、各项事实来源互不依赖时才并行调查；小问题直接顺序完成。Agent（协调代理）负责统一适用范围、处理冲突和写最终结论，不要把多个代理摘要直接拼成最终判断。
 
-## 4. 记录原子证据
+## 4. 逐条记录证据
 
 每条重要主张保存：稳定 ID、原文或精确位置、URL/文件路径、发布者、版本或更新时间、访问日期、适用范围和证据等级。链接到首页不等于支持具体结论。
 
@@ -48,9 +48,9 @@ description: Use when the user or another Easypower skill explicitly asks to inv
 
 对冲突来源先检查产品、版本、地区、端点和日期是否不同。版本化官方资料通常优先于通用说明；可运行源代码可以解释当前行为，但不自动等于供应商承诺的公共契约。
 
-官方资料仍有空白时，按成本选择：第一方支持确认、sandbox 技术 spike、项目源码检查或将问题标为 Blocked。不得用二手文章投票决定事实。
+官方资料仍有空白时，按成本选择：第一方支持确认、在 Sandbox（隔离测试环境）中做技术可行性验证、检查项目源码，或将问题标为 Blocked。不得用二手文章投票决定事实。
 
-## 6. 合成决策证据
+## 6. 汇总决策证据
 
 读取 [synthesis-protocol.md](references/synthesis-protocol.md)。输出顺序：
 
@@ -60,9 +60,9 @@ description: Use when the user or another Easypower skill explicitly asks to inv
 4. 基于哪些事实产生的推论；
 5. 条件建议及其前提；
 6. 未知项、冲突和需要实测的问题；
-7. 对 Spec、架构或 Plan 的影响。
+7. 对 Spec（业务规格）、架构或 Plan（执行计划）的影响。
 
-研究 Agent 可以给出推荐，但用户批准业务选择，架构 Skill批准系统取舍。没有足够证据时给出“条件结论”，不要为了结束任务强行二选一。
+研究 Agent 可以给出推荐；业务选择由用户批准，系统取舍由架构 Skill 批准。没有足够证据时给出“条件结论”，不要为了结束任务强行二选一。
 
 ## 7. 保存与回写
 
@@ -72,9 +72,9 @@ description: Use when the user or another Easypower skill explicitly asks to inv
 
 需要完整示例时读取 [vendor-api-example.md](references/vendor-api-example.md)。
 
-## 完成门
+## 完成条件
 
-- 研究坐标足以限定答案；
+- 调研范围和适用条件足以限定答案；
 - 每个关键主张有匹配范围的一手来源；
 - 事实、推论、建议和未知项清楚分层；
 - 冲突来源得到解释或明确保留；

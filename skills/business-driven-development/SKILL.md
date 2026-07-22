@@ -7,13 +7,13 @@ description: Use when the user explicitly asks to turn a substantial business re
 
 ## 核心原则
 
-以可验收的业务闭环作为规划、实现和验证的基本单位。先与用户批准 Spec 和主 Plan，再自主完成已授权范围；不要用技术任务、测试数量或代码完成度代替业务结果。
+以可验收的业务闭环作为规划、实现和验证的基本单位。先与用户确认并批准 Spec（业务规格）和主 Plan（主执行计划），再自主完成授权范围；不要用技术任务、测试数量或代码完成度代替业务结果。
 
-本 Skill 只在用户显式调用时运行。事实可从仓库和工具获取时直接调查；业务决策由用户确认；可逆且不改变业务契约的实现选择交给执行 Agent。
+本 Skill 只在用户显式调用时运行。事实可从仓库和工具获取时直接调查；业务决策由用户确认；可逆且不改变业务契约的实现选择交给 Agent（执行代理）。
 
 ## 工作流
 
-### 1. 形成 Spec
+### 1. 编写 Spec
 
 读取 [spec-protocol.md](references/spec-protocol.md)。探索现有系统后，与用户逐项确定：
 
@@ -25,9 +25,9 @@ description: Use when the user explicitly asks to turn a substantial business re
 
 每次只讨论一个决策，并给出推荐答案。必须运行、操作或展示后才能判断时，明确调用 `$prototyping-decisions`；依赖外部事实时调用 `$researching-decisions`；业务术语、场景、边界或不变量存在多种解释时调用 `$modeling-business-domain`；涉及公共接口、计算、存储、迁移或系统结构的重要取舍时，明确调用 `$designing-business-architecture`。写入 `docs/easypower/<feature>/spec.md`，等待用户明确批准。
 
-### 2. 形成渐进式 Plan
+### 2. 编写渐进式 Plan
 
-Spec 批准后读取 [plan-protocol.md](references/plan-protocol.md)。创建短小的 `plan.md` 作为执行地图，定义业务切片、依赖图、核心闭环里程碑、验收证据和自治边界。
+Spec 批准后读取 [plan-protocol.md](references/plan-protocol.md)。创建短小的 `plan.md` 作为执行地图，定义业务切片、依赖图、核心闭环里程碑、验收证据和自主执行边界。
 
 大型工作只详细展开第一个可执行子 Plan；其他子 Plan 先保留目标、依赖和验收结果。Plan 可包含固定重要决策所必需的最小代码、伪代码、Schema 或接口，不提前书写普通实现。等待用户明确批准主 Plan。
 

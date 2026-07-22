@@ -3,17 +3,17 @@ name: diagnosing-business-failures
 description: Use when the user or another Easypower skill explicitly asks to diagnose and repair an observed wrong business result, regression, intermittent production failure, or performance degradation using reproducible evidence
 ---
 
-# 诊断业务失败
+# 诊断业务故障
 
 ## 核心原则
 
-从用户可观察的业务失败建立反馈环，沿数据和控制流找到首次错误，再修复根因。生产止损、根因修复和长期增强是三件事；不要用临时防护冒充根因已经解决。
+从用户可观察的业务结果异常建立 Feedback Loop（反馈闭环），沿数据流和控制流找到第一次出现偏差的位置，再修复根因。生产止损、根因修复和长期增强分别处理，不要把临时防护写成根因修复。
 
 本 Skill 只在用户或执行流程明确要求诊断时运行。普通编译错误、明确的小拼写错误或尚未观察到失败的预防性重构，不需要进入完整流程。
 
-## 1. 固定业务失败
+## 1. 明确要诊断的业务问题
 
-读取相关 Spec、Plan、已完成证据、代码、数据版本和运行环境。建立一条失败记录：
+读取相关 Spec（业务规格）、Plan（执行计划）、已完成证据、代码、数据版本和运行环境。建立一条失败记录：
 
 - 哪个参与者在哪个场景得到什么错误结果；
 - 已批准或历史可靠的预期结果；
@@ -21,19 +21,19 @@ description: Use when the user or another Easypower skill explicitly asks to dia
 - 输入、业务口径、实现版本、环境和外部依赖；
 - 当前业务风险是否仍在扩大。
 
-读取 [failure-classification.md](references/failure-classification.md) 区分实现缺陷、数据问题、环境/依赖问题、验收工具失真、业务口径多解和性能退化。业务口径无法由证据决定时标为 Blocked，不替用户选择一种解释。
+读取 [failure-classification.md](references/failure-classification.md) 区分实现缺陷、数据问题、环境或依赖问题、验收工具失真、业务口径存在多种合理解释和性能退化。业务口径无法由证据决定时标为 `Blocked（受阻）`，不要替用户选择一种解释。
 
 ## 2. 先止损，再保留现场
 
 只有资金、安全、隐私、数据损坏或持续生产影响需要立即控制时，先选择最小、可逆、已授权的措施：关闭受影响入口、回退已知可靠版本、限制流量或转入人工处理。
 
-止损前后保存时间线、版本、输入、日志、请求标识和外部系统事实。不要为了“恢复干净”清空工作区、删除失败数据或覆盖生产证据。止损措施单独标记为 Containment，不得标记为根因修复。
+止损前后保存时间线、版本、输入、日志、请求标识和外部系统事实。不要为了“恢复干净”清空工作区、删除失败数据或覆盖生产证据。止损措施单独标记为 Containment（止损措施），不得标记为根因修复。
 
-## 3. 建立最窄反馈环
+## 3. 建立最小反馈闭环
 
-读取 [feedback-loops.md](references/feedback-loops.md)。选择能直接判定该业务症状、且成本最低的反馈方式：黄金结果差异、稳定业务接口、捕获请求重放、浏览器路径、受控并发、差分运行或代表性性能基准。
+读取 [feedback-loops.md](references/feedback-loops.md)。选择能直接判断该业务问题、且成本最低的验证方式：Golden Result（基准结果）差异、稳定业务接口、捕获请求重放、浏览器路径、受控并发、差分运行或代表性性能基准。
 
-运行反馈环并观察目标症状失败。已有可靠失败证据时直接复用，不为形式重新编写测试。无法在当前环境建立可信反馈时，记录已尝试方法，索取最小工件或临时仪器化授权；不要仅靠阅读代码宣称根因。
+运行反馈闭环，确认它能稳定显示目标问题。已有可靠失败证据时直接复用，不为形式重新编写测试。当前环境无法建立可信反馈时，记录已尝试的方法，索取最小复现材料或临时观测授权；不要只靠阅读代码宣称根因。
 
 ## 4. 缩小并追踪首次偏差
 
@@ -45,7 +45,7 @@ description: Use when the user or another Easypower skill explicitly asks to dia
 
 列出少量有证据的候选原因并排序。一次只检验一个可证伪假设，写明：如果它成立，改变或观测什么会让失败消失、增强或出现特定证据。
 
-使用最小探针区分假设。优先调试器、查询计划、Profiler 和边界日志；临时日志使用唯一前缀并记录清理入口。不要同时修改多个变量，也不要用增加 `sleep`、重试或超时掩盖时序问题。
+使用最小探针区分假设。优先使用调试器、查询计划、Profiler（性能分析器）和边界日志；临时日志使用唯一前缀并记录清理方式。不要同时修改多个变量，也不要用增加 `sleep`、重试或超时掩盖时序问题。
 
 性能或并发问题读取 [performance-and-concurrency.md](references/performance-and-concurrency.md)。
 
@@ -53,7 +53,7 @@ description: Use when the user or another Easypower skill explicitly asks to dia
 
 只有证据链能够解释原业务失败时才实施修复。修复最初产生错误的源头，并在确有独立风险的边界增加必要保护；不要在每一层重复同一断言。
 
-优先把最小复现固化在最高稳定的业务接口。复杂公式、金额、权限、状态、一致性和历史回归值得留下自动化保护；一次性环境故障或无法自动化的生产场景可以保留重放工件、监控规则和人工验证证据。
+优先把最小复现固化在最高层且稳定的业务接口。复杂公式、金额、权限、状态、一致性和历史回归值得留下自动化保护；一次性环境故障或无法自动化的生产场景可以保留重放材料、监控规则和人工验证证据。
 
 需要改变业务口径、公共接口、数据模型或关键架构时停止受影响修复，更新 Blocked 记录并交给用户或 `designing-business-architecture`。
 
@@ -71,16 +71,16 @@ description: Use when the user or another Easypower skill explicitly asks to dia
 
 ## 8. 返回执行流程
 
-保存诊断结果包：业务症状、反馈命令或工件、最小复现、证据链、已排除假设、确认根因、止损措施、修复、验证、剩余风险和复发监控。
+保存诊断结果包：业务问题、验证命令或复现材料、最小复现、证据链、已排除假设、确认根因、止损措施、修复、验证、剩余风险和复发监控。
 
-若由 `executing-business-plans` 调用，将切片从 Blocked 或 In Progress 恢复到 Implemented；只有业务验证和证据归档完成后，协调 Agent 才能推进 Verified、Completed 和下游前沿。
+若由 `executing-business-plans` 调用，将切片从 Blocked 或 In Progress 恢复到 Implemented；只有业务验证和证据归档完成后，Agent（协调代理）才能推进 Verified、Completed 和下游前沿。
 
 需要完整示例时读取 [bi-failure-example.md](references/bi-failure-example.md)。
 
 ## 常见错误
 
 - 只看堆栈或慢查询就宣布根因。
-- 还没有直接业务反馈环就连续试补丁。
+- 还没有直接的业务反馈闭环就连续试补丁。
 - 把回滚、限流、幂等兜底或重试当成根因修复。
 - 为简单缺陷固定运行全量测试和独立评审。
 - 复现的是附近错误，而不是用户报告的业务症状。

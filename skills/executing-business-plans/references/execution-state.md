@@ -1,19 +1,19 @@
 # 执行状态与恢复
 
-主 Plan 是协调 Agent 维护的执行账本。每个业务切片使用以下状态：
+主 Plan 是协调 Agent 维护的执行账本。每个业务切片使用以下状态，英文名称是状态机中的固定值：
 
 | 状态 | 含义 | 允许的下一状态 |
 |---|---|---|
-| Planned | 范围已批准，但依赖或子 Plan 尚未就绪 | Ready、Blocked |
-| Ready | 依赖、子 Plan、验收、环境和所有权均已就绪 | Claimed、Blocked |
-| Claimed | 已分配唯一执行者，尚未修改代码 | In Progress、Ready、Blocked |
-| In Progress | 正在实现 | Implemented、Blocked |
-| Implemented | 代码或产物已形成，尚未完成业务验证 | Verified、In Progress、Blocked |
-| Verified | 切片验收和必要回归已通过，证据待归档 | Completed、In Progress |
-| Completed | 证据已归档，交付结果可被下游依赖 | 仅在回归失败时重新打开 |
-| Blocked | 缺少业务决定、公共契约、权限、环境或可靠验收 | Planned、Ready |
+| Planned（已规划） | 范围已批准，但依赖或子 Plan 尚未就绪 | Ready、Blocked |
+| Ready（可领取） | 依赖、子 Plan、验收、环境和所有权均已就绪 | Claimed、Blocked |
+| Claimed（已领取） | 已分配唯一执行者，尚未修改代码 | In Progress、Ready、Blocked |
+| In Progress（实施中） | 正在实现 | Implemented、Blocked |
+| Implemented（已实现） | 代码或产物已形成，尚未完成业务验证 | Verified、In Progress、Blocked |
+| Verified（已验证） | 切片验收和必要回归已通过，证据待归档 | Completed、In Progress |
+| Completed（已完成） | 证据已归档，交付结果可被下游依赖 | 仅在回归失败时重新打开 |
+| Blocked（受阻） | 缺少业务决定、公共契约、权限、环境或可靠验收 | Planned、Ready |
 
-## Ready 判定
+## Ready（可领取）判定
 
 协调 Agent 只在以下条件全部满足时设置 Ready：
 

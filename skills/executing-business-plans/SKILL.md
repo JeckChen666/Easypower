@@ -7,14 +7,14 @@ description: Use when the user or another Easypower skill explicitly asks to exe
 
 ## 核心原则
 
-只执行已经批准的业务契约。以磁盘中的 Spec、主 Plan、子 Plan、代码和证据为事实来源；不要依赖上一段对话或 Agent 记忆。业务切片只有完成验收并留下证据后才算完成。
+只执行已经批准的业务契约。以磁盘中的 Spec（业务规格）、主 Plan（主执行计划）、子 Plan、代码和证据为准，不依赖上一段对话或 Agent（智能体）记忆。业务切片通过验收并留下证据后才算完成。
 
 ## 1. 启动检查
 
 读取 Spec 和主 Plan 的完整文件，确认：
 
 - 两者状态均为“已批准”或“执行中”；
-- 核心业务闭环、切片依赖、验收摘要和自治边界存在；
+- 核心业务闭环、切片依赖、验收摘要和自主执行边界存在；
 - 当前仓库、环境、权限和基线可用；
 - 没有需要用户先决定的阻塞问题。
 
@@ -24,11 +24,11 @@ description: Use when the user or another Easypower skill explicitly asks to exe
 
 读取 [execution-state.md](references/execution-state.md)。以主 Plan 的状态表为执行账本，结合 Git 状态、子 Plan 和 `evidence/` 目录恢复真实进度。不要因为进程中断就重跑已验证任务，也不要把“代码存在”推断为“业务已经通过”。
 
-重新计算执行前沿。优先领取核心业务闭环；它通过前不推进纯增强切片。
+根据依赖关系更新 Frontier（当前可执行任务）。优先领取核心业务闭环；核心业务闭环验收通过前不推进纯增强切片。
 
 ## 3. 按需展开子 Plan
 
-一个切片即将进入 Ready 时，根据最新代码展开或刷新对应子 Plan。细化实现步骤不需要重新审批；改变业务范围、验收、不变量、公共接口、数据模型或关键架构时，将切片标为 Blocked 并升级审批。
+一个切片即将进入 `Ready（可领取）` 时，根据最新代码展开或刷新对应子 Plan。细化实现步骤不需要重新审批；改变业务范围、验收、不变量、公共接口、数据模型或关键架构时，将切片标为 `Blocked（受阻）` 并升级审批。
 
 ## 4. 调度任务
 
@@ -44,27 +44,27 @@ description: Use when the user or another Easypower skill explicitly asks to exe
 
 1. 确认基线和依赖证据仍然有效；
 2. 实现最小完整业务路径；
-3. 保存实现摘要和局部检查结果，将状态改为 Implemented；
+3. 保存实现摘要和局部检查结果，将状态改为 `Implemented（已实现）`；
 4. 按 [validation-and-recovery.md](references/validation-and-recovery.md) 选择最少但充分的业务验证；
 5. 回归已经成立的核心业务证据；
-6. 验证通过后保存证据并改为 Verified；
-7. 核心闭环、高风险切片、公共契约变化或最终交付明确调用 `$reviewing-business-delivery`；评审通过后进入 Completed；
+6. 验证通过后保存证据并改为 `Verified（已验证）`；
+7. 核心闭环、高风险切片、公共契约变化或最终交付明确调用 `$reviewing-business-delivery`；评审通过后进入 `Completed（已完成）`；
 8. 低风险且已有直接证据的切片不强制独立评审，可以从 Verified 进入 Completed；
-9. 重新计算执行前沿并调度下一批任务。
+9. 根据依赖关系更新 Frontier 并调度下一批任务。
 
 不要为每个切片固定运行全量测试、双阶段评审或独立审查代理。验证和评审强度由业务风险、影响范围和证据可信度决定。
 
 ## 6. 处理失败和阻塞
 
-局部实现或业务证据失败时，明确调用 `$diagnosing-business-failures`，传递 Spec、主 Plan、当前子 Plan、失败记录和证据路径。在任务 Brief 和执行更新中写出 Skill 名称，不要只写“交给诊断执行者”。诊断 Skill 建立业务反馈环、定位根因并在授权范围内修复；证据表明需要改变已批准契约时停止相关切片，不用临时绕过继续推进。
+局部实现或业务证据失败时，明确调用 `$diagnosing-business-failures`，传递 Spec、主 Plan、当前子 Plan、失败记录和证据路径。在 Agent Brief（任务说明）和执行更新中写出 Skill 名称，不要只写“交给诊断执行者”。诊断 Skill 建立 Feedback Loop（反馈闭环）、定位根因并在授权范围内修复；证据表明需要改变已批准契约时停止相关切片，不用临时绕过继续推进。
 
 诊断返回后，由协调 Agent 核对原业务场景、回归证据和剩余风险，再恢复切片状态。止损措施、代码已修改或局部测试通过都不能直接把切片推进为 Completed。
 
-一个切片 Blocked 时继续执行与它在依赖、契约、状态和所有权上独立的前沿任务。记录阻塞事实、影响、候选方案和恢复入口，等待用户决定。
+一个切片 Blocked 时，继续执行在依赖、契约、状态和所有权上与它无关的 Frontier 任务。记录受阻原因、影响、候选方案和恢复点，等待用户决定。
 
 ## 7. 评审与交付
 
-调用 `$reviewing-business-delivery` 时传递批准的 Spec、Plan、评审范围、真实 diff/产物和证据路径，并在任务 Brief 和执行更新中写出 Skill 名称。评审出现 Blocker 或 Important 时，将相关切片退回 In Progress 或标为 Blocked；修复后只重验受影响 finding、业务证据和必要回归。
+调用 `$reviewing-business-delivery` 时传递批准的 Spec、Plan、评审范围、实际代码差异（diff）、产物和证据路径，并在 Agent Brief（任务说明）和执行更新中写出 Skill 名称。评审出现 Blocker（阻断项）或 Important（重要项）时，将相关切片退回 In Progress 或标为 Blocked；修复后只重新验证受影响的评审发现、业务证据和必要回归。
 
 所有可执行切片结束后，按 Spec 输出业务交付报告：
 
@@ -73,7 +73,7 @@ description: Use when the user or another Easypower skill explicitly asks to exe
 - Blocked、未开始和范围外项目；
 - 计划偏差及审批情况；
 - 实际运行的验证和产物位置；
-- 用户回来后可以直接继续的恢复入口。
+- 用户回来后可以直接继续的恢复点。
 
 需要完整例子时读取 [bi-execution-example.md](references/bi-execution-example.md)。
 

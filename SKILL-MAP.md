@@ -17,14 +17,14 @@ Easypower 不提供“每轮对话都先运行”的全局路由 Skill。Skill �
 
 | Skill | 类型 | 状态 | 调用方式 | 解决的问题 |
 |---|---|---|---|---|
-| `business-driven-development` | 主流程 | 已完成 | 用户显式调用 | 从业务想法形成已批准 Spec、渐进式 Plan 和自治边界 |
-| `executing-business-plans` | 执行 | 已完成 | 用户或主流程显式调用 | 在全新上下文中按执行前沿持续完成已批准 Plan |
+| `business-driven-development` | 主流程 | 已完成 | 用户显式调用 | 从业务想法形成已批准 Spec、渐进式 Plan 和自主执行边界 |
+| `executing-business-plans` | 执行 | 已完成 | 用户或主流程显式调用 | 在全新上下文中按 Frontier（当前可执行任务）持续完成已批准 Plan |
 | `designing-business-architecture` | 决策支持 | 已完成 | 用户或主流程显式调用 | 围绕业务负载比较接口、计算、存储和系统架构方案 |
-| `diagnosing-business-failures` | 质量保障 | 已完成 | 用户或执行流程显式调用 | 从业务失败证据建立反馈循环、定位根因并防止回归 |
+| `diagnosing-business-failures` | 质量保障 | 已完成 | 用户或执行流程显式调用 | 从业务故障证据建立反馈闭环、定位根因并防止回归 |
 | `reviewing-business-delivery` | 质量保障 | 已完成 | 用户或执行流程显式调用 | 分别审查业务契约符合度和工程风险，并汇总交付证据 |
 | `prototyping-decisions` | 决策支持 | 已完成 | 用户或主流程显式调用 | 用一次性逻辑或 UI 原型回答无法靠文字解决的问题 |
 | `researching-decisions` | 决策支持 | 已完成 | 用户或主流程显式调用 | 基于第一方资料调查事实并留下可引用结论 |
-| `modeling-business-domain` | 决策支持 | 已完成 | 用户或主流程显式调用 | 统一业务语言、具体场景和少量真正必要的 ADR |
+| `modeling-business-domain` | 决策支持 | 已完成 | 用户或主流程显式调用 | 统一业务语言、具体场景和少量必要的 ADR |
 | `wayfinding-large-work` | 主流程入口 | 已完成 | 用户显式调用 | 为超过一个上下文的大型模糊工作维护决策地图和未知前沿 |
 | `triaging-business-requests` | 需求入口 | 已完成 | 用户显式调用 | 验证外部需求或缺陷，并形成可交给规划流程的 Business Brief |
 
@@ -70,7 +70,7 @@ flowchart TD
 | `brainstorming` + `writing-plans` | `business-driven-development` | 合并为业务 Spec 和渐进式 Plan，两次用户审批 |
 | `subagent-driven-development` + `executing-plans` + `dispatching-parallel-agents` | `executing-business-plans` | 合并为依赖前沿、任务所有权和后台自治执行 |
 | `test-driven-development` | 风险验证协议 | 不作为所有实现的强制 Skill；复杂核心逻辑按需使用测试先行 |
-| `systematic-debugging` | `diagnosing-business-failures` | 保留根因分析，起点改为可复现的业务失败证据 |
+| `systematic-debugging` | `diagnosing-business-failures` | 保留根因分析，起点改为可复现的业务故障证据 |
 | `requesting-code-review` + `receiving-code-review` | `reviewing-business-delivery` | 合并请求、判断反馈和复验，业务符合度优先 |
 | `verification-before-completion` | 执行和评审内部协议 | 保留证据原则，验证范围按业务风险选择 |
 | `using-git-worktrees` + `finishing-a-development-branch` | 执行内部操作规则 | 隔离、提交、合并和清理由环境及授权决定 |
@@ -84,13 +84,13 @@ flowchart TD
 | `implement` | `executing-business-plans` | 改为业务切片循环和按风险验证，不默认全量 TDD |
 | `codebase-design` + `improve-codebase-architecture` | `designing-business-architecture` | 吸收深模块、接口、局部性、Design It Twice，并补充性能负载分析 |
 | `diagnosing-bugs` | `diagnosing-business-failures` | 吸收最小复现、假设、仪器化和回归证据 |
-| `code-review` | `reviewing-business-delivery` | 将 Spec 轴升级为业务契约轴，工程轴按风险审查 |
+| `code-review` | `reviewing-business-delivery` | 分开检查业务契约和工程风险，不合成一个总分 |
 | `prototype` | `prototyping-decisions` | 保留“一次性代码只回答一个问题” |
 | `research` | `researching-decisions` | 保留第一方来源和后台调查 |
 | `domain-modeling` | `modeling-business-domain` | 保留术语、场景和稀疏 ADR，避免实现细节污染业务语言 |
 | `wayfinder` | `wayfinding-large-work` | 保留决策票据、未知前沿和跨上下文地图 |
 | `triage` | `triaging-business-requests` | 从 issue 状态机改为业务价值、可复现性和规划就绪的 Business Brief |
-| `handoff` | 执行内部上下文协议 | 权威文件链接和任务 Brief 代替复制整段会话 |
+| `handoff` | 执行内部上下文协议 | 权威文件链接和 Agent Brief（任务说明）代替复制整段会话 |
 | `ask-matt` | 无正式对应 | 不创建强制路由；由能力地图和显式调用完成发现 |
 
 ## 五、不单独创建的 Skill
@@ -100,7 +100,7 @@ flowchart TD
 | 机制 | 原因 | 所属位置 |
 |---|---|---|
 | 通用 TDD | 不是所有改动都值得测试先行 | 执行、诊断中的风险策略 |
-| 完成前验证 | 所有交付都需要证据，但验证强度不同 | 执行和评审的完成门 |
+| 完成前验证 | 所有交付都需要证据，但验证强度不同 | 执行和评审的完成条件 |
 | 并行代理调度 | 是执行策略，不是用户目标 | `executing-business-plans` |
 | Git worktree 与分支收尾 | 依赖平台、仓库和用户授权 | 执行内部操作规则 |
 | 接收评审意见 | 与发起评审属于同一交付闭环 | `reviewing-business-delivery` |
@@ -122,9 +122,9 @@ flowchart TD
 
 `designing-business-architecture` 已完成 BI 负载、定价模块边界和渐进存储演进三个隔离前向场景。它作为规划阶段的按需决策分支，不成为每个功能的固定步骤。
 
-`diagnosing-business-failures` 已完成黄金报表差异、低概率重复扣款和性能退化三个隔离前向场景。它区分生产止损、根因修复和业务恢复证据，并由执行流程在失败时显式调用。
+`diagnosing-business-failures` 已完成基准报表差异、低概率重复扣款和性能退化三个隔离前向场景。它区分生产止损、根因修复和业务恢复证据，并由执行流程在失败时显式调用。
 
-`reviewing-business-delivery` 已完成业务契约失败、工程风险阻断和低风险反馈核验三个隔离前向场景。它不要求每个切片固定双代理评审，并把业务契约轴和工程风险轴分别报告。
+`reviewing-business-delivery` 已完成业务契约失败、工程风险阻断和低风险反馈核验三个隔离前向场景。它不要求每个切片固定双代理评审，并分别报告业务契约检查和工程风险检查。
 
 ### P2：提高复杂决策质量
 
@@ -134,7 +134,7 @@ flowchart TD
 
 `modeling-business-domain` 已完成 SaaS “账号”歧义、报表定义/计算/发布混用和 ADR 过度记录三个隔离前向场景。它用具体场景确认业务语言和不变量，将结论回写 Spec，并保持上下文地图与 ADR 稀疏。
 
-`wayfinding-large-work` 已完成 ERP 替换、模糊 BI 平台统一和清晰小功能三个前向场景。它只服务于跨上下文且无法直接形成 Spec 的目标，维护低分辨率主地图、单决策票据、真实前沿和未知区域，路线清楚后交给 `business-driven-development`。
+`wayfinding-large-work` 已完成 ERP 替换、模糊 BI 平台统一和清晰小功能三个前向场景。它只服务于跨上下文且无法直接形成 Spec 的目标，维护 Decision Map（决策地图）、Decision Ticket（决策票据）、Frontier（决策前沿）和 Fog（待澄清区域），路线清楚后交给 `business-driven-development`。
 
 下一步建设 `triaging-business-requests`。顺序由最常出现的真实问题决定。
 

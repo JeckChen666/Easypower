@@ -9,7 +9,7 @@ description: Use when the user or another Easypower skill explicitly asks to com
 
 架构服务于已知的业务场景、负载和不变量。先证明决定解决了什么业务问题，再比较系统级方案；不要从技术品牌、单一性能数字或抽象偏好反推需求。
 
-本 Skill 只处理会影响 Spec 或多个业务切片的重要决定。普通实现选择留给执行 Agent；没有重要架构未知项时返回上游流程，不制造额外设计阶段。
+本 Skill 只处理会影响 Spec（业务规格）或多个业务切片的重要决定。普通实现选择留给 Agent（执行代理）；没有重要架构未知项时返回上游流程，不制造额外设计阶段。
 
 ## 1. 建立事实边界
 
@@ -40,7 +40,7 @@ description: Use when the user or another Easypower skill explicitly asks to com
 - 一致性、失败语义、安全和可观测性；
 - 如何双跑、灰度、迁移、回滚和退出旧路径。
 
-设计模块时读取 [architecture-patterns.md](references/architecture-patterns.md)。优先小接口、深实现和变更局部性；只有确实存在生产与替代实现时才创建 Adapter，不为测试凭空增加层次。
+设计模块时读取 [architecture-patterns.md](references/architecture-patterns.md)。优先小接口、深实现和变更局部性；只有确实存在生产实现和替代实现时才创建 Adapter（适配层），不要只为测试增加抽象层。
 
 ## 4. 比较并形成推荐
 
@@ -48,7 +48,7 @@ description: Use when the user or another Easypower skill explicitly asks to com
 
 先给推荐，再说明它在什么假设下成立、代价是什么、什么证据会推翻它。不要在缺少关键负载或组织约束时直接锁定数据库、消息系统或部署拓扑。
 
-自然语言无法可靠区分方案时，选择最小 Research、Prototype 或基准实验。实验只回答决策问题，不顺便建设生产系统。
+自然语言无法可靠区分方案时，选择最小 Research（资料调研）、Prototype（原型验证）或基准实验。实验只回答当前决策问题，不顺便建设生产系统。
 
 ## 5. 取得批准并回写上游
 
@@ -61,7 +61,7 @@ description: Use when the user or another Easypower skill explicitly asks to com
 
 返回 `business-driven-development` 继续规划，或返回 `executing-business-plans` 继续已批准切片。架构 Skill 不直接接管长期实现。
 
-## 决策完成门
+## 完成条件
 
 - 推荐方案对应明确的业务场景和负载，而非抽象最佳实践；
 - 至少一个可行替代方案经过同维度比较；

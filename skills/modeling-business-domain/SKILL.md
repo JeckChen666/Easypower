@@ -3,23 +3,23 @@ name: modeling-business-domain
 description: Use when the user or another Easypower skill explicitly asks to resolve ambiguous or overloaded business language, distinguish domain concepts and boundaries, define concrete scenarios and invariants, or decide whether a consequential domain decision deserves a sparse ADR before approving a Spec or Plan
 ---
 
-# 建模业务领域
+# 业务领域建模
 
 ## 核心原则
 
-领域建模用于消除会导致不同业务解释的歧义。以具体场景迫使概念、边界和规则变得明确，再把已确认结论回写业务事实来源；不要把领域模型提前变成实体类、数据库表或通用架构设计。
+领域建模用于消除会导致不同业务解释的歧义。用具体场景明确概念、边界和规则，再把已确认结论回写业务事实的权威来源；不要把领域模型提前变成实体类、数据库表或通用架构设计。
 
 本 Skill 只处理当前决策所需的最小模型。没有业务歧义时返回上游，不为完整而补齐无关术语、图表或文档。
 
-## 1. 固定待解决的歧义
+## 1. 明确要解决的歧义
 
-明确当前业务问题、涉及的参与者、模糊术语、可能的不同解释，以及解释错误会影响的业务结果。读取现有 Spec、业务文档、`CONTEXT.md`、`CONTEXT-MAP.md`、相关代码和已有 ADR。
+明确当前业务问题、涉及的参与者、模糊术语、可能的不同解释，以及解释错误会影响的业务结果。读取现有 Spec（业务规格）、业务文档、`CONTEXT.md`、`CONTEXT-MAP.md`、相关代码和已有 ADR（架构决策记录）。
 
 区分三类信息：
 
 - 用户确认的业务含义与取舍；
 - 代码、数据和现有文档呈现的项目事实；
-- Agent 为暴露边界提出的候选概念和场景。
+- Agent（智能体）为暴露边界提出的候选概念和场景。
 
 代码与业务说法冲突时，展示具体差异并请用户决定哪一个应成为目标规则。不要静默让代码定义业务，也不要把用户的新说法直接当作现有行为。
 
@@ -39,7 +39,7 @@ description: Use when the user or another Easypower skill explicitly asks to res
 - 权限、时间、租户或作用域边界；
 - 两种解释会产生不同结果的反例。
 
-对每个场景写清 Given、When、Then，并用业务可观察结果判断候选模型。只有多个场景都必须遵守的规则才提升为不变量；不要把当前实现方式包装成业务不变量。
+对每个场景写清 Given（前提）、When（动作）、Then（结果），并用业务可观察结果判断候选模型。只有多个场景都必须遵守的规则才提升为不变量；不要把当前实现方式包装成业务不变量。
 
 ## 4. 确认边界与责任
 
@@ -47,7 +47,7 @@ description: Use when the user or another Easypower skill explicitly asks to res
 
 只有系统确实存在多个独立语言和模型边界时才建立上下文地图。按团队目录、微服务或数据库数量机械切分，不足以证明存在多个业务上下文。涉及系统结构或集成方式的重要取舍时，将问题交给 `$designing-business-architecture`。
 
-## 5. 保存最少权威产物
+## 5. 只保留必要的权威产物
 
 读取 [context-and-adr.md](references/context-and-adr.md)，并遵循项目已有约定：
 
@@ -57,7 +57,7 @@ description: Use when the user or another Easypower skill explicitly asks to res
 - ADR 仅记录同时满足“难以逆转、脱离背景会令人意外、存在真实取舍”的决定；
 - 实现步骤、字段、类、普通库和局部参数留给 Plan、代码、配置或评审记录。
 
-不要同时创建 glossary、domain model、decision log 和说明文档来保存同一结论。用户批准前标记候选含义；批准后再更新权威文件，并列出受影响但尚未迁移的旧用语。
+不要同时创建 Glossary（词汇表）、Domain Model（领域模型）、Decision Log（决策记录）和说明文档来保存同一结论。用户批准前标记候选含义；批准后再更新权威文件，并列出受影响但尚未迁移的旧用语。
 
 ## 6. 返回上游
 
@@ -72,7 +72,7 @@ description: Use when the user or another Easypower skill explicitly asks to res
 
 用户确认后，将业务结论交回 `$business-driven-development`。领域建模不接管 Plan 或生产实现。
 
-## 完成门
+## 完成条件
 
 - 每个关键术语只有一个当前上下文内的明确含义；
 - 关键关系由具体场景和反例验证，而非只靠名词列表；

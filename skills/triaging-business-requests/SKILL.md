@@ -3,17 +3,17 @@ name: triaging-business-requests
 description: Use when the user explicitly asks to evaluate, verify, prioritize, deduplicate, or route incoming business requests, bug reports, support escalations, issues, or external pull requests and turn sufficiently grounded items into durable business briefs for Easypower planning
 ---
 
-# 分流业务请求
+# 业务请求分流
 
 ## 核心原则
 
-Triage 判断一个外部请求是什么、是否真实、为何值得处理、还缺什么，以及下一步应由谁接手。先验证业务主张，再形成分流结论；不要把提交者建议的技术方案直接当成需求，也不要把信息完整的 Brief 当成已批准 Spec 或 Plan。
+Triage（需求分流）用于判断外部请求的类型、事实依据、业务价值、信息缺口和下一步负责人。先验证业务主张，再给出分流结论；不要把提交者建议的技术方案直接当成需求，也不要把信息完整的 Business Brief（业务简报）当成已批准的 Spec（业务规格）或 Plan（执行计划）。
 
 本 Skill 只在用户显式调用时运行。默认执行只读调查和本地输出；修改外部标签、评论、状态、关闭请求或改动 PR 必须在用户明确授权后执行。
 
 ## 1. 读取完整请求
 
-读取原始描述、附件、评论、状态、作者、时间、关联条目和已有处理记录；PR 还要读取真实 diff 与评审。记录请求来源和当前状态，避免把转述摘要当成完整事实。
+读取原始描述、附件、评论、状态、作者、时间、关联条目和已有处理记录；PR 还要读取实际代码差异（diff）与评审。记录请求来源和当前状态，避免把转述摘要当成完整事实。
 
 从请求中分开：
 
@@ -24,7 +24,7 @@ Triage 判断一个外部请求是什么、是否真实、为何值得处理、�
 - 声称的影响、范围和紧迫性；
 - 已有证据与仍属推测的内容。
 
-先给出候选类别：Defect、Enhancement、Operational/Support 或 External Change。类别服务于验证方法，不强迫所有请求落入 bug/enhancement 两类。
+先给出候选类别：Defect（缺陷）、Enhancement（增强需求）、Operational/Support（运营或支持）或 External Change（外部变更）。类别用于选择验证方法，不强迫所有请求落入缺陷或增强需求两类。
 
 ## 2. 调查项目事实
 
@@ -48,20 +48,20 @@ Triage 判断一个外部请求是什么、是否真实、为何值得处理、�
 
 外部 PR 同时验证业务意图与 diff：它是否解决声称的问题、是否违反权限/数据/兼容边界、相关验证是否足够。测试通过不能替代业务授权。
 
-涉及正在发生的金额、权限、数据损坏、安全或大面积可用性风险时，不等待普通队列完善；将状态设为 `Active Incident`，明确调用 `$diagnosing-business-failures` 建立止损与证据反馈环。
+涉及正在发生的金额、权限、数据损坏、安全或大面积可用性风险时，不等待普通队列补齐信息；将状态设为 `Active Incident（正在发生的生产事故）`，明确调用 `$diagnosing-business-failures` 建立止损措施和反馈闭环。
 
 ## 4. 给出一个分流状态
 
 读取 [routing-states.md](references/routing-states.md)。每个请求只给一个当前状态和推荐理由：
 
-- `Needs Evidence`：关键主张无法验证；
-- `Needs Business Decision`：事实足够，但价值、范围或口径需要用户决定；
-- `Ready for Planning`：业务问题、边界和验收依据足以进入 Easypower 规划；
-- `Route to Existing Capability`：产品已支持，问题是发现、权限、配置或使用；
-- `Duplicate`：已有活动请求或已批准工作覆盖；
-- `Active Incident`：需要立即止损和诊断；
-- `Deferred`：有价值但当前时机、依赖或容量不满足；
-- `Rejected`：明确不符合业务方向、风险边界或已有持久决定。
+- `Needs Evidence（需要证据）`：关键主张无法验证；
+- `Needs Business Decision（需要业务决策）`：事实足够，但价值、范围或口径需要用户决定；
+- `Ready for Planning（可以进入规划）`：业务问题、边界和验收依据足以进入 Easypower 规划；
+- `Route to Existing Capability（转用现有能力）`：产品已支持，问题出在发现、权限、配置或使用；
+- `Duplicate（重复请求）`：已有活动请求或已批准工作覆盖；
+- `Active Incident（正在发生的生产事故）`：需要立即止损和诊断；
+- `Deferred（延期）`：有价值，但当前时机、依赖或容量不满足；
+- `Rejected（拒绝）`：明确不符合业务方向、风险边界或已有长期决定。
 
 不要用虚假的数值评分掩盖业务判断。优先级至少说明受影响业务、严重度、范围、频率、时间敏感性、替代路径和不处理的后果；缺证据时降低置信度，不把嗓门当优先级。
 
@@ -69,13 +69,13 @@ Triage 判断一个外部请求是什么、是否真实、为何值得处理、�
 
 ## 5. 只追问阻塞信息
 
-Agent 能从仓库、附件或只读工具查到的事实直接调查。必须由业务方确认时，每次只问一个会改变状态、优先级或 Brief 内容的问题，并给出推荐选项。
+Agent（智能体）能从仓库、附件或只读工具查到的事实直接调查。必须由业务方确认时，每次只问一个会改变状态、优先级或 Brief 内容的问题，并给出推荐选项。
 
 `Needs Evidence` 问题必须具体可执行，例如租户/环境、关联 ID、时间窗、脱敏样本、操作步骤、期望公式或用户可见差异。不要丢给提交者一份通用二十项问卷，也不要重复询问已有评论已经回答的内容。
 
-## 6. 形成 Business Brief
+## 6. 编写 Business Brief
 
-只有达到 `Ready for Planning` 才读取 [business-brief.md](references/business-brief.md) 并写 Brief。Brief 固定业务问题、已验证事实、期望结果、场景、验收契约、范围外和风险，不预写普通实现步骤。
+只有达到 `Ready for Planning` 才读取 [business-brief.md](references/business-brief.md) 并写 Brief。Brief 记录业务问题、已验证事实、期望结果、场景、验收契约、范围外和风险，不预写普通实现步骤。
 
 阻塞性业务决定必须在 Brief 前解决；无法阻止规划的未知项可以明确保留，并写出谁在何时用什么证据关闭。Brief 应能跨几天或代码移动后继续使用，优先引用稳定业务接口与权威产物，避免依赖行号或聊天记忆。
 
@@ -91,7 +91,7 @@ Business Brief 是规划输入，不是开发授权：
 
 不要仅凭外部 issue、PR、需求邮件或 Business Brief 直接编码。
 
-## 完成门
+## 完成条件
 
 - 原始请求、观察、期望和建议方案已经分离；
 - Agent 先查明可从项目获得的事实，再向人提问；

@@ -1,4 +1,4 @@
-# 决策票据协议
+# Decision Ticket（决策票据）协议
 
 ## 模板
 
@@ -37,12 +37,12 @@
 
 | 类型 | 解决方式 | 谁能关闭 |
 |---|---|---|
-| Business | 比较业务价值、范围和取舍，每次问用户一个问题 | 用户确认后关闭 |
-| Domain | `$modeling-business-domain` 的场景与不变量 | 用户确认业务含义后关闭 |
-| Research | `$researching-decisions` 的一手证据 | 事实充分且不含未决业务选择时可由 Agent 关闭 |
-| Prototype | `$prototyping-decisions` 的最小可体验或运行产物 | 用户对展示/行为作出选择后关闭 |
-| Architecture | `$designing-business-architecture` 的方案比较 | 用户批准重要取舍后关闭 |
-| Prerequisite | 取得样本、访问或运行环境，不交付业务功能 | 所需事实或条件真实可用后关闭 |
+| Business（业务决策） | 比较业务价值、范围和取舍，每次问用户一个问题 | 用户确认后关闭 |
+| Domain（领域建模） | `$modeling-business-domain` 的场景与不变量 | 用户确认业务含义后关闭 |
+| Research（资料调研） | `$researching-decisions` 的一手证据 | 事实充分且不含未决业务选择时可由 Agent 关闭 |
+| Prototype（原型验证） | `$prototyping-decisions` 的最小可体验或运行产物 | 用户对展示或行为作出选择后关闭 |
+| Architecture（架构决策） | `$designing-business-architecture` 的方案比较 | 用户批准重要取舍后关闭 |
+| Prerequisite（前置准备） | 取得样本、访问或运行环境，不交付业务功能 | 所需事实或条件真实可用后关闭 |
 
 不要用 Prerequisite 绕过“只找路不实施”：它只能取得作决定所必需的输入。例如导出匿名样本可以，建设完整数据管道不可以。
 

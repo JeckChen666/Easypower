@@ -9,7 +9,7 @@ Easypower 目前有十个正式 Skill：
 - [business-driven-development](skills/business-driven-development/SKILL.md)：与用户形成并批准业务 Spec 和渐进式 Plan；
 - [executing-business-plans](skills/executing-business-plans/SKILL.md)：在全新上下文中消费已批准的 Spec 和 Plan，持续执行并留下业务证据。
 - [designing-business-architecture](skills/designing-business-architecture/SKILL.md)：围绕业务负载比较计算、存储、接口和迁移方案，形成可批准的架构决定。
-- [diagnosing-business-failures](skills/diagnosing-business-failures/SKILL.md)：从错误业务结果、间歇故障或性能退化建立反馈环，定位根因并证明恢复。
+- [diagnosing-business-failures](skills/diagnosing-business-failures/SKILL.md)：从错误业务结果、间歇故障或性能退化建立 Feedback Loop（反馈闭环），定位根因并证明恢复。
 - [reviewing-business-delivery](skills/reviewing-business-delivery/SKILL.md)：分别审查业务契约符合度、工程风险和交付证据可信度。
 - [prototyping-decisions](skills/prototyping-decisions/SKILL.md)：用一次性逻辑、UI 或技术原型回答一个必须运行后才能判断的问题。
 - [researching-decisions](skills/researching-decisions/SKILL.md)：基于第一方来源调查外部事实，形成可引用的业务决策证据。
@@ -17,7 +17,7 @@ Easypower 目前有十个正式 Skill：
 - [wayfinding-large-work](skills/wayfinding-large-work/SKILL.md)：为跨上下文且尚无法形成 Spec 的大型目标维护决策地图和未知前沿。
 - [triaging-business-requests](skills/triaging-business-requests/SKILL.md)：验证外部需求、缺陷和 PR 的业务主张，并形成可交给规划流程的 Business Brief。
 
-需求分流、Wayfinding、规划与执行 Skill 组成外部请求或大型模糊目标到业务交付的完整链路；架构、研究、原型、领域建模、诊断和评审 Skill 只在相应的重要决策、业务失败或交付门出现时进入。后续能力只根据真实使用反馈扩展。
+需求分流、Wayfinding、规划与执行 Skill 组成外部请求或大型模糊目标到业务交付的完整链路；架构、研究、原型、领域建模、诊断和评审 Skill 只在相应的重要决策、业务结果异常或交付判断中进入。后续能力只根据真实使用反馈扩展。
 
 新 Skill 不直接复制 Superpowers 或 mattpocock-skill。每个能力都需要结合实际工作方式重新定义触发边界、业务价值和验证方式，并通过独立场景测试后才进入 `skills/`。
 
@@ -26,7 +26,7 @@ Easypower 目前有十个正式 Skill：
 它解决以下问题：
 
 - 日常对话不应自动进入重型开发流程；
-- Spec 应先固定业务目标、规则和验收依据；
+- Spec 应先明确业务目标、规则和验收依据；
 - Plan 应按端到端业务切片组织，而不是按技术层拆分；
 - 大型 Plan 应使用主 Plan 和按需子 Plan 渐进展开；
 - 核心业务闭环应先完成并验证，再推进增强能力；
@@ -59,7 +59,7 @@ $triaging-business-requests
 
 使用 $designing-business-architecture 比较这个报表功能的计算、查询和存储架构，并形成可批准的决定。
 
-使用 $diagnosing-business-failures 从这份错误业务结果建立反馈环，定位根因并验证修复。
+使用 $diagnosing-business-failures 从这份错误业务结果建立反馈闭环，定位根因并验证修复。
 
 使用 $reviewing-business-delivery 对照批准的业务契约和工程风险评审这次交付。
 
@@ -83,6 +83,12 @@ policy:
 
 因此不会因为普通问答或简单代码请求自动进入完整工作流。
 
+## 语言约定
+
+Easypower 保留工程团队常用的英文术语，第一次出现时使用 `English（中文）`，后文固定使用英文或已约定的中文简称。例如：`Spec（业务规格）`、`Plan（执行计划）`、`Business Brief（业务简报）`、`Wayfinding（大型工作导航）`。API、JSON、HTML 等通用缩写只在含义可能不清楚时解释，不逐处机械翻译。
+
+状态名保持英文原值，避免文档与状态机不一致，并在状态定义处补充中文，例如 `Ready（可领取）`、`Blocked（受阻）`、`Completed（已完成）`。普通动作和判断使用自然中文，避免逐字翻译英文流程名。
+
 ## 工作方式
 
 ```text
@@ -104,7 +110,7 @@ policy:
 - [执行状态协议](skills/executing-business-plans/references/execution-state.md)
 - [风险验证与恢复](skills/executing-business-plans/references/validation-and-recovery.md)
 - [业务架构决策框架](skills/designing-business-architecture/references/decision-framework.md)
-- [业务失败反馈环](skills/diagnosing-business-failures/references/feedback-loops.md)
+- [Feedback Loop（业务反馈闭环）](skills/diagnosing-business-failures/references/feedback-loops.md)
 - [业务契约评审轴](skills/reviewing-business-delivery/references/business-contract-axis.md)
 - [逻辑原型协议](skills/prototyping-decisions/references/logic-prototype.md)
 - [研究来源与证据等级](skills/researching-decisions/references/source-evidence.md)
@@ -116,7 +122,7 @@ skills/
 ├─ business-driven-development/  # 形成业务 Spec 和渐进式 Plan
 ├─ executing-business-plans/     # 消费已批准 Plan 并持续执行
 ├─ designing-business-architecture/ # 比较并批准重要架构决定
-├─ diagnosing-business-failures/ # 从业务失败证据诊断并恢复
+├─ diagnosing-business-failures/ # 从业务故障证据诊断并恢复
 ├─ reviewing-business-delivery/  # 审查业务契约和工程风险
 ├─ prototyping-decisions/        # 用一次性原型回答决策问题
 ├─ researching-decisions/        # 用一手来源形成决策证据
@@ -155,7 +161,7 @@ tests/
 
 [规划场景测试](tests/business-driven-development/scenarios.md) 覆盖三类核心用法：
 
-- 有黄金目标数据的 BI 报表；
+- 有基准目标数据的 BI 报表；
 - 没有现成目标产物的权限功能；
 - 需要多个子代理持续执行的大型功能。
 
@@ -169,7 +175,7 @@ tests/
 
 [架构场景测试](tests/designing-business-architecture/scenarios.md) 覆盖 BI 计算与查询负载、订单定价模块边界，以及大 JSON 的渐进存储演进。该 Skill 已通过三个隔离前向场景。
 
-[诊断场景测试](tests/diagnosing-business-failures/scenarios.md) 覆盖黄金报表差异、低概率重复扣款和 Schema 迁移后的性能退化。该 Skill 已通过三个隔离前向场景。
+[诊断场景测试](tests/diagnosing-business-failures/scenarios.md) 覆盖基准报表差异、低概率重复扣款和 Schema 迁移后的性能退化。该 Skill 已通过三个隔离前向场景。
 
 [评审场景测试](tests/reviewing-business-delivery/scenarios.md) 覆盖业务结果失败、工程风险阻断和低风险外部反馈核验。该 Skill 已通过三个隔离前向场景。
 
