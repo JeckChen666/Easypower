@@ -36,7 +36,7 @@ flowchart TD
     G --> H[用户批准主 Plan]
     H --> I[执行核心业务闭环 P01]
     I --> J{业务验收通过?}
-    J -- 否 --> K[诊断并修复或升级审批]
+    J -- 否 --> K[diagnosing-business-failures]
     K --> I
     J -- 是 --> L[更新执行前沿]
     L --> M[按需展开增强子 Plan]

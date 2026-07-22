@@ -20,7 +20,7 @@ Easypower 不提供“每轮对话都先运行”的全局路由 Skill。Skill �
 | `business-driven-development` | 主流程 | 已完成 | 用户显式调用 | 从业务想法形成已批准 Spec、渐进式 Plan 和自治边界 |
 | `executing-business-plans` | 执行 | 已完成 | 用户或主流程显式调用 | 在全新上下文中按执行前沿持续完成已批准 Plan |
 | `designing-business-architecture` | 决策支持 | 已完成 | 用户或主流程显式调用 | 围绕业务负载比较接口、计算、存储和系统架构方案 |
-| `diagnosing-business-failures` | 质量保障 | P1 | 用户或执行流程显式调用 | 从业务失败证据建立反馈循环、定位根因并防止回归 |
+| `diagnosing-business-failures` | 质量保障 | 已完成 | 用户或执行流程显式调用 | 从业务失败证据建立反馈循环、定位根因并防止回归 |
 | `reviewing-business-delivery` | 质量保障 | P1 | 用户或执行流程显式调用 | 分别审查业务契约符合度和工程风险，并汇总交付证据 |
 | `prototyping-decisions` | 决策支持 | P2 | 用户或主流程显式调用 | 用一次性逻辑或 UI 原型回答无法靠文字解决的问题 |
 | `researching-decisions` | 决策支持 | P2 | 用户或主流程显式调用 | 基于第一方资料调查事实并留下可引用结论 |
@@ -115,12 +115,14 @@ flowchart TD
 
 1. `executing-business-plans`（已完成）：把已批准 Plan 交给全新上下文持续执行，是后台自治的核心。
 2. `designing-business-architecture`（已完成）：补足性能、接口、存储和系统级取舍，直接改善 Spec 与 Plan 质量。
-3. `diagnosing-business-failures`：为执行失败建立可靠恢复路径。
+3. `diagnosing-business-failures`（已完成）：为执行失败建立可靠恢复路径。
 4. `reviewing-business-delivery`：在最终交付前独立检查业务契约和工程风险。
 
 `executing-business-plans` 已完成三个隔离前向场景和一次规划到执行的组合测试。`business-driven-development` 负责形成授权，执行 Skill 负责消费授权；规划会话和长时间执行会话使用不同上下文。
 
 `designing-business-architecture` 已完成 BI 负载、定价模块边界和渐进存储演进三个隔离前向场景。它作为规划阶段的按需决策分支，不成为每个功能的固定步骤。
+
+`diagnosing-business-failures` 已完成黄金报表差异、低概率重复扣款和性能退化三个隔离前向场景。它区分生产止损、根因修复和业务恢复证据，并由执行流程在失败时显式调用。
 
 ### P2：提高复杂决策质量
 
