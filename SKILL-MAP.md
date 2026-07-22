@@ -29,6 +29,7 @@ Easypower 不提供“每轮对话都先运行”的全局路由 Skill。Skill �
 | `modeling-business-domain` | 决策支持 | 已完成 | 用户或主流程显式调用 | 统一业务语言、具体场景和少量必要的 ADR |
 | `wayfinding-large-work` | 主流程入口 | 已完成 | 用户显式调用 | 为超过一个上下文的大型模糊工作维护决策地图和未知前沿 |
 | `triaging-business-requests` | 需求入口 | 已完成 | 用户显式调用 | 验证外部需求或缺陷，并形成可交给规划流程的 Business Brief |
+| `orchestrating-multi-role-workflows` | 执行支持 | 已完成 | 用户显式调用 | 用真实子代理、DAG 和持久化状态运行多角色工作流 |
 | `writing-natural-chinese` | 表达约束 | 已完成 | 默认隐式调用 | 让中文解释和工程文档保留准确术语，并避免英文直译腔 |
 
 P1 补齐核心交付闭环，P2 处理复杂决策和超大范围，P3 处理团队需求入口。优先级可以根据真实使用反馈调整，但每次只创建和验证一个 Skill。
@@ -63,6 +64,8 @@ flowchart TD
 
 上图描述调用关系，不代表每个任务都要经过全部 Skill。没有重要未知项时直接跳过决策支持；低风险切片也不要求独立评审 Skill。
 
+`orchestrating-multi-role-workflows` 是独立的通用编排入口，不替代业务主流程。角色步骤可以调用适合的决策支持 Skill，已批准 Plan 的代码执行仍交给 `executing-business-plans`。
+
 ## 四、来源能力映射
 
 ### Superpowers 中文译版
@@ -95,6 +98,12 @@ flowchart TD
 | `triage` | `triaging-business-requests` | 从 issue 状态机改为业务价值、可复现性和规划就绪的 Business Brief |
 | `handoff` | 执行内部上下文协议 | 权威文件链接和 Agent Brief（任务说明）代替复制整段会话 |
 | `ask-matt` | 无正式对应 | 不创建强制路由；由能力地图和显式调用完成发现 |
+
+### jnMetaCode/superpowers-zh
+
+| 来源能力 | Easypower 去向 | 处理方式 |
+|---|---|---|
+| `workflow-runner` | `orchestrating-multi-role-workflows` | 保留 YAML DAG、角色契约和分层并行；改为真实子代理、持久化状态、所有权检查和用户 Decision Gate |
 
 ## 五、不单独创建的 Skill
 
@@ -147,7 +156,11 @@ flowchart TD
 
 `writing-natural-chinese` 覆盖用户解释、Spec、Plan 和工程文档。它保留专业英文，在首次出现时补充中文意译，并保持后续用词一致；其内容保持简短，不引入额外流程。
 
-当前能力地图中的十一个正式 Skill 已全部完成。后续候选能力只从真实使用反馈中产生，不为了覆盖参考仓库目录继续扩张。
+### P5：多角色工作流编排
+
+`orchestrating-multi-role-workflows` 吸收声明式 YAML 工作流、角色定义和 DAG 分层执行，并补上真实子代理、文件所有权、运行状态、失败传播和跨会话恢复。它服务于通用多角色评审、研究和决策，不接管已批准业务 Plan 的实现。
+
+当前能力地图中的十二个正式 Skill 已全部完成。后续候选能力只从真实使用反馈中产生，不为了覆盖参考仓库目录继续扩张。
 
 ## 七、正式 Skill 准入条件
 
