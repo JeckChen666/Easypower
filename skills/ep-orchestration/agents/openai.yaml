@@ -1,5 +1,5 @@
 interface:
-  display_name: "多角色工作流编排"
+  display_name: "Easypower Orchestration"
   short_description: "通过持久化 DAG 和真实子代理安全协调多角色工作流"
   default_prompt: "使用 $ep-orchestration 运行这个已批准的多角色工作流。"
 

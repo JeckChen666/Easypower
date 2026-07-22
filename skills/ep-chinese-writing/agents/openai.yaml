@@ -1,5 +1,5 @@
 interface:
-  display_name: "自然技术中文"
+  display_name: "Easypower Chinese Writing"
   short_description: "让技术解释和工程文档使用自然、准确且一致的中文表达"
   default_prompt: "使用 $ep-chinese-writing 检查这段技术中文的术语和表达。"
 

@@ -1,5 +1,5 @@
 interface:
-  display_name: "塑造产品体验"
+  display_name: "Easypower Product Design"
   short_description: "通过用户证据、多角色评审和任务走查确定可批准的产品形态"
   default_prompt: "使用 $ep-product-design 和我确定这个功能的用户路径与产品形态。"
 

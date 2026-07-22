@@ -1,5 +1,5 @@
 interface:
-  display_name: "大型工作导航"
+  display_name: "Easypower Large Project"
   short_description: "为跨上下文的模糊业务目标维护 Decision Map、Frontier 和恢复点"
   default_prompt: "使用 $ep-large-project 为这个大型模糊目标建立可持续推进的决策地图。"
 

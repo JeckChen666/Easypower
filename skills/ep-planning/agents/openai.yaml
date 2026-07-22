@@ -1,5 +1,5 @@
 interface:
-  display_name: "业务驱动开发"
+  display_name: "Easypower Planning"
   short_description: "以业务闭环、渐进式计划和验收证据组织可审核的自主开发交付"
   default_prompt: "使用 $ep-planning 与我确认业务 Spec 和渐进式 Plan，并在批准后组织自主执行。"
 

@@ -1,5 +1,5 @@
 interface:
-  display_name: "轻量代码修改"
+  display_name: "Easypower Code Change"
   short_description: "自动区分快速修改与复杂任务，并选择适当的代码验证和升级路径"
   default_prompt: "使用 $ep-code-change 以合适的流程和验证强度完成这次代码修改。"
 

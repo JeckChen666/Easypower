@@ -44,6 +44,8 @@ Easypower 目前有十五个正式 Skill：
 
 Easypower 以一个包含十五个 Skill 的 Codex Plugin（插件）发布。推荐从 GitHub Marketplace Source（插件源）整体安装：
 
+如需通过通用 Skills CLI 安装，或让仓库进入 skills.sh 的自动索引，参见 [skills.sh 收录说明](SKILLS-SH.md)。
+
 ```powershell
 codex plugin marketplace add JeckChen666/Easypower --ref main
 codex plugin add easypower@easypower

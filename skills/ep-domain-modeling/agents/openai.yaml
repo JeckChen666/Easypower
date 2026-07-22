@@ -1,5 +1,5 @@
 interface:
-  display_name: "业务领域建模"
+  display_name: "Easypower Domain Modeling"
   short_description: "统一业务语言、场景与不变量，并只记录必要的领域决策"
   default_prompt: "使用 $ep-domain-modeling 澄清这个功能的领域语言、场景和不变量。"
 
