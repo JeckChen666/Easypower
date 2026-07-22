@@ -25,7 +25,7 @@ Easypower 不提供“每轮对话都先运行”的全局路由 Skill。Skill �
 | `prototyping-decisions` | 决策支持 | 已完成 | 用户或主流程显式调用 | 用一次性逻辑或 UI 原型回答无法靠文字解决的问题 |
 | `researching-decisions` | 决策支持 | 已完成 | 用户或主流程显式调用 | 基于第一方资料调查事实并留下可引用结论 |
 | `modeling-business-domain` | 决策支持 | 已完成 | 用户或主流程显式调用 | 统一业务语言、具体场景和少量真正必要的 ADR |
-| `wayfinding-large-work` | 主流程入口 | P2 | 用户显式调用 | 为超过一个上下文的大型模糊工作维护决策地图和未知前沿 |
+| `wayfinding-large-work` | 主流程入口 | 已完成 | 用户显式调用 | 为超过一个上下文的大型模糊工作维护决策地图和未知前沿 |
 | `triaging-business-requests` | 需求入口 | P3 | 用户显式调用 | 验证外部需求或缺陷，并形成可交给 Agent 的业务 Brief |
 
 P1 补齐核心交付闭环，P2 处理复杂决策和超大范围，P3 处理团队需求入口。优先级可以根据真实使用反馈调整，但每次只创建和验证一个 Skill。
@@ -134,7 +134,9 @@ flowchart TD
 
 `modeling-business-domain` 已完成 SaaS “账号”歧义、报表定义/计算/发布混用和 ADR 过度记录三个隔离前向场景。它用具体场景确认业务语言和不变量，将结论回写 Spec，并保持上下文地图与 ADR 稀疏。
 
-下一步建设 `wayfinding-large-work`。顺序由最常出现的真实问题决定。
+`wayfinding-large-work` 已完成 ERP 替换、模糊 BI 平台统一和清晰小功能三个前向场景。它只服务于跨上下文且无法直接形成 Spec 的目标，维护低分辨率主地图、单决策票据、真实前沿和未知区域，路线清楚后交给 `business-driven-development`。
+
+下一步建设 `triaging-business-requests`。顺序由最常出现的真实问题决定。
 
 ### P3：扩展团队入口
 

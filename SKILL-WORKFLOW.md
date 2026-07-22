@@ -18,14 +18,18 @@ Easypower 面向需要先审核 Spec 和 Plan、再交给 Code Agent 或子代�
 
 ## 二、默认入口
 
-当前第一个正式入口是 [business-driven-development](skills/business-driven-development/SKILL.md)。
+清晰业务需求的正式入口是 [business-driven-development](skills/business-driven-development/SKILL.md)。超过一个上下文且仍无法形成可批准 Spec 的目标，先显式调用 [wayfinding-large-work](skills/wayfinding-large-work/SKILL.md)；当决策地图达到 `Ready for Spec` 后再进入规划。
 
-该 Skill 禁止隐式调用。用户需要通过 `$business-driven-development` 或等价的显式 Skill 调用启动完整流程。普通问答、简单修改和状态检查不自动进入该工作流。
+两个主流程入口都禁止隐式调用。普通问答、简单修改和状态检查不自动进入该工作流。
 
 ```mermaid
 flowchart TD
-    A[用户显式调用 Skill] --> B[调查仓库和业务事实]
-    B --> C[讨论业务 Spec]
+    Z[超大且模糊的目标] --> W[wayfinding-large-work]
+    W --> A[路线达到 Ready for Spec]
+    A --> B[显式调用 business-driven-development]
+    Y[清晰业务需求] --> B
+    B --> B1[调查仓库和业务事实]
+    B1 --> C[讨论业务 Spec]
     C --> D{重要问题能否靠讨论解决?}
     D -- 外部事实 --> E[researching-decisions]
     D -- 需要运行或展示 --> E3[prototyping-decisions]
