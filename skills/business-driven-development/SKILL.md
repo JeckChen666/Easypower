@@ -23,7 +23,7 @@ description: Use when the user explicitly asks to turn a substantial business re
 - 已纳入本次交付的增强能力；
 - 质量属性和关键技术决策。
 
-每次只讨论一个决策，并给出推荐答案。文字不足以解决重要问题时，按协议选择 Research 或 Prototype；涉及公共接口、计算、存储、迁移或系统结构的重要取舍时，明确调用 `designing-business-architecture`。写入 `docs/easypower/<feature>/spec.md`，等待用户明确批准。
+每次只讨论一个决策，并给出推荐答案。必须运行、操作或展示后才能判断时，明确调用 `$prototyping-decisions`；依赖外部事实时调用 `$researching-decisions`；涉及公共接口、计算、存储、迁移或系统结构的重要取舍时，明确调用 `$designing-business-architecture`。写入 `docs/easypower/<feature>/spec.md`，等待用户明确批准。
 
 ### 2. 形成渐进式 Plan
 

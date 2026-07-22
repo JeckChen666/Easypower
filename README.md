@@ -4,13 +4,14 @@ Easypower 是一个以业务结果为核心的 Code Agent Skill 仓库。它面�
 
 ## 当前进度
 
-Easypower 目前有五个正式 Skill：
+Easypower 目前有六个正式 Skill：
 
 - [business-driven-development](skills/business-driven-development/SKILL.md)：与用户形成并批准业务 Spec 和渐进式 Plan；
 - [executing-business-plans](skills/executing-business-plans/SKILL.md)：在全新上下文中消费已批准的 Spec 和 Plan，持续执行并留下业务证据。
 - [designing-business-architecture](skills/designing-business-architecture/SKILL.md)：围绕业务负载比较计算、存储、接口和迁移方案，形成可批准的架构决定。
 - [diagnosing-business-failures](skills/diagnosing-business-failures/SKILL.md)：从错误业务结果、间歇故障或性能退化建立反馈环，定位根因并证明恢复。
 - [reviewing-business-delivery](skills/reviewing-business-delivery/SKILL.md)：分别审查业务契约符合度、工程风险和交付证据可信度。
+- [prototyping-decisions](skills/prototyping-decisions/SKILL.md)：用一次性逻辑、UI 或技术原型回答一个必须运行后才能判断的问题。
 
 规划与执行 Skill 组成第一条完整交付链路；架构、诊断和评审 Skill 只在相应的重要决策、业务失败或交付门出现时进入。后续还会继续加入研究和其他实际工作场景的独立 Skill。
 
@@ -38,6 +39,7 @@ $executing-business-plans
 $designing-business-architecture
 $diagnosing-business-failures
 $reviewing-business-delivery
+$prototyping-decisions
 ```
 
 示例：
@@ -52,9 +54,11 @@ $reviewing-business-delivery
 使用 $diagnosing-business-failures 从这份错误业务结果建立反馈环，定位根因并验证修复。
 
 使用 $reviewing-business-delivery 对照批准的业务契约和工程风险评审这次交付。
+
+使用 $prototyping-decisions 构建最小原型来回答这个业务决策问题。
 ```
 
-五个 Skill 都在各自的 OpenAI 元数据中设置了：
+六个 Skill 都在各自的 OpenAI 元数据中设置了：
 
 ```yaml
 policy:
@@ -86,6 +90,7 @@ policy:
 - [业务架构决策框架](skills/designing-business-architecture/references/decision-framework.md)
 - [业务失败反馈环](skills/diagnosing-business-failures/references/feedback-loops.md)
 - [业务契约评审轴](skills/reviewing-business-delivery/references/business-contract-axis.md)
+- [逻辑原型协议](skills/prototyping-decisions/references/logic-prototype.md)
 
 ## 仓库结构
 
@@ -95,7 +100,8 @@ skills/
 ├─ executing-business-plans/     # 消费已批准 Plan 并持续执行
 ├─ designing-business-architecture/ # 比较并批准重要架构决定
 ├─ diagnosing-business-failures/ # 从业务失败证据诊断并恢复
-└─ reviewing-business-delivery/  # 审查业务契约和工程风险
+├─ reviewing-business-delivery/  # 审查业务契约和工程风险
+└─ prototyping-decisions/        # 用一次性原型回答决策问题
 
 references/
 └─ superpowers-zh/
@@ -106,7 +112,8 @@ tests/
 ├─ executing-business-plans/     # 执行 Skill 的前向测试场景
 ├─ designing-business-architecture/ # 架构 Skill 的前向测试场景
 ├─ diagnosing-business-failures/ # 诊断 Skill 的前向测试场景
-└─ reviewing-business-delivery/  # 评审 Skill 的前向测试场景
+├─ reviewing-business-delivery/  # 评审 Skill 的前向测试场景
+└─ prototyping-decisions/        # 原型 Skill 的前向测试场景
 ```
 
 `skills/` 是 Easypower 正式 Skill 的唯一发布目录。`references/` 下的内容不参与安装或 Skill 发现。
@@ -140,5 +147,7 @@ tests/
 [诊断场景测试](tests/diagnosing-business-failures/scenarios.md) 覆盖黄金报表差异、低概率重复扣款和 Schema 迁移后的性能退化。该 Skill 已通过三个隔离前向场景。
 
 [评审场景测试](tests/reviewing-business-delivery/scenarios.md) 覆盖业务结果失败、工程风险阻断和低风险外部反馈核验。该 Skill 已通过三个隔离前向场景。
+
+[原型场景测试](tests/prototyping-decisions/scenarios.md) 覆盖业务逻辑口径、现有页面 UI 方案和应先调查的供应商能力。该 Skill 已通过三个隔离前向场景。
 
 新增或修改正式 Skill 时，应先观察无 Skill 的基线行为，再使用相同场景进行前向验证。

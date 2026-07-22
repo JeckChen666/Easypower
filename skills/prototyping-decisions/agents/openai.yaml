@@ -1,0 +1,7 @@
+interface:
+  display_name: "原型验证决策"
+  short_description: "用一次性逻辑或界面原型回答一个无法靠文字确定的业务决定"
+  default_prompt: "使用 $prototyping-decisions 构建最小原型来回答这个业务决策问题。"
+
+policy:
+  allow_implicit_invocation: false

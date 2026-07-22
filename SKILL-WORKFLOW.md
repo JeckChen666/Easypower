@@ -27,9 +27,11 @@ flowchart TD
     A[用户显式调用 Skill] --> B[调查仓库和业务事实]
     B --> C[讨论业务 Spec]
     C --> D{重要问题能否靠讨论解决?}
-    D -- 外部事实或运行验证 --> E[Research / Prototype]
+    D -- 外部事实 --> E[researching-decisions]
+    D -- 需要运行或展示 --> E3[prototyping-decisions]
     D -- 重要架构取舍 --> E2[designing-business-architecture]
     E --> C
+    E3 --> C
     E2 --> C
     D -- 是 --> F[用户批准 Spec]
     F --> G[编写主 Plan 和首个子 Plan]
@@ -72,8 +74,8 @@ Spec 是业务事实来源，回答：
 
 | 分支 | 适用问题 | 产物 |
 |---|---|---|
-| Research | 依赖官方文档、规范或外部事实 | 有来源的结论 |
-| Prototype | 状态、计算或交互需要运行后判断 | 一次性原型和验证结论 |
+| `researching-decisions` | 依赖官方文档、规范或外部事实 | 有来源的结论 |
+| `prototyping-decisions` | 状态、计算或交互需要运行后判断 | 一次性原型和验证结论 |
 | `designing-business-architecture` | 公共接口、数据模型、计算、存储或迁移架构难以逆转 | 业务负载、多个方案、取舍、迁移和批准决定 |
 
 分支产物用于消除决策歧义，不直接替代生产实现。
