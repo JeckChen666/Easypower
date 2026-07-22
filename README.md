@@ -4,7 +4,7 @@ Easypower 是一个以业务结果为核心的 Code Agent Skill 仓库。它面�
 
 ## 当前进度
 
-Easypower 目前有十二个正式 Skill：
+Easypower 目前有十三个正式 Skill：
 
 - [business-driven-development](skills/business-driven-development/SKILL.md)：与用户形成并批准业务 Spec 和渐进式 Plan；
 - [executing-business-plans](skills/executing-business-plans/SKILL.md)：在全新上下文中消费已批准的 Spec 和 Plan，持续执行并留下业务证据。
@@ -16,6 +16,7 @@ Easypower 目前有十二个正式 Skill：
 - [modeling-business-domain](skills/modeling-business-domain/SKILL.md)：用具体场景统一业务语言、边界和不变量，并限制 ADR 膨胀。
 - [wayfinding-large-work](skills/wayfinding-large-work/SKILL.md)：为跨上下文且尚无法形成 Spec 的大型目标维护决策地图和未知前沿。
 - [triaging-business-requests](skills/triaging-business-requests/SKILL.md)：验证外部需求、缺陷和 PR 的业务主张，并形成可交给规划流程的 Business Brief。
+- [shaping-product-experiences](skills/shaping-product-experiences/SKILL.md)：基于用户证据、多角色评审和任务走查确定可批准的产品形态。
 - [orchestrating-multi-role-workflows](skills/orchestrating-multi-role-workflows/SKILL.md)：用持久化 DAG、真实子代理和 Decision Gate 运行多角色工作流。
 - [writing-natural-chinese](skills/writing-natural-chinese/SKILL.md)：约束面向用户的中文解释和工程文档，保留专业英文并在首次出现时补充中文意译。
 
@@ -29,6 +30,7 @@ Easypower 目前有十二个正式 Skill：
 
 - 日常对话不应自动进入重型开发流程；
 - Spec 应先明确业务目标、规则和验收依据；
+- 重要用户路径和产品形态应在 Spec 批准前完成走查；
 - Plan 应按端到端业务切片组织，而不是按技术层拆分；
 - 大型 Plan 应使用主 Plan 和按需子 Plan 渐进展开；
 - 核心业务闭环应先完成并验证，再推进增强能力；
@@ -50,6 +52,7 @@ $researching-decisions
 $modeling-business-domain
 $wayfinding-large-work
 $triaging-business-requests
+$shaping-product-experiences
 $orchestrating-multi-role-workflows
 $writing-natural-chinese
 ```
@@ -77,12 +80,14 @@ $writing-natural-chinese
 
 使用 $triaging-business-requests 验证这个外部请求并形成可交给规划流程的 Business Brief。
 
+使用 $shaping-product-experiences 和我确定这个功能的用户路径与产品形态。
+
 使用 $orchestrating-multi-role-workflows 运行这个已批准的多角色 YAML 工作流。
 
 使用 $writing-natural-chinese 检查这段技术中文的术语和表达。
 ```
 
-除 `writing-natural-chinese` 外，其余十一个流程型 Skill 都设置了：
+除 `writing-natural-chinese` 外，其余十二个流程型 Skill 都设置了：
 
 ```yaml
 policy:
@@ -105,6 +110,7 @@ Easypower 保留工程团队常用的英文术语，第一次出现时使用 `En
 
 ```text
 业务调查
+  -> 产品体验塑造（按需）
   -> Spec 审批
   -> 主 Plan 审批
   -> 核心业务闭环
@@ -126,6 +132,7 @@ Easypower 保留工程团队常用的英文术语，第一次出现时使用 `En
 - [业务契约评审轴](skills/reviewing-business-delivery/references/business-contract-axis.md)
 - [逻辑原型协议](skills/prototyping-decisions/references/logic-prototype.md)
 - [研究来源与证据等级](skills/researching-decisions/references/source-evidence.md)
+- [Product Experience Contract（产品体验契约）](skills/shaping-product-experiences/references/experience-protocol.md)
 
 ## 仓库结构
 
@@ -141,6 +148,7 @@ skills/
 ├─ modeling-business-domain/     # 用场景澄清领域语言与边界
 ├─ wayfinding-large-work/        # 为大型模糊目标维护决策地图
 ├─ triaging-business-requests/   # 验证和分流外部业务请求
+├─ shaping-product-experiences/  # 塑造用户路径与产品形态
 ├─ orchestrating-multi-role-workflows/ # 运行多角色 DAG 工作流
 └─ writing-natural-chinese/      # 统一中文技术表达与术语
 
@@ -159,6 +167,7 @@ tests/
 ├─ modeling-business-domain/     # 领域建模 Skill 的前向测试场景
 ├─ wayfinding-large-work/        # 大型工作导航 Skill 的前向测试场景
 ├─ triaging-business-requests/   # 业务请求分流 Skill 的前向测试场景
+├─ shaping-product-experiences/  # 产品体验塑造 Skill 的场景
 ├─ orchestrating-multi-role-workflows/ # 多角色工作流编排场景
 └─ writing-natural-chinese/      # 中文技术表达 Skill 的场景
 ```
@@ -171,6 +180,7 @@ tests/
 - `superpowers/`：本地原版克隆，由 `.gitignore` 排除；
 - `mattpocock-skill/` 与 `mattpocock-skill-zh/`：本地对比仓库，由 `.gitignore` 排除。
 - [jnMetaCode workflow-runner](https://github.com/jnMetaCode/superpowers-zh/blob/main/skills/workflow-runner/SKILL.md)：提供 YAML 多角色工作流的参考实现。
+- [agency-orchestrator](https://github.com/jnMetaCode/agency-orchestrator)：提供角色库、工作流和编排引擎分离的参考设计。
 
 参考来源用于提取可复用思想，不决定 Easypower 的 Skill 数量、触发方式或工作流结构。
 
@@ -209,5 +219,7 @@ tests/
 [自然技术中文场景](tests/writing-natural-chinese/scenarios.md) 覆盖用户解释、Spec/Plan 文档和代码评审，检查首次释义、术语一致性和自然中文句法。
 
 [多角色工作流编排场景](tests/orchestrating-multi-role-workflows/scenarios.md) 覆盖并行角色评审、共享 Schema 冲突，以及失败后的跨会话恢复。
+
+[产品体验塑造场景](tests/shaping-product-experiences/scenarios.md) 覆盖 BI 高频筛选、权限配置流程，以及不应进入体验设计的纯后端任务。
 
 新增或修改正式 Skill 时，应先观察无 Skill 的基线行为，再使用相同场景进行前向验证。

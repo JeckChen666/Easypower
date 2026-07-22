@@ -29,6 +29,7 @@ Easypower 不提供“每轮对话都先运行”的全局路由 Skill。Skill �
 | `modeling-business-domain` | 决策支持 | 已完成 | 用户或主流程显式调用 | 统一业务语言、具体场景和少量必要的 ADR |
 | `wayfinding-large-work` | 主流程入口 | 已完成 | 用户显式调用 | 为超过一个上下文的大型模糊工作维护决策地图和未知前沿 |
 | `triaging-business-requests` | 需求入口 | 已完成 | 用户显式调用 | 验证外部需求或缺陷，并形成可交给规划流程的 Business Brief |
+| `shaping-product-experiences` | 决策支持 | 已完成 | 用户或主流程显式调用 | 基于用户证据和多角色任务走查确定可批准的产品形态 |
 | `orchestrating-multi-role-workflows` | 执行支持 | 已完成 | 用户显式调用 | 用真实子代理、DAG 和持久化状态运行多角色工作流 |
 | `writing-natural-chinese` | 表达约束 | 已完成 | 默认隐式调用 | 让中文解释和工程文档保留准确术语，并避免英文直译腔 |
 
@@ -46,10 +47,12 @@ flowchart TD
 
     B --> D{存在重要未知项?}
     D -- 外部事实 --> RS[researching-decisions]
+    D -- 产品形态或用户路径 --> UX[shaping-product-experiences]
     D -- 需要运行或展示 --> P[prototyping-decisions]
     D -- 架构取舍 --> A1[designing-business-architecture]
     D -- 领域歧义 --> M[modeling-business-domain]
     RS --> B
+    UX --> B
     P --> B
     A1 --> B
     M --> B
@@ -65,6 +68,8 @@ flowchart TD
 上图描述调用关系，不代表每个任务都要经过全部 Skill。没有重要未知项时直接跳过决策支持；低风险切片也不要求独立评审 Skill。
 
 `orchestrating-multi-role-workflows` 是独立的通用编排入口，不替代业务主流程。角色步骤可以调用适合的决策支持 Skill，已批准 Plan 的代码执行仍交给 `executing-business-plans`。
+
+`shaping-product-experiences` 定义产品体验方法和角色契约；需要多角色独立评审时调用 `orchestrating-multi-role-workflows`，需要实际操作后判断时调用 `prototyping-decisions`。三者不互相复制职责。
 
 ## 四、来源能力映射
 
@@ -99,11 +104,12 @@ flowchart TD
 | `handoff` | 执行内部上下文协议 | 权威文件链接和 Agent Brief（任务说明）代替复制整段会话 |
 | `ask-matt` | 无正式对应 | 不创建强制路由；由能力地图和显式调用完成发现 |
 
-### jnMetaCode/superpowers-zh
+### jnMetaCode Agent 生态
 
 | 来源能力 | Easypower 去向 | 处理方式 |
 |---|---|---|
 | `workflow-runner` | `orchestrating-multi-role-workflows` | 保留 YAML DAG、角色契约和分层并行；改为真实子代理、持久化状态、所有权检查和用户 Decision Gate |
+| `agency-orchestrator` + `agency-agents-zh` | `shaping-product-experiences` | 吸收角色、方法和工作流分离；用证据和权限契约代替大规模人格角色库 |
 
 ## 五、不单独创建的 Skill
 
@@ -160,7 +166,11 @@ flowchart TD
 
 `orchestrating-multi-role-workflows` 吸收声明式 YAML 工作流、角色定义和 DAG 分层执行，并补上真实子代理、文件所有权、运行状态、失败传播和跨会话恢复。它服务于通用多角色评审、研究和决策，不接管已批准业务 Plan 的实现。
 
-当前能力地图中的十二个正式 Skill 已全部完成。后续候选能力只从真实使用反馈中产生，不为了覆盖参考仓库目录继续扩张。
+### P6：产品体验塑造
+
+`shaping-product-experiences` 补足 Spec 前的用户路径、信息层级和产品形态决策。它使用 Product Lead、User Advocate、Interaction Designer 和 Architect 的责任契约进行有限轮次评审；Agent 不能冒充真实用户，无法区分的方案转入用户证据或 Prototype（原型验证）。
+
+当前能力地图中的十三个正式 Skill 已全部完成。后续候选能力只从真实使用反馈中产生，不为了覆盖参考仓库目录继续扩张。
 
 ## 七、正式 Skill 准入条件
 

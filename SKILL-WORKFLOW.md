@@ -36,10 +36,12 @@ flowchart TD
     B1 --> C[讨论业务 Spec]
     C --> D{重要问题能否靠讨论解决?}
     D -- 外部事实 --> E[researching-decisions]
+    D -- 产品形态或用户路径 --> E5[shaping-product-experiences]
     D -- 需要运行或展示 --> E3[prototyping-decisions]
     D -- 领域歧义 --> E4[modeling-business-domain]
     D -- 重要架构取舍 --> E2[designing-business-architecture]
     E --> C
+    E5 --> C
     E3 --> C
     E4 --> C
     E2 --> C
@@ -66,6 +68,7 @@ Spec 是业务事实来源，回答：
 
 - 为什么做；
 - 谁使用；
+- 用户如何完成关键任务，以及哪些体验假设仍需验证；
 - 最小业务闭环是什么；
 - 哪些业务规则和不变量必须成立；
 - 哪些增强能力纳入本次交付；
@@ -85,6 +88,7 @@ Spec 是业务事实来源，回答：
 | 分支 | 适用问题 | 产物 |
 |---|---|---|
 | `researching-decisions` | 依赖官方文档、规范或外部事实 | 有来源的结论 |
+| `shaping-product-experiences` | 重要用户路径、信息层级或产品形态存在多种合理方案 | 已批准的体验契约和待验证假设 |
 | `prototyping-decisions` | 状态、计算或交互需要运行后判断 | 一次性原型和验证结论 |
 | `modeling-business-domain` | 术语、场景、边界或不变量存在多种业务解释 | 规范语言、区分场景和已确认不变量 |
 | `designing-business-architecture` | 公共接口、数据模型、计算、存储或迁移架构难以逆转 | 业务负载、多个方案、取舍、迁移和批准决定 |
