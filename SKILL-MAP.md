@@ -11,14 +11,16 @@
 5. **渐进式披露**：主 `SKILL.md` 保留选择和状态机，详细协议按需读取。
 6. **逐个验证**：每个新 Skill 都先观察无 Skill 基线，再编写最小版本并前向测试。
 
-Easypower 不提供“每轮对话都先运行”的全局路由 Skill。Skill 发现依赖清晰的名称、描述和仓库文档，不依赖强制启动流程。
+Easypower 不提供“每轮对话都先运行”的重型路由流程。`ep-use-easypower` 只在用户明确要求使用 Easypower 时选择一个下游 Skill；`ep-code-change` 可以自动触发，但只区分快速修改与正式流程，不编写 Spec 或 Plan。
 
-`ep-chinese-writing` 只约束输出表达，不路由任务或增加工作步骤，因此作为高频隐式 Skill 使用。
+`ep-code-change` 和 `ep-chinese-writing` 都是简短的高频隐式 Skill。前者约束代码修改的流程与验证成本，后者只约束输出表达。
 
 ## 二、正式 Skill 规划
 
 | Skill | 类型 | 状态 | 调用方式 | 解决的问题 |
 |---|---|---|---|---|
+| `ep-use-easypower` | 总入口 | 已完成 | 用户显式调用或明确指定 Easypower | 根据上下文选择最小且足够的 Easypower 流程 |
+| `ep-code-change` | 轻量守门 | 已完成 | 代码或局部开发操作默认触发 | 快速完成局部修改，复杂任务升级总入口 |
 | `ep-planning` | 主流程 | 已完成 | 用户显式调用 | 从业务想法形成已批准 Spec、渐进式 Plan 和自主执行边界 |
 | `ep-execution` | 执行 | 已完成 | 用户或主流程显式调用 | 在全新上下文中按 Frontier（当前可执行任务）持续完成已批准 Plan |
 | `ep-architecture` | 决策支持 | 已完成 | 用户或主流程显式调用 | 围绕业务负载比较接口、计算、存储和系统架构方案 |
@@ -39,6 +41,13 @@ P1 补齐核心交付闭环，P2 处理复杂决策和超大范围，P3 处理�
 
 ```mermaid
 flowchart TD
+    U[明确使用 Easypower] --> R0[ep-use-easypower]
+    C0[普通代码修改] --> C1[ep-code-change]
+    C1 -- Quick Change --> C2[直接修改和最低成本验证]
+    C1 -- 需要正式流程 --> R0
+    R0 --> B
+    R0 --> W
+    R0 --> T
     A[业务想法] --> B[ep-planning]
     Z[超大且模糊的目标] --> W[ep-large-project]
     W --> B
@@ -102,7 +111,7 @@ flowchart TD
 | `wayfinder` | `ep-large-project` | 保留决策票据、未知前沿和跨上下文地图 |
 | `triage` | `ep-request-intake` | 从 issue 状态机改为业务价值、可复现性和规划就绪的 Business Brief |
 | `handoff` | 执行内部上下文协议 | 权威文件链接和 Agent Brief（任务说明）代替复制整段会话 |
-| `ask-matt` | 无正式对应 | 不创建强制路由；由能力地图和显式调用完成发现 |
+| `ask-matt` | `ep-use-easypower` | 只吸收按上下文发现能力的思想，不复制人格入口或每轮强制触发 |
 
 ### jnMetaCode Agent 生态
 
@@ -123,7 +132,6 @@ flowchart TD
 | Git worktree 与分支收尾 | 依赖平台、仓库和用户授权 | 执行内部操作规则 |
 | 接收评审意见 | 与发起评审属于同一交付闭环 | `ep-delivery-review` |
 | Conversation handoff | 权威文档和 Agent Brief 已承担主要职责 | 各主流程内部协议 |
-| Skill 路由器 | 容易恢复每轮强制触发 | README、能力地图和精确 description |
 
 如果真实使用证明某个内嵌机制需要独立调用、独立上下文或独立评估，再从内部协议提升为正式 Skill。
 
@@ -170,7 +178,11 @@ flowchart TD
 
 `ep-product-design` 补足 Spec 前的用户路径、信息层级和产品形态决策。它使用 Product Lead、User Advocate、Interaction Designer 和 Architect 的责任契约进行有限轮次评审；Agent 不能冒充真实用户，无法区分的方案转入用户证据或 Prototype（原型验证）。
 
-当前能力地图中的十三个正式 Skill 已全部完成。后续候选能力只从真实使用反馈中产生，不为了覆盖参考仓库目录继续扩张。
+### P7：统一入口与快速修改
+
+`ep-use-easypower` 为用户提供单一显式入口，只选择一个最先阻止业务推进的下游 Skill。`ep-code-change` 在普通代码修改时自动触发；它不按权限、金额或状态等词语机械升级，而是根据业务决策、影响范围、可恢复性和上下文规模判断是否需要正式流程。
+
+当前能力地图中的十五个正式 Skill 已全部完成。后续候选能力只从真实使用反馈中产生，不为了覆盖参考仓库目录继续扩张。
 
 ## 七、正式 Skill 准入条件
 

@@ -18,12 +18,19 @@ Easypower 面向需要先审核 Spec 和 Plan、再交给 Code Agent 或子代�
 
 ## 二、默认入口
 
-清晰业务需求的正式入口是 [ep-planning](skills/ep-planning/SKILL.md)。超过一个上下文且仍无法形成可批准 Spec 的目标，先显式调用 [ep-large-project](skills/ep-large-project/SKILL.md)；当决策地图达到 `Ready for Spec` 后再进入规划。外部 issue、PR、缺陷或需求池先使用 [ep-request-intake](skills/ep-request-intake/SKILL.md) 验证主张并形成 Business Brief。
+用户可以显式调用 [ep-use-easypower](skills/ep-use-easypower/SKILL.md)，让它根据当前上下文选择最小且足够的正式流程。普通代码、配置、数据或局部开发操作由 [ep-code-change](skills/ep-code-change/SKILL.md) 自动区分快速修改和需要升级的复杂任务。
 
-三个入口都禁止隐式调用。普通问答、简单修改和状态检查不自动进入该工作流。
+清晰业务需求的正式入口是 [ep-planning](skills/ep-planning/SKILL.md)。超过一个上下文且仍无法形成可批准 Spec 的目标进入 [ep-large-project](skills/ep-large-project/SKILL.md)；外部 issue、PR、缺陷或需求池先使用 [ep-request-intake](skills/ep-request-intake/SKILL.md)。这些重型流程都禁止隐式调用，普通问答和状态检查不自动进入。
 
 ```mermaid
 flowchart TD
+    U[明确要求使用 Easypower] --> U1[ep-use-easypower]
+    X[普通代码修改] --> X1[ep-code-change]
+    X1 -- 清晰、局部、可恢复 --> X2[Quick Change]
+    X1 -- 需要正式流程 --> U1
+    U1 --> B
+    U1 --> W
+    U1 --> T
     R[外部请求/缺陷/PR] --> T[ep-request-intake]
     T -- 清晰且 Ready for Planning --> B
     T -- 大型且仍然模糊 --> W
@@ -138,6 +145,10 @@ Plan 可以包含少量代码。只有删除片段会导致执行者对重要业
 
 测试服务于业务判断，不作为工作量指标。
 
+Quick Change 默认不新增测试用例。已有测试覆盖被修改行为时，同步修改必要用例并运行最相关测试；不得删除、弱化或绕过原有保护。无论是否存在测试，都使用成本最低的直接证据检查结果。
+
+权限、金额、公式和状态相关修改不自动升级。指定对象、预期结果、授权和影响范围清楚，且沿用现有规则时可以快速完成；需要定义新规则、改变公共契约或无法确认影响范围时才进入正式流程。
+
 | 变化 | 推荐验证 |
 |---|---|
 | 文档、文案、低风险配置 | 格式、差异或针对性检查 |
@@ -200,7 +211,7 @@ Agent 必须升级审批：
 后续每个 Easypower Skill 都应满足：
 
 1. 对应一个独立、可重复出现的实际工作问题；
-2. 触发条件足够窄，不因普通对话频繁启动；
+2. 重型流程的触发条件足够窄；高频隐式 Skill 必须简短且不能自行启动完整流程；
 3. 明确它与业务目标、主流程和其他 Skill 的关系；
 4. 先观察没有该 Skill 时的失败行为；
 5. 编写最小 Skill 后使用相同场景前向验证；

@@ -1,0 +1,7 @@
+interface:
+  display_name: "使用 Easypower"
+  short_description: "根据当前任务智能选择并进入合适的 Easypower 工作流"
+  default_prompt: "使用 $ep-use-easypower 判断这个任务应进入哪个 Easypower 流程。"
+
+policy:
+  allow_implicit_invocation: false

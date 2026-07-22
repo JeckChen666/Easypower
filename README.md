@@ -4,8 +4,10 @@ Easypower 是一个以业务结果为核心的 Code Agent Skill 仓库。它面�
 
 ## 当前进度
 
-Easypower 目前有十三个正式 Skill：
+Easypower 目前有十五个正式 Skill：
 
+- [ep-use-easypower](skills/ep-use-easypower/SKILL.md)：在用户明确要求使用 Easypower 时，根据上下文选择最小且足够的正式流程。
+- [ep-code-change](skills/ep-code-change/SKILL.md)：自动区分快速代码或开发操作和需要正式规划的复杂任务，避免为小改动机械新增测试。
 - [ep-planning](skills/ep-planning/SKILL.md)：与用户形成并批准业务 Spec 和渐进式 Plan；
 - [ep-execution](skills/ep-execution/SKILL.md)：在全新上下文中消费已批准的 Spec 和 Plan，持续执行并留下业务证据。
 - [ep-architecture](skills/ep-architecture/SKILL.md)：围绕业务负载比较计算、存储、接口和迁移方案，形成可批准的架构决定。
@@ -29,6 +31,7 @@ Easypower 目前有十三个正式 Skill：
 它解决以下问题：
 
 - 日常对话不应自动进入重型开发流程；
+- 清晰、局部且可逆的代码修改应快速完成，不机械新增测试；
 - Spec 应先明确业务目标、规则和验收依据；
 - 重要用户路径和产品形态应在 Spec 批准前完成走查；
 - Plan 应按端到端业务切片组织，而不是按技术层拆分；
@@ -42,6 +45,8 @@ Easypower 目前有十三个正式 Skill：
 安装或加载需要的 Skill 目录，然后显式调用：
 
 ```text
+$ep-use-easypower
+$ep-code-change
 $ep-planning
 $ep-execution
 $ep-architecture
@@ -60,6 +65,10 @@ $ep-chinese-writing
 示例：
 
 ```text
+使用 $ep-use-easypower 判断这个任务应该进入哪个 Easypower 流程。
+
+使用 $ep-code-change 快速完成这个局部代码修改，并按现有测试情况选择验证。
+
 使用 $ep-planning 和我梳理这个功能的业务 Spec 与渐进式 Plan，批准后再组织子代理执行。
 
 使用 $ep-execution 执行 docs/easypower/sales-report/ 中已经批准的 Spec 和主 Plan。
@@ -87,16 +96,16 @@ $ep-chinese-writing
 使用 $ep-chinese-writing 检查这段技术中文的术语和表达。
 ```
 
-除 `ep-chinese-writing` 外，其余十二个流程型 Skill 都设置了：
+除 `ep-code-change` 和 `ep-chinese-writing` 外，其余十三个 Skill 都设置了：
 
 ```yaml
 policy:
   allow_implicit_invocation: false
 ```
 
-因此不会因为普通问答或简单代码请求自动进入完整工作流。
+因此不会因为普通问答或简单代码请求自动进入完整工作流。`ep-use-easypower` 只在用户显式调用或明确要求使用 Easypower 时进行智能路由。
 
-`ep-chinese-writing` 是轻量表达约束，设置 `allow_implicit_invocation: true`，可在中文解释和文档生成时高频触发。它只调整表达，不启动业务工作流。
+`ep-code-change` 和 `ep-chinese-writing` 设置 `allow_implicit_invocation: true`。前者只为代码修改选择 Quick Change（快速修改）或升级路径，后者只调整表达；两者都保持简短，不自动启动完整业务工作流。
 
 ## 语言约定
 
@@ -138,6 +147,8 @@ Easypower 保留工程团队常用的英文术语，第一次出现时使用 `En
 
 ```text
 skills/
+├─ ep-use-easypower/ # 显式进入 Easypower 并智能路由
+├─ ep-code-change/ # 自动区分快速修改和复杂代码任务
 ├─ ep-planning/  # 形成业务 Spec 和渐进式 Plan
 ├─ ep-execution/     # 消费已批准 Plan 并持续执行
 ├─ ep-architecture/ # 比较并批准重要架构决定
@@ -157,6 +168,8 @@ references/
    └─ skills/                    # 旧 Superpowers 中文译版，仅作参考
 
 tests/
+├─ ep-use-easypower/ # 总入口路由场景
+├─ ep-code-change/ # 轻量代码修改场景
 ├─ ep-planning/  # 规划 Skill 的前向测试场景
 ├─ ep-execution/     # 执行 Skill 的前向测试场景
 ├─ ep-architecture/ # 架构 Skill 的前向测试场景
@@ -221,5 +234,7 @@ tests/
 [多角色工作流编排场景](tests/ep-orchestration/scenarios.md) 覆盖并行角色评审、共享 Schema 冲突，以及失败后的跨会话恢复。
 
 [产品体验塑造场景](tests/ep-product-design/scenarios.md) 覆盖 BI 高频筛选、权限配置流程，以及不应进入体验设计的纯后端任务。
+
+[Easypower 路由场景](tests/ep-use-easypower/scenarios.md) 覆盖明确小改动、已批准 Plan 和大型模糊目标。[代码修改场景](tests/ep-code-change/scenarios.md) 覆盖无需新增测试的小修改、需要同步既有测试的行为修改，以及可以快速处理的指定用户赋权。
 
 新增或修改正式 Skill 时，应先观察无 Skill 的基线行为，再使用相同场景进行前向验证。
