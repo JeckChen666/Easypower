@@ -47,8 +47,10 @@ description: Use when the user or another Easypower skill explicitly asks to exe
 3. 保存实现摘要和局部检查结果，将状态改为 Implemented；
 4. 按 [validation-and-recovery.md](references/validation-and-recovery.md) 选择最少但充分的业务验证；
 5. 回归已经成立的核心业务证据；
-6. 验证通过后保存证据并依次改为 Verified、Completed；
-7. 重新计算执行前沿并调度下一批任务。
+6. 验证通过后保存证据并改为 Verified；
+7. 核心闭环、高风险切片、公共契约变化或最终交付明确调用 `$reviewing-business-delivery`；评审通过后进入 Completed；
+8. 低风险且已有直接证据的切片不强制独立评审，可以从 Verified 进入 Completed；
+9. 重新计算执行前沿并调度下一批任务。
 
 不要为每个切片固定运行全量测试、双阶段评审或独立审查代理。验证和评审强度由业务风险、影响范围和证据可信度决定。
 
@@ -60,7 +62,9 @@ description: Use when the user or another Easypower skill explicitly asks to exe
 
 一个切片 Blocked 时继续执行与它在依赖、契约、状态和所有权上独立的前沿任务。记录阻塞事实、影响、候选方案和恢复入口，等待用户决定。
 
-## 7. 交付
+## 7. 评审与交付
+
+调用 `$reviewing-business-delivery` 时传递批准的 Spec、Plan、评审范围、真实 diff/产物和证据路径，并在任务 Brief 和执行更新中写出 Skill 名称。评审出现 Blocker 或 Important 时，将相关切片退回 In Progress 或标为 Blocked；修复后只重验受影响 finding、业务证据和必要回归。
 
 所有可执行切片结束后，按 Spec 输出业务交付报告：
 

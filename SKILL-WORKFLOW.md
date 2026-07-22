@@ -44,7 +44,8 @@ flowchart TD
     N --> O[增强验收并回归核心闭环]
     O --> P{仍有 Ready 切片?}
     P -- 是 --> L
-    P -- 否 --> Q[生成业务交付报告]
+    P -- 否 --> V[reviewing-business-delivery]
+    V --> Q[生成业务交付报告]
 ```
 
 ## 三、Spec
