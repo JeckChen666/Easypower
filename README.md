@@ -40,9 +40,36 @@ Easypower 目前有十五个正式 Skill：
 - 测试强度应由业务风险和影响范围决定；
 - 用户批准范围内可以由子代理持续执行，重大变化必须升级审批。
 
+## 安装
+
+Easypower 以一个包含十五个 Skill 的 Codex Plugin（插件）发布。推荐从 GitHub Marketplace Source（插件源）整体安装：
+
+```powershell
+codex plugin marketplace add JeckChen666/Easypower --ref main
+codex plugin add easypower@easypower
+```
+
+本地开发时，可以把第一条命令中的仓库地址换成 Easypower 的绝对路径。修改 Plugin 后，运行以下命令刷新来源并重新安装：
+
+```powershell
+codex plugin marketplace upgrade easypower
+codex plugin add easypower@easypower
+```
+
+安装或更新后开启新对话，使 Codex 重新加载 Skill。使用 `$ep-use-easypower` 作为统一入口；也可以用 `$` 直接选择任意 `ep-*` Skill。
+
+### 兼容性
+
+| 环境 | 支持情况 |
+|---|---|
+| Codex CLI、IDE Extension（IDE 扩展） | 支持显式和隐式 Skill 调用 |
+| ChatGPT Desktop / Codex App | 支持 Plugin 安装和 Skill UI 元数据 |
+| 不支持子代理的环境 | 规划和普通执行仍可使用；`ep-execution` 按顺序执行，不伪造并行 |
+| MCP 或外部服务 | Easypower 本身无强制依赖；具体项目权限仍由用户和运行环境提供 |
+
 ## 调用方式
 
-安装或加载需要的 Skill 目录，然后显式调用：
+安装 Plugin 后，可以显式调用：
 
 ```text
 $ep-use-easypower
@@ -146,58 +173,33 @@ Easypower 保留工程团队常用的英文术语，第一次出现时使用 `En
 ## 仓库结构
 
 ```text
-skills/
-├─ ep-use-easypower/ # 显式进入 Easypower 并智能路由
-├─ ep-code-change/ # 自动区分快速修改和复杂代码任务
-├─ ep-planning/  # 形成业务 Spec 和渐进式 Plan
-├─ ep-execution/     # 消费已批准 Plan 并持续执行
-├─ ep-architecture/ # 比较并批准重要架构决定
-├─ ep-diagnosis/ # 从业务故障证据诊断并恢复
-├─ ep-delivery-review/  # 审查业务契约和工程风险
-├─ ep-prototyping/        # 用一次性原型回答决策问题
-├─ ep-research/        # 用一手来源形成决策证据
-├─ ep-domain-modeling/     # 用场景澄清领域语言与边界
-├─ ep-large-project/        # 为大型模糊目标维护决策地图
-├─ ep-request-intake/   # 验证和分流外部业务请求
-├─ ep-product-design/  # 塑造用户路径与产品形态
-├─ ep-orchestration/ # 运行多角色 DAG 工作流
-└─ ep-chinese-writing/      # 统一中文技术表达与术语
-
-references/
-└─ superpowers-zh/
-   └─ skills/                    # 旧 Superpowers 中文译版，仅作参考
-
-tests/
-├─ ep-use-easypower/ # 总入口路由场景
-├─ ep-code-change/ # 轻量代码修改场景
-├─ ep-planning/  # 规划 Skill 的前向测试场景
-├─ ep-execution/     # 执行 Skill 的前向测试场景
-├─ ep-architecture/ # 架构 Skill 的前向测试场景
-├─ ep-diagnosis/ # 诊断 Skill 的前向测试场景
-├─ ep-delivery-review/  # 评审 Skill 的前向测试场景
-├─ ep-prototyping/        # 原型 Skill 的前向测试场景
-├─ ep-research/        # 研究 Skill 的前向测试场景
-├─ ep-domain-modeling/     # 领域建模 Skill 的前向测试场景
-├─ ep-large-project/        # 大型工作导航 Skill 的前向测试场景
-├─ ep-request-intake/   # 业务请求分流 Skill 的前向测试场景
-├─ ep-product-design/  # 产品体验塑造 Skill 的场景
-├─ ep-orchestration/ # 多角色工作流编排场景
-└─ ep-chinese-writing/      # 中文技术表达 Skill 的场景
+.codex-plugin/plugin.json       # Plugin 清单与版本
+.agents/plugins/marketplace.json # GitHub 与本地安装入口
+skills/                         # 十五个正式 Skill
+tests/                          # 场景与路由 Eval
+scripts/validate_repo.py        # 跨平台仓库校验
 ```
 
-`skills/` 是 Easypower 正式 Skill 的唯一发布目录。`references/` 下的内容不参与安装或 Skill 发现。
+`skills/` 是 Easypower 正式 Skill 的唯一发布目录。根目录的 Plugin 清单只分发该目录；本地 `references/` 已由 `.gitignore` 排除，不参与 Git、安装或 Skill 发现。
 
 ## 参考来源
 
-- [Superpowers 中文译版](references/superpowers-zh/README.md)：保留原有中文翻译，供行为比较和机制迁移；
-- `superpowers/`：本地原版克隆，由 `.gitignore` 排除；
-- `mattpocock-skill/` 与 `mattpocock-skill-zh/`：本地对比仓库，由 `.gitignore` 排除。
+- [obra/superpowers](https://github.com/obra/superpowers)：提供规划、执行、调试和评审机制的对比基线；
+- [mattpocock/skills](https://github.com/mattpocock/skills)：提供领域建模、研究、原型和大型工作导航等行为参考；
 - [jnMetaCode workflow-runner](https://github.com/jnMetaCode/superpowers-zh/blob/main/skills/workflow-runner/SKILL.md)：提供 YAML 多角色工作流的参考实现。
 - [agency-orchestrator](https://github.com/jnMetaCode/agency-orchestrator)：提供角色库、工作流和编排引擎分离的参考设计。
 
-参考来源用于提取可复用思想，不决定 Easypower 的 Skill 数量、触发方式或工作流结构。
+参考来源用于提取可复用思想，不决定 Easypower 的 Skill 数量、触发方式或工作流结构。完整归属说明见 [Third-party notices](THIRD_PARTY_NOTICES.md)。
 
 ## 验证
+
+每次提交先运行结构校验：
+
+```powershell
+python scripts/validate_repo.py
+```
+
+该命令检查 Plugin、Marketplace、Skill 元数据、触发策略、交叉引用、本地链接和路由 Eval 的结构。CI 会运行同一命令。`tests/routing-evals.json` 保存两个入口的最小可移植评估语料，不在 CI 中调用付费模型或把非确定性模型输出伪装成单元测试。
 
 [规划场景测试](tests/ep-planning/scenarios.md) 覆盖三类核心用法：
 
@@ -238,3 +240,9 @@ tests/
 [Easypower 路由场景](tests/ep-use-easypower/scenarios.md) 覆盖明确小改动、已批准 Plan 和大型模糊目标。[代码修改场景](tests/ep-code-change/scenarios.md) 覆盖无需新增测试的小修改、需要同步既有测试的行为修改，以及可以快速处理的指定用户赋权。
 
 新增或修改正式 Skill 时，应先观察无 Skill 的基线行为，再使用相同场景进行前向验证。
+
+## 版本与贡献
+
+Plugin 使用 Semantic Versioning（语义化版本），当前版本记录在 [.codex-plugin/plugin.json](.codex-plugin/plugin.json)。触发边界、审批协议或路由行为发生兼容性变化时必须提升版本。
+
+贡献前阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，安全问题按 [SECURITY.md](SECURITY.md) 私下报告。Easypower 使用 [MIT License](LICENSE)。

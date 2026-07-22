@@ -197,7 +197,7 @@ Agent 必须升级审批：
 
 ## 十、参考源与后续 Skill
 
-旧 Superpowers 中文译版已经移动到 `references/superpowers-zh/skills/`，仅用于研究、比较和逐步吸收成熟机制：
+Easypower 早期通过本地克隆和翻译版本研究 Superpowers；这些参考文件不再纳入 Git 或 Plugin，只保留以下上游能力名称用于说明设计来源：
 
 - `using-superpowers`
 - `brainstorming`
@@ -206,7 +206,7 @@ Agent 必须升级审批：
 - `subagent-driven-development`
 - 其余调试、评审、验证和分支管理 Skill
 
-这些目录不属于 Skill 发布路径，不应安装或参与自动发现。
+对应上游代码由各项目自行发布和授权，不属于 Easypower Skill 发布路径，也不参与安装或自动发现。
 
 后续每个 Easypower Skill 都应满足：
 

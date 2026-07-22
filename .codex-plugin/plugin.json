@@ -1,0 +1,32 @@
+{
+  "name": "easypower",
+  "version": "0.1.0",
+  "description": "Business-first planning, execution, diagnosis, review, and routing workflows for Codex.",
+  "author": {
+    "name": "JeckChen666",
+    "url": "https://github.com/JeckChen666"
+  },
+  "homepage": "https://github.com/JeckChen666/Easypower",
+  "repository": "https://github.com/JeckChen666/Easypower",
+  "license": "MIT",
+  "keywords": [
+    "codex",
+    "skills",
+    "business-driven-development",
+    "multi-agent"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Easypower",
+    "shortDescription": "以业务结果为核心的 Codex 开发工作流",
+    "longDescription": "通过智能路由、业务 Spec、渐进式 Plan、子代理执行和风险验证完成软件交付。",
+    "developerName": "JeckChen666",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/JeckChen666/Easypower",
+    "defaultPrompt": "使用 $ep-use-easypower 判断当前任务应进入哪个 Easypower 流程。"
+  }
+}

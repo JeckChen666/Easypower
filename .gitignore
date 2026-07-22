@@ -6,3 +6,6 @@
 .codex/
 .superpowers/
 *.log
+/references/
+__pycache__/
+*.py[cod]

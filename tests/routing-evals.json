@@ -1,0 +1,37 @@
+[
+  {
+    "id": "explicit-small-change",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 把现有页面按钮文案改为重新计算。",
+    "expected_route": "ep-code-change",
+    "must_not": ["create-spec", "create-plan", "add-new-tests"]
+  },
+  {
+    "id": "approved-plan",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 继续执行磁盘中已经批准的 Spec 和 Plan。",
+    "expected_route": "ep-execution",
+    "must_not": ["rewrite-plan"]
+  },
+  {
+    "id": "large-ambiguous-goal",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 统一多个业务系统，目前边界和迁移顺序还不清楚。",
+    "expected_route": "ep-large-project",
+    "must_not": ["start-implementation"]
+  },
+  {
+    "id": "bounded-permission-assignment",
+    "entry": "ep-code-change",
+    "prompt": "为指定用户赋予现有报表管理员角色，授权和回滚方式都已确认。",
+    "expected_route": "ep-code-change",
+    "must_not": ["create-spec", "add-new-tests"]
+  },
+  {
+    "id": "permission-model-redesign",
+    "entry": "ep-code-change",
+    "prompt": "重新设计角色继承和默认权限，业务规则还没有确定。",
+    "expected_route": "ep-use-easypower",
+    "must_not": ["direct-change", "routing-loop"]
+  }
+]

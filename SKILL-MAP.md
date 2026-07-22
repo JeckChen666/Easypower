@@ -2,6 +2,8 @@
 
 本文定义 Easypower 计划建设的正式 Skill、参考来源和能力边界。它是演进地图，不要求一次完成所有 Skill，也不按参考仓库目录逐个复刻。
 
+Easypower 以单一 Codex Plugin 发布，`.codex-plugin/plugin.json` 只包含根目录 `skills/`。能力地图决定 Skill 边界，Plugin 负责整体安装、版本和升级，两者不互相复制内容。
+
 ## 一、设计原则
 
 1. **业务结果优先**：规划、实现、调试和评审都先回答业务目标是否成立。
