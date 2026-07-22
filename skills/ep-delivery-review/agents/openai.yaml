@@ -1,0 +1,7 @@
+interface:
+  display_name: "评审业务交付"
+  short_description: "围绕业务契约、工程风险与证据可信度评审业务交付结果"
+  default_prompt: "使用 $ep-delivery-review 对照批准契约评审这次业务交付。"
+
+policy:
+  allow_implicit_invocation: false

@@ -1,7 +1,0 @@
-interface:
-  display_name: "自然技术中文"
-  short_description: "让技术解释和工程文档使用自然、准确且一致的中文表达"
-  default_prompt: "使用 $writing-natural-chinese 检查这段技术中文的术语和表达。"
-
-policy:
-  allow_implicit_invocation: true

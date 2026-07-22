@@ -1,7 +1,0 @@
-interface:
-  display_name: "大型工作导航"
-  short_description: "为跨上下文的模糊业务目标维护 Decision Map、Frontier 和恢复点"
-  default_prompt: "使用 $wayfinding-large-work 为这个大型模糊目标建立可持续推进的决策地图。"
-
-policy:
-  allow_implicit_invocation: false

@@ -1,7 +1,0 @@
-interface:
-  display_name: "多角色工作流编排"
-  short_description: "通过持久化 DAG 和真实子代理安全协调多角色工作流"
-  default_prompt: "使用 $orchestrating-multi-role-workflows 运行这个已批准的多角色工作流。"
-
-policy:
-  allow_implicit_invocation: false

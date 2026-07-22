@@ -18,28 +18,28 @@ Easypower 面向需要先审核 Spec 和 Plan、再交给 Code Agent 或子代�
 
 ## 二、默认入口
 
-清晰业务需求的正式入口是 [business-driven-development](skills/business-driven-development/SKILL.md)。超过一个上下文且仍无法形成可批准 Spec 的目标，先显式调用 [wayfinding-large-work](skills/wayfinding-large-work/SKILL.md)；当决策地图达到 `Ready for Spec` 后再进入规划。外部 issue、PR、缺陷或需求池先使用 [triaging-business-requests](skills/triaging-business-requests/SKILL.md) 验证主张并形成 Business Brief。
+清晰业务需求的正式入口是 [ep-planning](skills/ep-planning/SKILL.md)。超过一个上下文且仍无法形成可批准 Spec 的目标，先显式调用 [ep-large-project](skills/ep-large-project/SKILL.md)；当决策地图达到 `Ready for Spec` 后再进入规划。外部 issue、PR、缺陷或需求池先使用 [ep-request-intake](skills/ep-request-intake/SKILL.md) 验证主张并形成 Business Brief。
 
 三个入口都禁止隐式调用。普通问答、简单修改和状态检查不自动进入该工作流。
 
 ```mermaid
 flowchart TD
-    R[外部请求/缺陷/PR] --> T[triaging-business-requests]
+    R[外部请求/缺陷/PR] --> T[ep-request-intake]
     T -- 清晰且 Ready for Planning --> B
     T -- 大型且仍然模糊 --> W
     T -- 活跃业务故障 --> K
-    Z[超大且模糊的目标] --> W[wayfinding-large-work]
+    Z[超大且模糊的目标] --> W[ep-large-project]
     W --> A[路线达到 Ready for Spec]
-    A --> B[显式调用 business-driven-development]
+    A --> B[显式调用 ep-planning]
     Y[清晰业务需求] --> B
     B --> B1[调查仓库和业务事实]
     B1 --> C[讨论业务 Spec]
     C --> D{重要问题能否靠讨论解决?}
-    D -- 外部事实 --> E[researching-decisions]
-    D -- 产品形态或用户路径 --> E5[shaping-product-experiences]
-    D -- 需要运行或展示 --> E3[prototyping-decisions]
-    D -- 领域歧义 --> E4[modeling-business-domain]
-    D -- 重要架构取舍 --> E2[designing-business-architecture]
+    D -- 外部事实 --> E[ep-research]
+    D -- 产品形态或用户路径 --> E5[ep-product-design]
+    D -- 需要运行或展示 --> E3[ep-prototyping]
+    D -- 领域歧义 --> E4[ep-domain-modeling]
+    D -- 重要架构取舍 --> E2[ep-architecture]
     E --> C
     E5 --> C
     E3 --> C
@@ -50,7 +50,7 @@ flowchart TD
     G --> H[用户批准主 Plan]
     H --> I[执行核心业务闭环 P01]
     I --> J{业务验收通过?}
-    J -- 否 --> K[diagnosing-business-failures]
+    J -- 否 --> K[ep-diagnosis]
     K --> I
     J -- 是 --> L[更新 Frontier]
     L --> M[按需展开增强子 Plan]
@@ -58,7 +58,7 @@ flowchart TD
     N --> O[增强验收并回归核心闭环]
     O --> P{仍有 Ready 切片?}
     P -- 是 --> L
-    P -- 否 --> V[reviewing-business-delivery]
+    P -- 否 --> V[ep-delivery-review]
     V --> Q[生成业务交付报告]
 ```
 
@@ -79,7 +79,7 @@ Spec 是业务事实来源，回答：
 
 业务方没有提供目标文件时，Agent 应通过输入输出样例、决策表、权限矩阵、状态转换、业务不变量或用户可观察结果构造验收契约。
 
-详细规则见 [Spec 协议](skills/business-driven-development/references/spec-protocol.md)。
+详细规则见 [Spec 协议](skills/ep-planning/references/spec-protocol.md)。
 
 ## 四、决策分支
 
@@ -87,11 +87,11 @@ Spec 是业务事实来源，回答：
 
 | 分支 | 适用问题 | 产物 |
 |---|---|---|
-| `researching-decisions` | 依赖官方文档、规范或外部事实 | 有来源的结论 |
-| `shaping-product-experiences` | 重要用户路径、信息层级或产品形态存在多种合理方案 | 已批准的体验契约和待验证假设 |
-| `prototyping-decisions` | 状态、计算或交互需要运行后判断 | 一次性原型和验证结论 |
-| `modeling-business-domain` | 术语、场景、边界或不变量存在多种业务解释 | 规范语言、区分场景和已确认不变量 |
-| `designing-business-architecture` | 公共接口、数据模型、计算、存储或迁移架构难以逆转 | 业务负载、多个方案、取舍、迁移和批准决定 |
+| `ep-research` | 依赖官方文档、规范或外部事实 | 有来源的结论 |
+| `ep-product-design` | 重要用户路径、信息层级或产品形态存在多种合理方案 | 已批准的体验契约和待验证假设 |
+| `ep-prototyping` | 状态、计算或交互需要运行后判断 | 一次性原型和验证结论 |
+| `ep-domain-modeling` | 术语、场景、边界或不变量存在多种业务解释 | 规范语言、区分场景和已确认不变量 |
+| `ep-architecture` | 公共接口、数据模型、计算、存储或迁移架构难以逆转 | 业务负载、多个方案、取舍、迁移和批准决定 |
 
 分支产物用于消除决策歧义，不直接替代生产实现。
 
@@ -119,7 +119,7 @@ Spec
 
 Plan 可以包含少量代码。只有删除片段会导致执行者对重要业务或架构决定产生不同理解时，才保留公式、伪代码、Schema、状态机、公共接口或性能关键逻辑。普通实现留给执行 Agent。
 
-详细规则见 [Plan 协议](skills/business-driven-development/references/plan-protocol.md)。
+详细规则见 [Plan 协议](skills/ep-planning/references/plan-protocol.md)。
 
 ## 六、业务切片
 
@@ -168,7 +168,7 @@ Agent 必须升级审批：
 - 需要新的外部权限、生产操作或不可恢复动作；
 - 主 Plan 未覆盖的系统性风险使原授权不再充分。
 
-详细规则见 [executing-business-plans](skills/executing-business-plans/SKILL.md)。
+详细规则见 [ep-execution](skills/ep-execution/SKILL.md)。
 
 ## 九、交付报告
 
@@ -206,4 +206,4 @@ Agent 必须升级审批：
 5. 编写最小 Skill 后使用相同场景前向验证；
 6. 验证通过后才加入 `skills/`。
 
-`business-driven-development` 是第一项成果，不代表 Easypower 最终只包含一个 Skill。
+`ep-planning` 是第一项成果，不代表 Easypower 最终只包含一个 Skill。

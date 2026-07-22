@@ -1,0 +1,7 @@
+interface:
+  display_name: "诊断业务故障"
+  short_description: "围绕业务故障证据建立反馈闭环、定位根因并验证业务恢复"
+  default_prompt: "使用 $ep-diagnosis 从业务故障证据定位根因并恢复核心业务结果。"
+
+policy:
+  allow_implicit_invocation: false

@@ -1,7 +1,0 @@
-interface:
-  display_name: "业务请求分流"
-  short_description: "验证外部业务请求的事实与价值，并形成可交给规划流程的 Business Brief"
-  default_prompt: "使用 $triaging-business-requests 验证并分流这个外部业务请求。"
-
-policy:
-  allow_implicit_invocation: false

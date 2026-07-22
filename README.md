@@ -6,19 +6,19 @@ Easypower 是一个以业务结果为核心的 Code Agent Skill 仓库。它面�
 
 Easypower 目前有十三个正式 Skill：
 
-- [business-driven-development](skills/business-driven-development/SKILL.md)：与用户形成并批准业务 Spec 和渐进式 Plan；
-- [executing-business-plans](skills/executing-business-plans/SKILL.md)：在全新上下文中消费已批准的 Spec 和 Plan，持续执行并留下业务证据。
-- [designing-business-architecture](skills/designing-business-architecture/SKILL.md)：围绕业务负载比较计算、存储、接口和迁移方案，形成可批准的架构决定。
-- [diagnosing-business-failures](skills/diagnosing-business-failures/SKILL.md)：从错误业务结果、间歇故障或性能退化建立 Feedback Loop（反馈闭环），定位根因并证明恢复。
-- [reviewing-business-delivery](skills/reviewing-business-delivery/SKILL.md)：分别审查业务契约符合度、工程风险和交付证据可信度。
-- [prototyping-decisions](skills/prototyping-decisions/SKILL.md)：用一次性逻辑、UI 或技术原型回答一个必须运行后才能判断的问题。
-- [researching-decisions](skills/researching-decisions/SKILL.md)：基于第一方来源调查外部事实，形成可引用的业务决策证据。
-- [modeling-business-domain](skills/modeling-business-domain/SKILL.md)：用具体场景统一业务语言、边界和不变量，并限制 ADR 膨胀。
-- [wayfinding-large-work](skills/wayfinding-large-work/SKILL.md)：为跨上下文且尚无法形成 Spec 的大型目标维护决策地图和未知前沿。
-- [triaging-business-requests](skills/triaging-business-requests/SKILL.md)：验证外部需求、缺陷和 PR 的业务主张，并形成可交给规划流程的 Business Brief。
-- [shaping-product-experiences](skills/shaping-product-experiences/SKILL.md)：基于用户证据、多角色评审和任务走查确定可批准的产品形态。
-- [orchestrating-multi-role-workflows](skills/orchestrating-multi-role-workflows/SKILL.md)：用持久化 DAG、真实子代理和 Decision Gate 运行多角色工作流。
-- [writing-natural-chinese](skills/writing-natural-chinese/SKILL.md)：约束面向用户的中文解释和工程文档，保留专业英文并在首次出现时补充中文意译。
+- [ep-planning](skills/ep-planning/SKILL.md)：与用户形成并批准业务 Spec 和渐进式 Plan；
+- [ep-execution](skills/ep-execution/SKILL.md)：在全新上下文中消费已批准的 Spec 和 Plan，持续执行并留下业务证据。
+- [ep-architecture](skills/ep-architecture/SKILL.md)：围绕业务负载比较计算、存储、接口和迁移方案，形成可批准的架构决定。
+- [ep-diagnosis](skills/ep-diagnosis/SKILL.md)：从错误业务结果、间歇故障或性能退化建立 Feedback Loop（反馈闭环），定位根因并证明恢复。
+- [ep-delivery-review](skills/ep-delivery-review/SKILL.md)：分别审查业务契约符合度、工程风险和交付证据可信度。
+- [ep-prototyping](skills/ep-prototyping/SKILL.md)：用一次性逻辑、UI 或技术原型回答一个必须运行后才能判断的问题。
+- [ep-research](skills/ep-research/SKILL.md)：基于第一方来源调查外部事实，形成可引用的业务决策证据。
+- [ep-domain-modeling](skills/ep-domain-modeling/SKILL.md)：用具体场景统一业务语言、边界和不变量，并限制 ADR 膨胀。
+- [ep-large-project](skills/ep-large-project/SKILL.md)：为跨上下文且尚无法形成 Spec 的大型目标维护决策地图和未知前沿。
+- [ep-request-intake](skills/ep-request-intake/SKILL.md)：验证外部需求、缺陷和 PR 的业务主张，并形成可交给规划流程的 Business Brief。
+- [ep-product-design](skills/ep-product-design/SKILL.md)：基于用户证据、多角色评审和任务走查确定可批准的产品形态。
+- [ep-orchestration](skills/ep-orchestration/SKILL.md)：用持久化 DAG、真实子代理和 Decision Gate 运行多角色工作流。
+- [ep-chinese-writing](skills/ep-chinese-writing/SKILL.md)：约束面向用户的中文解释和工程文档，保留专业英文并在首次出现时补充中文意译。
 
 需求分流、Wayfinding、规划与执行 Skill 组成外部请求或大型模糊目标到业务交付的完整链路；架构、研究、原型、领域建模、诊断和评审 Skill 只在相应的重要决策、业务结果异常或交付判断中进入。后续能力只根据真实使用反馈扩展。
 
@@ -42,52 +42,52 @@ Easypower 目前有十三个正式 Skill：
 安装或加载需要的 Skill 目录，然后显式调用：
 
 ```text
-$business-driven-development
-$executing-business-plans
-$designing-business-architecture
-$diagnosing-business-failures
-$reviewing-business-delivery
-$prototyping-decisions
-$researching-decisions
-$modeling-business-domain
-$wayfinding-large-work
-$triaging-business-requests
-$shaping-product-experiences
-$orchestrating-multi-role-workflows
-$writing-natural-chinese
+$ep-planning
+$ep-execution
+$ep-architecture
+$ep-diagnosis
+$ep-delivery-review
+$ep-prototyping
+$ep-research
+$ep-domain-modeling
+$ep-large-project
+$ep-request-intake
+$ep-product-design
+$ep-orchestration
+$ep-chinese-writing
 ```
 
 示例：
 
 ```text
-使用 $business-driven-development 和我梳理这个功能的业务 Spec 与渐进式 Plan，批准后再组织子代理执行。
+使用 $ep-planning 和我梳理这个功能的业务 Spec 与渐进式 Plan，批准后再组织子代理执行。
 
-使用 $executing-business-plans 执行 docs/easypower/sales-report/ 中已经批准的 Spec 和主 Plan。
+使用 $ep-execution 执行 docs/easypower/sales-report/ 中已经批准的 Spec 和主 Plan。
 
-使用 $designing-business-architecture 比较这个报表功能的计算、查询和存储架构，并形成可批准的决定。
+使用 $ep-architecture 比较这个报表功能的计算、查询和存储架构，并形成可批准的决定。
 
-使用 $diagnosing-business-failures 从这份错误业务结果建立反馈闭环，定位根因并验证修复。
+使用 $ep-diagnosis 从这份错误业务结果建立反馈闭环，定位根因并验证修复。
 
-使用 $reviewing-business-delivery 对照批准的业务契约和工程风险评审这次交付。
+使用 $ep-delivery-review 对照批准的业务契约和工程风险评审这次交付。
 
-使用 $prototyping-decisions 构建最小原型来回答这个业务决策问题。
+使用 $ep-prototyping 构建最小原型来回答这个业务决策问题。
 
-使用 $researching-decisions 调查这个决定依赖的外部事实，并区分事实、推论和未知项。
+使用 $ep-research 调查这个决定依赖的外部事实，并区分事实、推论和未知项。
 
-使用 $modeling-business-domain 通过具体场景澄清这个功能的业务术语、边界和不变量。
+使用 $ep-domain-modeling 通过具体场景澄清这个功能的业务术语、边界和不变量。
 
-使用 $wayfinding-large-work 为这个跨上下文且仍然模糊的业务目标建立决策地图。
+使用 $ep-large-project 为这个跨上下文且仍然模糊的业务目标建立决策地图。
 
-使用 $triaging-business-requests 验证这个外部请求并形成可交给规划流程的 Business Brief。
+使用 $ep-request-intake 验证这个外部请求并形成可交给规划流程的 Business Brief。
 
-使用 $shaping-product-experiences 和我确定这个功能的用户路径与产品形态。
+使用 $ep-product-design 和我确定这个功能的用户路径与产品形态。
 
-使用 $orchestrating-multi-role-workflows 运行这个已批准的多角色 YAML 工作流。
+使用 $ep-orchestration 运行这个已批准的多角色 YAML 工作流。
 
-使用 $writing-natural-chinese 检查这段技术中文的术语和表达。
+使用 $ep-chinese-writing 检查这段技术中文的术语和表达。
 ```
 
-除 `writing-natural-chinese` 外，其余十二个流程型 Skill 都设置了：
+除 `ep-chinese-writing` 外，其余十二个流程型 Skill 都设置了：
 
 ```yaml
 policy:
@@ -96,13 +96,13 @@ policy:
 
 因此不会因为普通问答或简单代码请求自动进入完整工作流。
 
-`writing-natural-chinese` 是轻量表达约束，设置 `allow_implicit_invocation: true`，可在中文解释和文档生成时高频触发。它只调整表达，不启动业务工作流。
+`ep-chinese-writing` 是轻量表达约束，设置 `allow_implicit_invocation: true`，可在中文解释和文档生成时高频触发。它只调整表达，不启动业务工作流。
 
 ## 语言约定
 
 Easypower 保留工程团队常用的英文术语，第一次出现时使用 `English（中文）`，后文固定使用英文或已约定的中文简称。例如：`Spec（业务规格）`、`Plan（执行计划）`、`Business Brief（业务简报）`、`Wayfinding（大型工作导航）`。API、JSON、HTML 等通用缩写只在含义可能不清楚时解释，不逐处机械翻译。
 
-具体约束见 [自然技术中文 Skill](skills/writing-natural-chinese/SKILL.md)。
+具体约束见 [自然技术中文 Skill](skills/ep-chinese-writing/SKILL.md)。
 
 状态名保持英文原值，避免文档与状态机不一致，并在状态定义处补充中文，例如 `Ready（可领取）`、`Blocked（受阻）`、`Completed（已完成）`。普通动作和判断使用自然中文，避免逐字翻译英文流程名。
 
@@ -122,54 +122,54 @@ Easypower 保留工程团队常用的英文术语，第一次出现时使用 `En
 
 按需参考协议：
 
-- [Spec 协议](skills/business-driven-development/references/spec-protocol.md)
-- [Plan 协议](skills/business-driven-development/references/plan-protocol.md)
-- [BI 报表规划示例](skills/business-driven-development/references/bi-report-example.md)
-- [执行状态协议](skills/executing-business-plans/references/execution-state.md)
-- [风险验证与恢复](skills/executing-business-plans/references/validation-and-recovery.md)
-- [业务架构决策框架](skills/designing-business-architecture/references/decision-framework.md)
-- [Feedback Loop（业务反馈闭环）](skills/diagnosing-business-failures/references/feedback-loops.md)
-- [业务契约评审轴](skills/reviewing-business-delivery/references/business-contract-axis.md)
-- [逻辑原型协议](skills/prototyping-decisions/references/logic-prototype.md)
-- [研究来源与证据等级](skills/researching-decisions/references/source-evidence.md)
-- [Product Experience Contract（产品体验契约）](skills/shaping-product-experiences/references/experience-protocol.md)
+- [Spec 协议](skills/ep-planning/references/spec-protocol.md)
+- [Plan 协议](skills/ep-planning/references/plan-protocol.md)
+- [BI 报表规划示例](skills/ep-planning/references/bi-report-example.md)
+- [执行状态协议](skills/ep-execution/references/execution-state.md)
+- [风险验证与恢复](skills/ep-execution/references/validation-and-recovery.md)
+- [业务架构决策框架](skills/ep-architecture/references/decision-framework.md)
+- [Feedback Loop（业务反馈闭环）](skills/ep-diagnosis/references/feedback-loops.md)
+- [业务契约评审轴](skills/ep-delivery-review/references/business-contract-axis.md)
+- [逻辑原型协议](skills/ep-prototyping/references/logic-prototype.md)
+- [研究来源与证据等级](skills/ep-research/references/source-evidence.md)
+- [Product Experience Contract（产品体验契约）](skills/ep-product-design/references/experience-protocol.md)
 
 ## 仓库结构
 
 ```text
 skills/
-├─ business-driven-development/  # 形成业务 Spec 和渐进式 Plan
-├─ executing-business-plans/     # 消费已批准 Plan 并持续执行
-├─ designing-business-architecture/ # 比较并批准重要架构决定
-├─ diagnosing-business-failures/ # 从业务故障证据诊断并恢复
-├─ reviewing-business-delivery/  # 审查业务契约和工程风险
-├─ prototyping-decisions/        # 用一次性原型回答决策问题
-├─ researching-decisions/        # 用一手来源形成决策证据
-├─ modeling-business-domain/     # 用场景澄清领域语言与边界
-├─ wayfinding-large-work/        # 为大型模糊目标维护决策地图
-├─ triaging-business-requests/   # 验证和分流外部业务请求
-├─ shaping-product-experiences/  # 塑造用户路径与产品形态
-├─ orchestrating-multi-role-workflows/ # 运行多角色 DAG 工作流
-└─ writing-natural-chinese/      # 统一中文技术表达与术语
+├─ ep-planning/  # 形成业务 Spec 和渐进式 Plan
+├─ ep-execution/     # 消费已批准 Plan 并持续执行
+├─ ep-architecture/ # 比较并批准重要架构决定
+├─ ep-diagnosis/ # 从业务故障证据诊断并恢复
+├─ ep-delivery-review/  # 审查业务契约和工程风险
+├─ ep-prototyping/        # 用一次性原型回答决策问题
+├─ ep-research/        # 用一手来源形成决策证据
+├─ ep-domain-modeling/     # 用场景澄清领域语言与边界
+├─ ep-large-project/        # 为大型模糊目标维护决策地图
+├─ ep-request-intake/   # 验证和分流外部业务请求
+├─ ep-product-design/  # 塑造用户路径与产品形态
+├─ ep-orchestration/ # 运行多角色 DAG 工作流
+└─ ep-chinese-writing/      # 统一中文技术表达与术语
 
 references/
 └─ superpowers-zh/
    └─ skills/                    # 旧 Superpowers 中文译版，仅作参考
 
 tests/
-├─ business-driven-development/  # 规划 Skill 的前向测试场景
-├─ executing-business-plans/     # 执行 Skill 的前向测试场景
-├─ designing-business-architecture/ # 架构 Skill 的前向测试场景
-├─ diagnosing-business-failures/ # 诊断 Skill 的前向测试场景
-├─ reviewing-business-delivery/  # 评审 Skill 的前向测试场景
-├─ prototyping-decisions/        # 原型 Skill 的前向测试场景
-├─ researching-decisions/        # 研究 Skill 的前向测试场景
-├─ modeling-business-domain/     # 领域建模 Skill 的前向测试场景
-├─ wayfinding-large-work/        # 大型工作导航 Skill 的前向测试场景
-├─ triaging-business-requests/   # 业务请求分流 Skill 的前向测试场景
-├─ shaping-product-experiences/  # 产品体验塑造 Skill 的场景
-├─ orchestrating-multi-role-workflows/ # 多角色工作流编排场景
-└─ writing-natural-chinese/      # 中文技术表达 Skill 的场景
+├─ ep-planning/  # 规划 Skill 的前向测试场景
+├─ ep-execution/     # 执行 Skill 的前向测试场景
+├─ ep-architecture/ # 架构 Skill 的前向测试场景
+├─ ep-diagnosis/ # 诊断 Skill 的前向测试场景
+├─ ep-delivery-review/  # 评审 Skill 的前向测试场景
+├─ ep-prototyping/        # 原型 Skill 的前向测试场景
+├─ ep-research/        # 研究 Skill 的前向测试场景
+├─ ep-domain-modeling/     # 领域建模 Skill 的前向测试场景
+├─ ep-large-project/        # 大型工作导航 Skill 的前向测试场景
+├─ ep-request-intake/   # 业务请求分流 Skill 的前向测试场景
+├─ ep-product-design/  # 产品体验塑造 Skill 的场景
+├─ ep-orchestration/ # 多角色工作流编排场景
+└─ ep-chinese-writing/      # 中文技术表达 Skill 的场景
 ```
 
 `skills/` 是 Easypower 正式 Skill 的唯一发布目录。`references/` 下的内容不参与安装或 Skill 发现。
@@ -186,40 +186,40 @@ tests/
 
 ## 验证
 
-[规划场景测试](tests/business-driven-development/scenarios.md) 覆盖三类核心用法：
+[规划场景测试](tests/ep-planning/scenarios.md) 覆盖三类核心用法：
 
 - 有基准目标数据的 BI 报表；
 - 没有现成目标产物的权限功能；
 - 需要多个子代理持续执行的大型功能。
 
-[执行场景测试](tests/executing-business-plans/scenarios.md) 覆盖：
+[执行场景测试](tests/ep-execution/scenarios.md) 覆盖：
 
 - 核心闭环完成后再推进增强；
 - Ready 任务之间存在公共 Schema 冲突；
 - 中断恢复、局部业务阻塞和独立任务继续执行。
 
-`executing-business-plans` 已通过上述三个隔离前向场景，以及一次从规划批准到执行交接的组合测试。
+`ep-execution` 已通过上述三个隔离前向场景，以及一次从规划批准到执行交接的组合测试。
 
-[架构场景测试](tests/designing-business-architecture/scenarios.md) 覆盖 BI 计算与查询负载、订单定价模块边界，以及大 JSON 的渐进存储演进。该 Skill 已通过三个隔离前向场景。
+[架构场景测试](tests/ep-architecture/scenarios.md) 覆盖 BI 计算与查询负载、订单定价模块边界，以及大 JSON 的渐进存储演进。该 Skill 已通过三个隔离前向场景。
 
-[诊断场景测试](tests/diagnosing-business-failures/scenarios.md) 覆盖基准报表差异、低概率重复扣款和 Schema 迁移后的性能退化。该 Skill 已通过三个隔离前向场景。
+[诊断场景测试](tests/ep-diagnosis/scenarios.md) 覆盖基准报表差异、低概率重复扣款和 Schema 迁移后的性能退化。该 Skill 已通过三个隔离前向场景。
 
-[评审场景测试](tests/reviewing-business-delivery/scenarios.md) 覆盖业务结果失败、工程风险阻断和低风险外部反馈核验。该 Skill 已通过三个隔离前向场景。
+[评审场景测试](tests/ep-delivery-review/scenarios.md) 覆盖业务结果失败、工程风险阻断和低风险外部反馈核验。该 Skill 已通过三个隔离前向场景。
 
-[原型场景测试](tests/prototyping-decisions/scenarios.md) 覆盖业务逻辑口径、现有页面 UI 方案和应先调查的供应商能力。该 Skill 已通过三个隔离前向场景。
+[原型场景测试](tests/ep-prototyping/scenarios.md) 覆盖业务逻辑口径、现有页面 UI 方案和应先调查的供应商能力。该 Skill 已通过三个隔离前向场景。
 
-[研究场景测试](tests/researching-decisions/scenarios.md) 覆盖供应商能力、未指定框架的版本升级，以及必须运行验证的 Excel 算法等价问题。该 Skill 已通过三个隔离前向场景。
+[研究场景测试](tests/ep-research/scenarios.md) 覆盖供应商能力、未指定框架的版本升级，以及必须运行验证的 Excel 算法等价问题。该 Skill 已通过三个隔离前向场景。
 
-[领域建模场景测试](tests/modeling-business-domain/scenarios.md) 覆盖 SaaS “账号”歧义、报表定义/计算/发布混用，以及 ADR 过度记录。该 Skill 已通过三个隔离前向场景。
+[领域建模场景测试](tests/ep-domain-modeling/scenarios.md) 覆盖 SaaS “账号”歧义、报表定义/计算/发布混用，以及 ADR 过度记录。该 Skill 已通过三个隔离前向场景。
 
-[大型工作导航场景测试](tests/wayfinding-large-work/scenarios.md) 覆盖 ERP 替换、模糊 BI 平台统一和不应建图的清晰小功能。该 Skill 已通过三个前向场景，小功能入口经一次修订后复测通过。
+[大型工作导航场景测试](tests/ep-large-project/scenarios.md) 覆盖 ERP 替换、模糊 BI 平台统一和不应建图的清晰小功能。该 Skill 已通过三个前向场景，小功能入口经一次修订后复测通过。
 
-[业务请求分流场景测试](tests/triaging-business-requests/scenarios.md) 覆盖证据不足的退款报表缺陷、方案先行的 Kafka 请求，以及完整但尚未批准规划的合同批量操作。该 Skill 已通过三个前向场景。
+[业务请求分流场景测试](tests/ep-request-intake/scenarios.md) 覆盖证据不足的退款报表缺陷、方案先行的 Kafka 请求，以及完整但尚未批准规划的合同批量操作。该 Skill 已通过三个前向场景。
 
-[自然技术中文场景](tests/writing-natural-chinese/scenarios.md) 覆盖用户解释、Spec/Plan 文档和代码评审，检查首次释义、术语一致性和自然中文句法。
+[自然技术中文场景](tests/ep-chinese-writing/scenarios.md) 覆盖用户解释、Spec/Plan 文档和代码评审，检查首次释义、术语一致性和自然中文句法。
 
-[多角色工作流编排场景](tests/orchestrating-multi-role-workflows/scenarios.md) 覆盖并行角色评审、共享 Schema 冲突，以及失败后的跨会话恢复。
+[多角色工作流编排场景](tests/ep-orchestration/scenarios.md) 覆盖并行角色评审、共享 Schema 冲突，以及失败后的跨会话恢复。
 
-[产品体验塑造场景](tests/shaping-product-experiences/scenarios.md) 覆盖 BI 高频筛选、权限配置流程，以及不应进入体验设计的纯后端任务。
+[产品体验塑造场景](tests/ep-product-design/scenarios.md) 覆盖 BI 高频筛选、权限配置流程，以及不应进入体验设计的纯后端任务。
 
 新增或修改正式 Skill 时，应先观察无 Skill 的基线行为，再使用相同场景进行前向验证。
