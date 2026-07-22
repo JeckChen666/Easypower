@@ -26,7 +26,7 @@ Easypower 不提供“每轮对话都先运行”的全局路由 Skill。Skill �
 | `researching-decisions` | 决策支持 | 已完成 | 用户或主流程显式调用 | 基于第一方资料调查事实并留下可引用结论 |
 | `modeling-business-domain` | 决策支持 | 已完成 | 用户或主流程显式调用 | 统一业务语言、具体场景和少量真正必要的 ADR |
 | `wayfinding-large-work` | 主流程入口 | 已完成 | 用户显式调用 | 为超过一个上下文的大型模糊工作维护决策地图和未知前沿 |
-| `triaging-business-requests` | 需求入口 | P3 | 用户显式调用 | 验证外部需求或缺陷，并形成可交给 Agent 的业务 Brief |
+| `triaging-business-requests` | 需求入口 | 已完成 | 用户显式调用 | 验证外部需求或缺陷，并形成可交给规划流程的 Business Brief |
 
 P1 补齐核心交付闭环，P2 处理复杂决策和超大范围，P3 处理团队需求入口。优先级可以根据真实使用反馈调整，但每次只创建和验证一个 Skill。
 
@@ -89,7 +89,7 @@ flowchart TD
 | `research` | `researching-decisions` | 保留第一方来源和后台调查 |
 | `domain-modeling` | `modeling-business-domain` | 保留术语、场景和稀疏 ADR，避免实现细节污染业务语言 |
 | `wayfinder` | `wayfinding-large-work` | 保留决策票据、未知前沿和跨上下文地图 |
-| `triage` | `triaging-business-requests` | 从 issue 状态机改为业务价值、可复现性和 Agent-ready Brief |
+| `triage` | `triaging-business-requests` | 从 issue 状态机改为业务价值、可复现性和规划就绪的 Business Brief |
 | `handoff` | 执行内部上下文协议 | 权威文件链接和任务 Brief 代替复制整段会话 |
 | `ask-matt` | 无正式对应 | 不创建强制路由；由能力地图和显式调用完成发现 |
 
@@ -140,7 +140,9 @@ flowchart TD
 
 ### P3：扩展团队入口
 
-当 Easypower 开始处理外部 issue、PR 或需求池时，再建设 `triaging-business-requests`，避免提前绑定某个 issue tracker。
+`triaging-business-requests` 已完成证据不足的退款报表缺陷、方案先行的 Kafka 请求和合同批量操作三个前向场景。它不绑定某个 issue tracker，先验证项目事实与业务价值，再以单一状态形成 Business Brief；清晰请求进入规划，大型模糊请求进入 Wayfinding，活跃故障进入诊断。
+
+当前能力地图中的十个正式 Skill 已全部完成。后续候选能力只从真实使用反馈中产生，不为了覆盖参考仓库目录继续扩张。
 
 ## 七、正式 Skill 准入条件
 

@@ -4,7 +4,7 @@ Easypower 是一个以业务结果为核心的 Code Agent Skill 仓库。它面�
 
 ## 当前进度
 
-Easypower 目前有九个正式 Skill：
+Easypower 目前有十个正式 Skill：
 
 - [business-driven-development](skills/business-driven-development/SKILL.md)：与用户形成并批准业务 Spec 和渐进式 Plan；
 - [executing-business-plans](skills/executing-business-plans/SKILL.md)：在全新上下文中消费已批准的 Spec 和 Plan，持续执行并留下业务证据。
@@ -15,8 +15,9 @@ Easypower 目前有九个正式 Skill：
 - [researching-decisions](skills/researching-decisions/SKILL.md)：基于第一方来源调查外部事实，形成可引用的业务决策证据。
 - [modeling-business-domain](skills/modeling-business-domain/SKILL.md)：用具体场景统一业务语言、边界和不变量，并限制 ADR 膨胀。
 - [wayfinding-large-work](skills/wayfinding-large-work/SKILL.md)：为跨上下文且尚无法形成 Spec 的大型目标维护决策地图和未知前沿。
+- [triaging-business-requests](skills/triaging-business-requests/SKILL.md)：验证外部需求、缺陷和 PR 的业务主张，并形成可交给规划流程的 Business Brief。
 
-Wayfinding、规划与执行 Skill 组成大型模糊目标到业务交付的完整链路；架构、研究、原型、领域建模、诊断和评审 Skill 只在相应的重要决策、业务失败或交付门出现时进入。后续还会继续加入其他实际工作场景的独立 Skill。
+需求分流、Wayfinding、规划与执行 Skill 组成外部请求或大型模糊目标到业务交付的完整链路；架构、研究、原型、领域建模、诊断和评审 Skill 只在相应的重要决策、业务失败或交付门出现时进入。后续能力只根据真实使用反馈扩展。
 
 新 Skill 不直接复制 Superpowers 或 mattpocock-skill。每个能力都需要结合实际工作方式重新定义触发边界、业务价值和验证方式，并通过独立场景测试后才进入 `skills/`。
 
@@ -46,6 +47,7 @@ $prototyping-decisions
 $researching-decisions
 $modeling-business-domain
 $wayfinding-large-work
+$triaging-business-requests
 ```
 
 示例：
@@ -68,9 +70,11 @@ $wayfinding-large-work
 使用 $modeling-business-domain 通过具体场景澄清这个功能的业务术语、边界和不变量。
 
 使用 $wayfinding-large-work 为这个跨上下文且仍然模糊的业务目标建立决策地图。
+
+使用 $triaging-business-requests 验证这个外部请求并形成可交给规划流程的 Business Brief。
 ```
 
-九个 Skill 都在各自的 OpenAI 元数据中设置了：
+十个 Skill 都在各自的 OpenAI 元数据中设置了：
 
 ```yaml
 policy:
@@ -117,7 +121,8 @@ skills/
 ├─ prototyping-decisions/        # 用一次性原型回答决策问题
 ├─ researching-decisions/        # 用一手来源形成决策证据
 ├─ modeling-business-domain/     # 用场景澄清领域语言与边界
-└─ wayfinding-large-work/        # 为大型模糊目标维护决策地图
+├─ wayfinding-large-work/        # 为大型模糊目标维护决策地图
+└─ triaging-business-requests/   # 验证和分流外部业务请求
 
 references/
 └─ superpowers-zh/
@@ -132,7 +137,8 @@ tests/
 ├─ prototyping-decisions/        # 原型 Skill 的前向测试场景
 ├─ researching-decisions/        # 研究 Skill 的前向测试场景
 ├─ modeling-business-domain/     # 领域建模 Skill 的前向测试场景
-└─ wayfinding-large-work/        # 大型工作导航 Skill 的前向测试场景
+├─ wayfinding-large-work/        # 大型工作导航 Skill 的前向测试场景
+└─ triaging-business-requests/   # 业务请求分流 Skill 的前向测试场景
 ```
 
 `skills/` 是 Easypower 正式 Skill 的唯一发布目录。`references/` 下的内容不参与安装或 Skill 发现。
@@ -174,5 +180,7 @@ tests/
 [领域建模场景测试](tests/modeling-business-domain/scenarios.md) 覆盖 SaaS “账号”歧义、报表定义/计算/发布混用，以及 ADR 过度记录。该 Skill 已通过三个隔离前向场景。
 
 [大型工作导航场景测试](tests/wayfinding-large-work/scenarios.md) 覆盖 ERP 替换、模糊 BI 平台统一和不应建图的清晰小功能。该 Skill 已通过三个前向场景，小功能入口经一次修订后复测通过。
+
+[业务请求分流场景测试](tests/triaging-business-requests/scenarios.md) 覆盖证据不足的退款报表缺陷、方案先行的 Kafka 请求，以及完整但尚未批准规划的合同批量操作。该 Skill 已通过三个前向场景。
 
 新增或修改正式 Skill 时，应先观察无 Skill 的基线行为，再使用相同场景进行前向验证。

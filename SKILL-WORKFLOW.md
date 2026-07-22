@@ -18,12 +18,16 @@ Easypower 面向需要先审核 Spec 和 Plan、再交给 Code Agent 或子代�
 
 ## 二、默认入口
 
-清晰业务需求的正式入口是 [business-driven-development](skills/business-driven-development/SKILL.md)。超过一个上下文且仍无法形成可批准 Spec 的目标，先显式调用 [wayfinding-large-work](skills/wayfinding-large-work/SKILL.md)；当决策地图达到 `Ready for Spec` 后再进入规划。
+清晰业务需求的正式入口是 [business-driven-development](skills/business-driven-development/SKILL.md)。超过一个上下文且仍无法形成可批准 Spec 的目标，先显式调用 [wayfinding-large-work](skills/wayfinding-large-work/SKILL.md)；当决策地图达到 `Ready for Spec` 后再进入规划。外部 issue、PR、缺陷或需求池先使用 [triaging-business-requests](skills/triaging-business-requests/SKILL.md) 验证主张并形成 Business Brief。
 
-两个主流程入口都禁止隐式调用。普通问答、简单修改和状态检查不自动进入该工作流。
+三个入口都禁止隐式调用。普通问答、简单修改和状态检查不自动进入该工作流。
 
 ```mermaid
 flowchart TD
+    R[外部请求/缺陷/PR] --> T[triaging-business-requests]
+    T -- 清晰且 Ready for Planning --> B
+    T -- 大型且仍然模糊 --> W
+    T -- 活跃业务故障 --> K
     Z[超大且模糊的目标] --> W[wayfinding-large-work]
     W --> A[路线达到 Ready for Spec]
     A --> B[显式调用 business-driven-development]
