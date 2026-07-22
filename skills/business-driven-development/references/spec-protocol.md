@@ -10,7 +10,8 @@ Spec 是经用户批准、供所有执行 Agent 共同遵守的业务事实来�
 | 业务目标、口径、范围和取舍 | Agent 提出推荐，用户决定 |
 | 外部事实 | 调用 `$researching-decisions` |
 | 必须运行、操作或展示才可判断的问题 | 调用 `$prototyping-decisions` |
-| 重要接口、计算、存储或系统架构取舍 | 调用 `designing-business-architecture` |
+| 业务术语、场景、边界或不变量存在多种解释 | 调用 `$modeling-business-domain` |
+| 重要接口、计算、存储或系统架构取舍 | 调用 `$designing-business-architecture` |
 | 可逆且不影响业务契约的实现细节 | 留给执行 Agent |
 
 Agent 不要只问“验收标准是什么”。先根据业务场景提出具体样例、不变量或可观察结果，让用户确认或修正。
@@ -19,7 +20,8 @@ Agent 不要只问“验收标准是什么”。先根据业务场景提出具�
 
 - **Research**：事实依赖官方文档、源代码、规范或外部系统时，调用 `$researching-decisions`，记录来源和可引用结论。
 - **Prototype**：状态、计算或交互必须运行或展示后才能判断时，调用 `$prototyping-decisions`。原型只回答一个问题，不追求测试、持久化和工程完整性；保留结论，生产代码重新实现。
-- **Architecture**：公共接口、数据模型、计算引擎、存储或迁移架构难以逆转时，调用 `designing-business-architecture`。基于业务负载比较至少两个可行方案，取得用户批准后回写质量属性、关键决定和计划约束。
+- **Domain Modeling**：术语重载、业务边界、场景或不变量存在多种合理解释时，调用 `$modeling-business-domain`。用具体场景消除歧义，将稳定术语写入领域词汇表，将业务结论回写 Spec，不提前设计表和类。
+- **Architecture**：公共接口、数据模型、计算引擎、存储或迁移架构难以逆转时，调用 `$designing-business-architecture`。基于业务负载比较至少两个可行方案，取得用户批准后回写质量属性、关键决定和计划约束。
 
 这些分支只处理会影响 Spec 的重要未知项，不成为每个功能的固定步骤。
 

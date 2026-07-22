@@ -24,7 +24,7 @@ Easypower 不提供“每轮对话都先运行”的全局路由 Skill。Skill �
 | `reviewing-business-delivery` | 质量保障 | 已完成 | 用户或执行流程显式调用 | 分别审查业务契约符合度和工程风险，并汇总交付证据 |
 | `prototyping-decisions` | 决策支持 | 已完成 | 用户或主流程显式调用 | 用一次性逻辑或 UI 原型回答无法靠文字解决的问题 |
 | `researching-decisions` | 决策支持 | 已完成 | 用户或主流程显式调用 | 基于第一方资料调查事实并留下可引用结论 |
-| `modeling-business-domain` | 决策支持 | P2 | 用户或主流程显式调用 | 统一业务语言、具体场景和少量真正必要的 ADR |
+| `modeling-business-domain` | 决策支持 | 已完成 | 用户或主流程显式调用 | 统一业务语言、具体场景和少量真正必要的 ADR |
 | `wayfinding-large-work` | 主流程入口 | P2 | 用户显式调用 | 为超过一个上下文的大型模糊工作维护决策地图和未知前沿 |
 | `triaging-business-requests` | 需求入口 | P3 | 用户显式调用 | 验证外部需求或缺陷，并形成可交给 Agent 的业务 Brief |
 
@@ -132,7 +132,9 @@ flowchart TD
 
 `researching-decisions` 已完成供应商能力、未指定框架升级和具体 Excel 算法等价三个隔离前向场景。它固定对象坐标、优先一手来源并严格区分事实、推论、建议和未知项。
 
-下一步依次建设 `modeling-business-domain` 和 `wayfinding-large-work`。顺序由最常出现的真实问题决定。
+`modeling-business-domain` 已完成 SaaS “账号”歧义、报表定义/计算/发布混用和 ADR 过度记录三个隔离前向场景。它用具体场景确认业务语言和不变量，将结论回写 Spec，并保持上下文地图与 ADR 稀疏。
+
+下一步建设 `wayfinding-large-work`。顺序由最常出现的真实问题决定。
 
 ### P3：扩展团队入口
 

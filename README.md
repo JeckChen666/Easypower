@@ -4,7 +4,7 @@ Easypower 是一个以业务结果为核心的 Code Agent Skill 仓库。它面�
 
 ## 当前进度
 
-Easypower 目前有七个正式 Skill：
+Easypower 目前有八个正式 Skill：
 
 - [business-driven-development](skills/business-driven-development/SKILL.md)：与用户形成并批准业务 Spec 和渐进式 Plan；
 - [executing-business-plans](skills/executing-business-plans/SKILL.md)：在全新上下文中消费已批准的 Spec 和 Plan，持续执行并留下业务证据。
@@ -13,8 +13,9 @@ Easypower 目前有七个正式 Skill：
 - [reviewing-business-delivery](skills/reviewing-business-delivery/SKILL.md)：分别审查业务契约符合度、工程风险和交付证据可信度。
 - [prototyping-decisions](skills/prototyping-decisions/SKILL.md)：用一次性逻辑、UI 或技术原型回答一个必须运行后才能判断的问题。
 - [researching-decisions](skills/researching-decisions/SKILL.md)：基于第一方来源调查外部事实，形成可引用的业务决策证据。
+- [modeling-business-domain](skills/modeling-business-domain/SKILL.md)：用具体场景统一业务语言、边界和不变量，并限制 ADR 膨胀。
 
-规划与执行 Skill 组成第一条完整交付链路；架构、诊断和评审 Skill 只在相应的重要决策、业务失败或交付门出现时进入。后续还会继续加入研究和其他实际工作场景的独立 Skill。
+规划与执行 Skill 组成第一条完整交付链路；架构、研究、原型、领域建模、诊断和评审 Skill 只在相应的重要决策、业务失败或交付门出现时进入。后续还会继续加入其他实际工作场景的独立 Skill。
 
 新 Skill 不直接复制 Superpowers 或 mattpocock-skill。每个能力都需要结合实际工作方式重新定义触发边界、业务价值和验证方式，并通过独立场景测试后才进入 `skills/`。
 
@@ -42,6 +43,7 @@ $diagnosing-business-failures
 $reviewing-business-delivery
 $prototyping-decisions
 $researching-decisions
+$modeling-business-domain
 ```
 
 示例：
@@ -60,9 +62,11 @@ $researching-decisions
 使用 $prototyping-decisions 构建最小原型来回答这个业务决策问题。
 
 使用 $researching-decisions 调查这个决定依赖的外部事实，并区分事实、推论和未知项。
+
+使用 $modeling-business-domain 通过具体场景澄清这个功能的业务术语、边界和不变量。
 ```
 
-七个 Skill 都在各自的 OpenAI 元数据中设置了：
+八个 Skill 都在各自的 OpenAI 元数据中设置了：
 
 ```yaml
 policy:
@@ -107,7 +111,8 @@ skills/
 ├─ diagnosing-business-failures/ # 从业务失败证据诊断并恢复
 ├─ reviewing-business-delivery/  # 审查业务契约和工程风险
 ├─ prototyping-decisions/        # 用一次性原型回答决策问题
-└─ researching-decisions/        # 用一手来源形成决策证据
+├─ researching-decisions/        # 用一手来源形成决策证据
+└─ modeling-business-domain/     # 用场景澄清领域语言与边界
 
 references/
 └─ superpowers-zh/
@@ -120,7 +125,8 @@ tests/
 ├─ diagnosing-business-failures/ # 诊断 Skill 的前向测试场景
 ├─ reviewing-business-delivery/  # 评审 Skill 的前向测试场景
 ├─ prototyping-decisions/        # 原型 Skill 的前向测试场景
-└─ researching-decisions/        # 研究 Skill 的前向测试场景
+├─ researching-decisions/        # 研究 Skill 的前向测试场景
+└─ modeling-business-domain/     # 领域建模 Skill 的前向测试场景
 ```
 
 `skills/` 是 Easypower 正式 Skill 的唯一发布目录。`references/` 下的内容不参与安装或 Skill 发现。
@@ -158,5 +164,7 @@ tests/
 [原型场景测试](tests/prototyping-decisions/scenarios.md) 覆盖业务逻辑口径、现有页面 UI 方案和应先调查的供应商能力。该 Skill 已通过三个隔离前向场景。
 
 [研究场景测试](tests/researching-decisions/scenarios.md) 覆盖供应商能力、未指定框架的版本升级，以及必须运行验证的 Excel 算法等价问题。该 Skill 已通过三个隔离前向场景。
+
+[领域建模场景测试](tests/modeling-business-domain/scenarios.md) 覆盖 SaaS “账号”歧义、报表定义/计算/发布混用，以及 ADR 过度记录。该 Skill 已通过三个隔离前向场景。
 
 新增或修改正式 Skill 时，应先观察无 Skill 的基线行为，再使用相同场景进行前向验证。

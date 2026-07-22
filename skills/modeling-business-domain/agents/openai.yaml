@@ -1,0 +1,7 @@
+interface:
+  display_name: "建模业务领域"
+  short_description: "统一业务语言、场景与不变量，并只记录必要的领域决策"
+  default_prompt: "使用 $modeling-business-domain 澄清这个功能的领域语言、场景和不变量。"
+
+policy:
+  allow_implicit_invocation: false
