@@ -5,13 +5,15 @@
 ## 一、设计原则
 
 1. **业务结果优先**：规划、实现、调试和评审都先回答业务目标是否成立。
-2. **默认显式调用**：正式 Skill 默认设置 `allow_implicit_invocation: false`。用户或上游 Skill 明确调用时才加载。
+2. **业务流程默认显式调用**：会启动规划、执行或决策流程的 Skill 设置 `allow_implicit_invocation: false`。轻量横切约束可以明确允许隐式调用。
 3. **一个 Skill 解决一个可重复问题**：只有需要独立触发、独立验证和独立上下文的能力才成为 Skill。
 4. **机制可以内嵌**：TDD、worktree、handoff、并行调度和完成验证可以作为内部协议，不必全部暴露为 Skill。
 5. **渐进式披露**：主 `SKILL.md` 保留选择和状态机，详细协议按需读取。
 6. **逐个验证**：每个新 Skill 都先观察无 Skill 基线，再编写最小版本并前向测试。
 
 Easypower 不提供“每轮对话都先运行”的全局路由 Skill。Skill 发现依赖清晰的名称、描述和仓库文档，不依赖强制启动流程。
+
+`writing-natural-chinese` 只约束输出表达，不路由任务或增加工作步骤，因此作为高频隐式 Skill 使用。
 
 ## 二、正式 Skill 规划
 
@@ -27,6 +29,7 @@ Easypower 不提供“每轮对话都先运行”的全局路由 Skill。Skill �
 | `modeling-business-domain` | 决策支持 | 已完成 | 用户或主流程显式调用 | 统一业务语言、具体场景和少量必要的 ADR |
 | `wayfinding-large-work` | 主流程入口 | 已完成 | 用户显式调用 | 为超过一个上下文的大型模糊工作维护决策地图和未知前沿 |
 | `triaging-business-requests` | 需求入口 | 已完成 | 用户显式调用 | 验证外部需求或缺陷，并形成可交给规划流程的 Business Brief |
+| `writing-natural-chinese` | 表达约束 | 已完成 | 默认隐式调用 | 让中文解释和工程文档保留准确术语，并避免英文直译腔 |
 
 P1 补齐核心交付闭环，P2 处理复杂决策和超大范围，P3 处理团队需求入口。优先级可以根据真实使用反馈调整，但每次只创建和验证一个 Skill。
 
@@ -136,13 +139,15 @@ flowchart TD
 
 `wayfinding-large-work` 已完成 ERP 替换、模糊 BI 平台统一和清晰小功能三个前向场景。它只服务于跨上下文且无法直接形成 Spec 的目标，维护 Decision Map（决策地图）、Decision Ticket（决策票据）、Frontier（决策前沿）和 Fog（待澄清区域），路线清楚后交给 `business-driven-development`。
 
-下一步建设 `triaging-business-requests`。顺序由最常出现的真实问题决定。
-
 ### P3：扩展团队入口
 
 `triaging-business-requests` 已完成证据不足的退款报表缺陷、方案先行的 Kafka 请求和合同批量操作三个前向场景。它不绑定某个 issue tracker，先验证项目事实与业务价值，再以单一状态形成 Business Brief；清晰请求进入规划，大型模糊请求进入 Wayfinding，活跃故障进入诊断。
 
-当前能力地图中的十个正式 Skill 已全部完成。后续候选能力只从真实使用反馈中产生，不为了覆盖参考仓库目录继续扩张。
+### P4：统一中文表达
+
+`writing-natural-chinese` 覆盖用户解释、Spec、Plan 和工程文档。它保留专业英文，在首次出现时补充中文意译，并保持后续用词一致；其内容保持简短，不引入额外流程。
+
+当前能力地图中的十一个正式 Skill 已全部完成。后续候选能力只从真实使用反馈中产生，不为了覆盖参考仓库目录继续扩张。
 
 ## 七、正式 Skill 准入条件
 

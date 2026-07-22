@@ -4,7 +4,7 @@ Easypower 是一个以业务结果为核心的 Code Agent Skill 仓库。它面�
 
 ## 当前进度
 
-Easypower 目前有十个正式 Skill：
+Easypower 目前有十一个正式 Skill：
 
 - [business-driven-development](skills/business-driven-development/SKILL.md)：与用户形成并批准业务 Spec 和渐进式 Plan；
 - [executing-business-plans](skills/executing-business-plans/SKILL.md)：在全新上下文中消费已批准的 Spec 和 Plan，持续执行并留下业务证据。
@@ -16,6 +16,7 @@ Easypower 目前有十个正式 Skill：
 - [modeling-business-domain](skills/modeling-business-domain/SKILL.md)：用具体场景统一业务语言、边界和不变量，并限制 ADR 膨胀。
 - [wayfinding-large-work](skills/wayfinding-large-work/SKILL.md)：为跨上下文且尚无法形成 Spec 的大型目标维护决策地图和未知前沿。
 - [triaging-business-requests](skills/triaging-business-requests/SKILL.md)：验证外部需求、缺陷和 PR 的业务主张，并形成可交给规划流程的 Business Brief。
+- [writing-natural-chinese](skills/writing-natural-chinese/SKILL.md)：约束面向用户的中文解释和工程文档，保留专业英文并在首次出现时补充中文意译。
 
 需求分流、Wayfinding、规划与执行 Skill 组成外部请求或大型模糊目标到业务交付的完整链路；架构、研究、原型、领域建模、诊断和评审 Skill 只在相应的重要决策、业务结果异常或交付判断中进入。后续能力只根据真实使用反馈扩展。
 
@@ -48,6 +49,7 @@ $researching-decisions
 $modeling-business-domain
 $wayfinding-large-work
 $triaging-business-requests
+$writing-natural-chinese
 ```
 
 示例：
@@ -72,9 +74,11 @@ $triaging-business-requests
 使用 $wayfinding-large-work 为这个跨上下文且仍然模糊的业务目标建立决策地图。
 
 使用 $triaging-business-requests 验证这个外部请求并形成可交给规划流程的 Business Brief。
+
+使用 $writing-natural-chinese 检查这段技术中文的术语和表达。
 ```
 
-十个 Skill 都在各自的 OpenAI 元数据中设置了：
+十个业务流程 Skill 都在各自的 OpenAI 元数据中设置了：
 
 ```yaml
 policy:
@@ -83,9 +87,13 @@ policy:
 
 因此不会因为普通问答或简单代码请求自动进入完整工作流。
 
+`writing-natural-chinese` 是轻量表达约束，设置 `allow_implicit_invocation: true`，可在中文解释和文档生成时高频触发。它只调整表达，不启动业务工作流。
+
 ## 语言约定
 
 Easypower 保留工程团队常用的英文术语，第一次出现时使用 `English（中文）`，后文固定使用英文或已约定的中文简称。例如：`Spec（业务规格）`、`Plan（执行计划）`、`Business Brief（业务简报）`、`Wayfinding（大型工作导航）`。API、JSON、HTML 等通用缩写只在含义可能不清楚时解释，不逐处机械翻译。
+
+具体约束见 [自然技术中文 Skill](skills/writing-natural-chinese/SKILL.md)。
 
 状态名保持英文原值，避免文档与状态机不一致，并在状态定义处补充中文，例如 `Ready（可领取）`、`Blocked（受阻）`、`Completed（已完成）`。普通动作和判断使用自然中文，避免逐字翻译英文流程名。
 
@@ -128,7 +136,8 @@ skills/
 ├─ researching-decisions/        # 用一手来源形成决策证据
 ├─ modeling-business-domain/     # 用场景澄清领域语言与边界
 ├─ wayfinding-large-work/        # 为大型模糊目标维护决策地图
-└─ triaging-business-requests/   # 验证和分流外部业务请求
+├─ triaging-business-requests/   # 验证和分流外部业务请求
+└─ writing-natural-chinese/      # 统一中文技术表达与术语
 
 references/
 └─ superpowers-zh/
@@ -144,7 +153,8 @@ tests/
 ├─ researching-decisions/        # 研究 Skill 的前向测试场景
 ├─ modeling-business-domain/     # 领域建模 Skill 的前向测试场景
 ├─ wayfinding-large-work/        # 大型工作导航 Skill 的前向测试场景
-└─ triaging-business-requests/   # 业务请求分流 Skill 的前向测试场景
+├─ triaging-business-requests/   # 业务请求分流 Skill 的前向测试场景
+└─ writing-natural-chinese/      # 中文技术表达 Skill 的场景
 ```
 
 `skills/` 是 Easypower 正式 Skill 的唯一发布目录。`references/` 下的内容不参与安装或 Skill 发现。
@@ -188,5 +198,7 @@ tests/
 [大型工作导航场景测试](tests/wayfinding-large-work/scenarios.md) 覆盖 ERP 替换、模糊 BI 平台统一和不应建图的清晰小功能。该 Skill 已通过三个前向场景，小功能入口经一次修订后复测通过。
 
 [业务请求分流场景测试](tests/triaging-business-requests/scenarios.md) 覆盖证据不足的退款报表缺陷、方案先行的 Kafka 请求，以及完整但尚未批准规划的合同批量操作。该 Skill 已通过三个前向场景。
+
+[自然技术中文场景](tests/writing-natural-chinese/scenarios.md) 覆盖用户解释、Spec/Plan 文档和代码评审，检查首次释义、术语一致性和自然中文句法。
 
 新增或修改正式 Skill 时，应先观察无 Skill 的基线行为，再使用相同场景进行前向验证。
