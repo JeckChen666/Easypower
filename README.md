@@ -1,8 +1,13 @@
 # Easypower
 
-Easypower 是一个以业务结果为核心的 Code Agent Skill 仓库。它面向需要先审核业务 Spec 和渐进式 Plan，再交给 Agent 或子代理持续执行的开发任务。
+[![skills.sh](https://skills.sh/b/JeckChen666/Easypower)](https://skills.sh/JeckChen666/Easypower)
+[![License](https://img.shields.io/github/license/JeckChen666/Easypower)](LICENSE)
 
-## 当前进度
+Easypower 是一个以业务结果为核心的 Code Agent Skill 仓库。它将复杂开发任务组织为可审核的业务 Spec（业务规格）、渐进式 Plan（执行计划）和可验证的业务闭环，再由 Agent 或子代理持续推进交付。
+
+它适合需要保留人类决策权、又希望将已批准范围交给 Agent 自主执行的团队：小修改快速完成；较大功能先澄清业务、用户体验和架构取舍；大型模糊目标先建立决策地图，而不急于编写实现清单。
+
+## 正式 Skill
 
 Easypower 目前有十五个正式 Skill：
 
@@ -42,9 +47,9 @@ Easypower 目前有十五个正式 Skill：
 
 ## 安装
 
-Easypower 以一个包含十五个 Skill 的 Codex Plugin（插件）发布。推荐从 GitHub Marketplace Source（插件源）整体安装：
+### Codex Plugin（推荐）
 
-如需通过通用 Skills CLI 安装，或让仓库进入 skills.sh 的自动索引，参见 [skills.sh 收录说明](SKILLS-SH.md)。
+Easypower 以一个包含十五个 Skill 的 Codex Plugin（插件）发布。推荐从 GitHub Marketplace Source（插件源）整体安装：
 
 ```powershell
 codex plugin marketplace add JeckChen666/Easypower --ref main
@@ -59,6 +64,18 @@ codex plugin add easypower@easypower
 ```
 
 安装或更新后开启新对话，使 Codex 重新加载 Skill。使用 `$ep-use-easypower` 作为统一入口；也可以用 `$` 直接选择任意 `ep-*` Skill。
+
+### Skills CLI
+
+需要在 Skills CLI 支持的其他 Agent 中安装时，使用：
+
+```powershell
+npx skills add JeckChen666/Easypower
+```
+
+在交互界面选择需要的 `ep-*` Skill。该安装方式与 Codex Plugin 分发相互独立；前者使用通用 Agent Skills 目录，后者提供 Codex 的 Plugin 安装与 UI 元数据。
+
+本仓库在 [skills.sh](https://skills.sh/JeckChen666/Easypower) 上的搜索和安装统计由 Skills CLI 的匿名安装 telemetry（安装遥测）自动建立。完整机制、排查步骤和本地扫描命令见 [skills.sh 收录说明](SKILLS-SH.md)。
 
 ### 兼容性
 
