@@ -9,6 +9,8 @@ description: Use when the user explicitly asks to turn a substantial business re
 
 以可验收的业务闭环作为规划、实现和验证的基本单位。先与用户确认并批准 Spec（业务规格）和主 Plan（主执行计划），再自主完成授权范围；不要用技术任务、测试数量或代码完成度代替业务结果。
 
+Agent 不是被动的执行者。用户提出需求或方案时，Agent 应当先理解用户的真实目标，主动评估方案是否最优，存在更好的替代方案时主动提出并说明理由，然后由用户决定。
+
 本 Skill 只在用户显式调用时运行。事实可从仓库和工具获取时直接调查；业务决策由用户确认；可逆且不改变业务契约的实现选择交给 Agent（执行代理）。
 
 ## 工作流
@@ -23,11 +25,11 @@ description: Use when the user explicitly asks to turn a substantial business re
 - 已纳入本次交付的增强能力；
 - 质量属性和关键技术决策。
 
-每次只讨论一个决策，并给出推荐答案。重要用户路径、信息层级或产品形态尚不明确时，明确调用 `$ep-product-design`；必须运行、操作或展示后才能判断时，明确调用 `$ep-prototyping`；依赖外部事实时调用 `$ep-research`；业务术语、场景、边界或不变量存在多种解释时调用 `$ep-domain-modeling`；涉及公共接口、计算、存储、迁移或系统结构的重要取舍时，明确调用 `$ep-architecture`。写入 `docs/easypower/<feature>/spec.md`，等待用户明确批准。
+每次只讨论一个决策，并给出推荐答案。用户提出具体方案时，先评估该方案是否最优，有更好的替代方案时主动提出。重要用户路径、信息层级或产品形态尚不明确时，明确调用 `$ep-product-design`；必须运行、操作或展示后才能判断时，明确调用 `$ep-prototyping`；依赖外部事实时调用 `$ep-research`；业务术语、场景、边界或不变量存在多种解释时调用 `$ep-domain-modeling`；涉及公共接口、计算、存储、迁移或系统结构的重要取舍时，明确调用 `$ep-architecture`。写入 `docs/easypower/<feature>/spec.md`，等待用户明确批准。
 
 ### 2. 编写渐进式 Plan
 
-Spec 批准后读取 [plan-protocol.md](references/plan-protocol.md)。创建短小的 `plan.md` 作为执行地图，定义业务切片、依赖图、核心闭环里程碑、验收证据和自主执行边界。
+Spec 批准后读取 [plan-protocol.md](references/plan-protocol.md)。创建短小的 `plan.md` 作为执行地图，定义业务切片、依赖图、核心闭环里程碑、验收证据和自主执行边界。主 Plan 必须包含全局进度区，让用户在批准时就能看到完整的切片总数和预期路径。
 
 大型工作只详细展开第一个可执行子 Plan；其他子 Plan 先保留目标、依赖和验收结果。Plan 可包含固定重要决策所必需的最小代码、伪代码、Schema 或接口，不提前书写普通实现。等待用户明确批准主 Plan。
 
@@ -71,5 +73,9 @@ Plan 批准后，明确调用 `$ep-execution`，传递 Spec 和主 Plan 的路�
 - 对同一业务结果在每个代码层重复测试。
 - 核心闭环未通过就开始性能、交互或存储增强。
 - 子代理发现重大歧义后自行选择一种解释继续执行。
+- 在执行中新建独立的 Plan 文件来替代已批准的主 Plan；应原地修改并在变更日志中记录。
+- 主 Plan 不包含全局进度区，让用户无法从 Plan 文件中直接看到整体进展。
+- 自行发明硬性能指标（如“接口响应时间必须在 X 秒内”），用户没有提出时不应设定。
+- 只服从用户指令而不提供专业判断；用户的方案明显存在更优解时应主动提出。
 
 需要完整示例时读取 [bi-report-example.md](references/bi-report-example.md)。
