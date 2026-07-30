@@ -203,8 +203,8 @@ scripts/validate_repo.py        # 跨平台仓库校验
 
 ## 参考来源
 
-- [obra/superpowers](https://github.com/obra/superpowers)：提供规划、执行、调试和评审机制的对比基线；
-- [mattpocock/skills](https://github.com/mattpocock/skills)：提供领域建模、研究、原型和大型工作导航等行为参考；
+- [obra/superpowers](https://github.com/obra/superpowers) (基于 2026-07-23 前的提交 `d884ae04edebef577e82ff7c4e143debd0bbec99`)：提供规划、执行、调试和评审机制的对比基线；
+- [mattpocock/skills](https://github.com/mattpocock/skills) (基于 2026-07-23 前的提交 `ed37663cc5fbef691ddfecd080dff42f7e7e350d`)：提供领域建模、研究、原型和大型工作导航等行为参考；
 - [jnMetaCode workflow-runner](https://github.com/jnMetaCode/superpowers-zh/blob/main/skills/workflow-runner/SKILL.md)：提供 YAML 多角色工作流的参考实现。
 - [agency-orchestrator](https://github.com/jnMetaCode/agency-orchestrator)：提供角色库、工作流和编排引擎分离的参考设计。
 
