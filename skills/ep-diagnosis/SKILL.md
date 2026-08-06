@@ -5,6 +5,28 @@ description: Use when the user or another Easypower skill explicitly asks to dia
 
 # 诊断业务故障
 
+## 不要进入本 Skill
+
+- 编译错误、明确的小拼写错误 → 直接修
+- 还没有失败发生的预防性重构 → 不进入
+- 业务结果正确,只是性能慢但已可接受 → 留给性能增强切片
+- 只是为了"更稳妥"而复盘已完成的工作 → 不进入
+
+## 入口检查
+
+- [ ] 已有可观察的业务结果错误或不稳定故障
+- [ ] 能描述哪个参与者在哪个场景得到错误结果
+- [ ] 预期结果有可引用来源（Spec、历史证据或基准样本）
+- [ ] 没有更好的入口（请求/缺陷验证走 `$ep-request-intake`,架构问题走 `$ep-architecture`）
+
+## 输出契约
+
+- 失败记录：场景、预期、实际、影响、频率、环境
+- 最小反馈闭环（可重复触发的验证命令）
+- 根因证据链：候选假设 → 验证 → 排除/确认
+- 修复 + 业务恢复证据 + 复发监控
+- 详细协议见 [feedback-loops.md](references/feedback-loops.md)、[failure-classification.md](references/failure-classification.md)
+
 ## 核心原则
 
 从用户可观察的业务结果异常建立 Feedback Loop（反馈闭环），沿数据流和控制流找到第一次出现偏差的位置，再修复根因。生产止损、根因修复和长期增强分别处理，不要把临时防护写成根因修复。

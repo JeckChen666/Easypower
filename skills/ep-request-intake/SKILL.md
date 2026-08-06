@@ -5,6 +5,28 @@ description: Use when the user explicitly asks to evaluate, verify, prioritize, 
 
 # 业务请求分流
 
+## 不要进入本 Skill
+
+- 没有外部请求（issue/PR/缺陷/支持升级）→ 不要凭空分流
+- 提交者建议的技术方案被直接当需求 → 不要照单全收
+- 已有批准 Spec/主 Plan → 走 `$ep-execution`,不需要再分流
+- 已经活跃生产故障 → 走 `$ep-diagnosis`,不放在请求队列
+
+## 入口检查
+
+- [ ] 有外部请求或缺陷输入（issue、PR、邮件、缺陷报告）
+- [ ] 尚未验证业务主张（事实依据、价值、范围）
+- [ ] 用户明确要求评估或分流
+- [ ] 没有更好的入口（活跃故障走 `$ep-diagnosis`,清晰需求走 `$ep-planning`,模糊大目标走 `$ep-large-project`）
+
+## 输出契约
+
+- 单一状态：`Needs Evidence` / `Needs Business Decision` / `Ready for Planning` / `Route to Existing Capability` / `Duplicate` / `Active Incident` / `Deferred` / `Rejected`
+- 优先级理由（影响、范围、频率、时效性、替代路径）
+- `Ready for Planning` 项：Business Brief（业务问题 + 已验证事实 + 期望结果 + 验收契约 + 范围外 + 风险）
+- 不修改外部系统状态除非用户明确授权
+- 详细协议见 [intake-and-verification.md](references/intake-and-verification.md)、[routing-states.md](references/routing-states.md)、[business-brief.md](references/business-brief.md)
+
 ## 核心原则
 
 Triage（需求分流）用于判断外部请求的类型、事实依据、业务价值、信息缺口和下一步负责人。先验证业务主张，再给出分流结论；不要把提交者建议的技术方案直接当成需求，也不要把信息完整的 Business Brief（业务简报）当成已批准的 Spec（业务规格）或 Plan（执行计划）。

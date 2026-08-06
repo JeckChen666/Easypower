@@ -5,6 +5,27 @@ description: Use when the user or another Easypower skill explicitly asks to com
 
 # 设计业务架构
 
+## 不要进入本 Skill
+
+- 普通实现选择（库选型、字段命名、局部重构）→ 留给执行 Agent
+- 仅靠讨论或现有证据就能决定 → 返回 `ep-planning` 直接拍板
+- 已有确定方案,只缺架构文档 → 写 ADR,不进入本 Skill
+- 只是为了看起来专业而制造设计阶段 → 直接拒绝
+
+## 入口检查
+
+- [ ] 决定会影响 Spec 或多个业务切片
+- [ ] 存在至少两个实质不同的系统方案
+- [ ] 业务负载、不变量或迁移路径有可观察的区分维度
+- [ ] 没有更好的入口（事实不清走 `$ep-research`,长期系统取舍走 `$ep-architecture`,状态/计算/交互不清走 `$ep-prototyping`）
+
+## 输出契约
+
+- 推荐方案 + 至少一个被否决的替代方案（同一决策矩阵比较）
+- 业务负载模型（不只是单个性能数字）
+- 业务契约、Schema、迁移、回滚约束回写到 Spec / 主 Plan
+- 详细协议见 [decision-framework.md](references/decision-framework.md)、[architecture-patterns.md](references/architecture-patterns.md)
+
 ## 核心原则
 
 架构服务于已知的业务场景、负载和不变量。先证明决定解决了什么业务问题，再比较系统级方案；不要从技术品牌、单一性能数字或抽象偏好反推需求。

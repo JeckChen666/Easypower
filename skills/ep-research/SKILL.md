@@ -5,6 +5,28 @@ description: Use when the user or another Easypower skill explicitly asks to inv
 
 # 调研决策依据
 
+## 不要进入本 Skill
+
+- 问题可以用官方文档或现有代码直接读懂 → 直接查
+- 是具体业务数据/性能/交互是否成立 → 走 `$ep-prototyping` 或业务验证
+- 是多方案系统取舍 → 把研究事实交回 `$ep-architecture`
+- 对象/版本/地区等关键适用条件未知 → 先停下来询问
+
+## 入口检查
+
+- [ ] 待决问题依赖外部事实（官方能力、版本兼容、协议、法规、SDK 行为）
+- [ ] 至少有一个具体的产品/库/规范作为研究对象
+- [ ] 有可访问的一手来源（官方文档、源代码、规范）
+- [ ] 没有更好的入口（业务验证走 `$ep-prototyping`,系统取舍走 `$ep-architecture`）
+
+## 输出契约
+
+- 调研范围声明（决策问题、对象、版本、地区、停止条件）
+- 每条主张附一手来源 ID + URL/路径 + 适用范围
+- 事实 / 推论 / 建议 / 未知项 四层分明
+- 决策影响：哪些回写 Spec,哪些交给架构,哪些留 Unknown
+- 详细协议见 [source-evidence.md](references/source-evidence.md)、[synthesis-protocol.md](references/synthesis-protocol.md)
+
 ## 核心原则
 
 Research（资料调研）只为一个待决问题收集足够的一手事实。先明确对象和适用范围，逐条保存可追溯来源，并分开记录官方事实、项目事实、推论、建议和 Unknown（未知项）。搜索摘要、博客和模型记忆只能帮助发现线索，不能作为决策证据。

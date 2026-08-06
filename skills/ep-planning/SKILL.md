@@ -5,6 +5,29 @@ description: Use when the user explicitly asks to turn a substantial business re
 
 # 业务驱动开发
 
+## 不要进入本 Skill
+
+- 清晰、局部、可逆的代码修改 → 走 `$ep-code-change`
+- 跨上下文且仍模糊的大目标 → 走 `$ep-large-project`
+- 已有批准 Spec 和主 Plan → 走 `$ep-execution`
+- 活跃业务故障 → 走 `$ep-diagnosis`
+- 只是想"看看大致实现清单" → 直接拒绝,先做业务调查
+
+## 入口检查
+
+- [ ] 单一业务功能/模块,目标与边界基本清晰
+- [ ] 可以在一个规划会话内形成可批准 Spec
+- [ ] 用户明确要求规划（不自动触发）
+- [ ] 没有更好的入口（外部请求走 `$ep-request-intake`,跨上下文走 `$ep-large-project`,活跃故障走 `$ep-diagnosis`）
+
+## 输出契约
+
+- Spec（业务规格）：业务目标 + 参与者 + 验收契约 + 范围外（待用户批准）
+- 主 Plan：业务切片 + 依赖图 + Frontier + 核心闭环 + 自主边界（待用户批准）
+- 验收依据：每条业务规则有可观察结果
+- 全局进度区,让用户能从 Plan 文件直接看到整体进展
+- 详细协议见 [spec-protocol.md](references/spec-protocol.md)、[plan-protocol.md](references/plan-protocol.md)
+
 ## 核心原则
 
 以可验收的业务闭环作为规划、实现和验证的基本单位。先与用户确认并批准 Spec（业务规格）和主 Plan（主执行计划），再自主完成授权范围；不要用技术任务、测试数量或代码完成度代替业务结果。

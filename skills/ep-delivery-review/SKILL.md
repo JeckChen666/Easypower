@@ -5,6 +5,28 @@ description: Use when the user or another Easypower skill explicitly asks to rev
 
 # 评审业务交付
 
+## 不要进入本 Skill
+
+- 低风险切片 + 已有直接业务证据 → 由 `ep-execution` 完成局部检查
+- 还未实现完成的代码 → 不评审空壳
+- 只是为了通过合并而走流程 → 不进入
+- 与业务契约无关的纯代码风格讨论 → 留给 Code Review 工具
+
+## 入口检查
+
+- [ ] 已有可评审的实际代码差异、产物和证据
+- [ ] Spec 已被批准或明确为"无法评估"
+- [ ] 切片属于核心闭环、高风险、公共契约变化或最终交付
+- [ ] 没有更好的入口（请求/缺陷验证走 `$ep-request-intake`,失败诊断走 `$ep-diagnosis`）
+
+## 输出契约
+
+- 业务契约检查：`Pass` / `Fail` / `Not assessable`
+- 工程风险检查：`Pass` / `Fail` / `Pass with follow-ups`
+- Findings 按 Blocker / Important / Minor / Question 排序
+- 最终决定：`Approved` / `Approved with follow-ups` / `Not approved`
+- 详细协议见 [business-contract-axis.md](references/business-contract-axis.md)、[engineering-risk-axis.md](references/engineering-risk-axis.md)、[feedback-and-gate.md](references/feedback-and-gate.md)
+
 ## 核心原则
 
 评审分别回答两个问题：交付是否满足已批准的业务契约；实现是否带来不可接受的工程风险。测试通过、代码整洁或性能达标都不能抵消业务结果错误，业务路径通过也不能掩盖越权、数据丢失或不可恢复迁移。

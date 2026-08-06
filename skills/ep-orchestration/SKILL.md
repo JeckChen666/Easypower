@@ -5,6 +5,28 @@ description: Use when the user explicitly asks to run or design a YAML-defined m
 
 # 多角色工作流编排
 
+## 不要进入本 Skill
+
+- 已批准业务 Plan 的开发执行 → 走 `$ep-execution`
+- 单次评审、简单交接或一个 Agent 直接能完成 → 不创建工作流
+- 用同一会话依次模仿角色 → 不是真正的多 Agent 编排
+- 业务问题不清、依赖未定义 → 先回到 `$ep-planning` 或 `$ep-large-project`
+
+## 入口检查
+
+- [ ] 任务需要多个独立角色（评审、研究、决策、合成）并行/串行协作
+- [ ] 有可表达为 YAML 的 DAG（节点、依赖、Decision Gate、写入范围）
+- [ ] 环境支持真实子代理
+- [ ] 用户明确希望用本 Skill（不自动触发）
+
+## 输出契约
+
+- 已批准 `workflow.yaml` + 持久化 `state.json`
+- 每个 Agent Step 的输出文件（`steps/<step-id>/output.md`）
+- `summary.md`：完成、失败、受阻、跳过步骤 + 剩余 Decision Gate + 风险
+- 跨会话恢复：磁盘状态 + Frontier 入口
+- 详细协议见 [workflow-schema.md](references/workflow-schema.md)
+
 ## 核心原则
 
 用声明式 DAG（有向无环图）协调真实子代理。角色是责任、权限和产出契约，不是主 Agent 临时切换的说话风格；协调 Agent 只管理状态、依赖、所有权和升级，不替角色完成任务。
