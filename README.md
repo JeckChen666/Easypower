@@ -33,6 +33,8 @@ Easypower 目前有十五个正式 Skill：
 
 完整候选能力、来源映射和建设顺序见 [Easypower Skill 能力地图](SKILL-MAP.md)。
 
+任务的概念框架（三阶段 × 三规模 × 两模式）见 [Easypower 任务形态](TASK-SHAPE.md)。
+
 它解决以下问题：
 
 - 日常对话不应自动进入重型开发流程；

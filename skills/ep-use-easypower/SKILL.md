@@ -5,6 +5,8 @@ description: Use when the user explicitly invokes ep-use-easypower or clearly as
 
 # 使用 Easypower
 
+> 任务形态（阶段/规模/模式）的概念框架见 [Easypower 任务形态](../../TASK-SHAPE.md)。本 Skill 负责按当前上下文选择最小且足够的下游 Skill。
+
 ## 核心原则
 
 只做一次 Route（路由）判断，然后进入最小且足够的下游 Skill。不要一次加载全部 Skill，不要因为用户提到 Easypower 就强制编写 Spec、Plan 或测试。
