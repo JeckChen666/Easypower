@@ -16,6 +16,35 @@ Easypower 面向需要先审核 Spec 和 Plan、再交给 Code Agent 或子代�
 - Agent 在批准范围内自主实现，重大变化升级给用户；
 - 完成结论由业务证据支持，而不是由测试数量支持。
 
+整个交付链路分为三个阶段：
+
+| 阶段 | 主要工作 | 协作密度 |
+|---|---|---|
+| Phase 1 分析（Analysis） | 业务调查、Spec、风险识别、替代方案；重度任务自动对抗性审查 | 始终 AI 自主 + 用户末尾审查一次 |
+| Phase 2 执行（Execution） | 主 Plan 展开、子代理调度、Goal Prompt | 可选：自主 / 协同 |
+| Phase 3 验证（Verification） | 业务证据、工程风险、双轨评审 | AI 评审 + 用户裁决 |
+
+**第一性原理**贯穿三个阶段：默认只解决已确认的核心业务路径；边缘场景必须识别但不默认实现；不为尚未发生的负载、租户、规模或迁移预留方案。
+
+## 一点五、执行方式
+
+进入 Phase 2 时，用户或协调 Agent 选择一种执行方式：
+
+| 方式 | 适用场景 | 特点 |
+|---|---|---|
+| 当前窗口派子代理 | 默认；用户能持续在线 | `ep-execution` 在当前窗口调度 Agent 工具，用户随时打断 |
+| 其他窗口（Standalone Goal Prompt） | 用户要离开当前窗口；适合超长任务 | 生成自包含 Prompt 包到 `docs/easypower/<feature>/execution-goal.md`，用户复制到其他窗口运行 |
+| 协同模式 | 用户希望逐步审批每个关键节点 | 数据形态 → 契约 → 骨架 → 实现，逐步等审批 |
+
+**协同模式的目的不是效率，而是 ownership**——用户通过逐步审批建立对每行代码的深度理解，让代码"像是自己写的"。牺牲速度换信任，这是 feature 不是 bug。
+
+协同模式的颗粒度按规模区分：
+
+- 中等：按 Plan 切片审批（每个切片整体一次审批）；
+- 重度：按 Phase 审批（几个切片为一组，每组一次审批），每个切片内部仍自主。
+
+不要默认启用协同模式——只在用户显式选择时进入。
+
 ## 二、默认入口
 
 用户可以显式调用 [ep-use-easypower](skills/ep-use-easypower/SKILL.md)，让它根据当前上下文选择最小且足够的正式流程。普通代码、配置、数据或局部开发操作由 [ep-code-change](skills/ep-code-change/SKILL.md) 自动区分快速修改和需要升级的复杂任务。
@@ -87,6 +116,8 @@ Spec 是业务事实来源，回答：
 业务方没有提供目标文件时，Agent 应通过输入输出样例、决策表、权限矩阵、状态转换、业务不变量或用户可观察结果构造验收契约。
 
 详细规则见 [Spec 协议](skills/ep-planning/references/spec-protocol.md)。
+
+重度任务的 Spec 与主 Plan 完成后、用户审批前，协调 Agent 自动进入对抗性审查：并行 spawn 多个只读子代理从产品、架构、用户、验证四个视角独立评审，主 Agent 整合后决定是否修改，再交给用户。详细协议见 [对抗性审查](skills/ep-planning/references/adversarial-review.md)。
 
 ## 四、决策分支
 
@@ -182,6 +213,15 @@ Agent 必须升级审批：
 - 主 Plan 未覆盖的系统性风险使原授权不再充分。
 
 详细规则见 [ep-execution](skills/ep-execution/SKILL.md)。
+
+按需参考协议：
+
+- [Agent Brief 模板](skills/ep-execution/references/agent-brief.md)
+- [子代理模式](skills/ep-execution/references/subagent-patterns.md)
+- [协同模式 Web 参考](skills/ep-execution/references/collaborative-web.md)
+- [Standalone Goal Prompt](skills/ep-execution/references/standalone-goal-prompt.md)
+- [执行状态协议](skills/ep-execution/references/execution-state.md)
+- [风险验证与恢复](skills/ep-execution/references/validation-and-recovery.md)
 
 ## 九、进度汇报与 Plan 稳定性
 
