@@ -5,6 +5,29 @@ description: Use when the user or another Easypower skill explicitly asks to exe
 
 # 执行业务计划
 
+## 不要进入本 Skill
+
+- Spec 或主 Plan 尚未批准 → 停在规划阶段
+- 只是局部代码修改、无需按切片交付 → 走 `$ep-code-change`
+- 业务结果已经出错需要诊断 → 走 `$ep-diagnosis`
+- 想做小型多角色评审 → 走 `$ep-delivery-review`,不要 spawn 整套 Plan
+
+## 入口检查
+
+- [ ] Spec 状态为"已批准"或"执行中"
+- [ ] 主 Plan 状态为"已批准"或"执行中",包含全局进度区
+- [ ] 核心业务闭环、切片依赖、验收摘要和自主边界已定义
+- [ ] 仓库、环境、权限和基线可用
+- [ ] 没有需要用户先决定的阻塞问题
+
+## 输出契约
+
+- 主 Plan 状态表持续更新（切片 ID + 状态 + 执行者 + 证据）
+- 每个切片留下 `evidence/<ID>/`（输入、期望、实际、命令、核心回归、风险）
+- 每切片进度汇报 + 全部完成时的业务交付报告
+- 子代理模式选择见 [subagent-patterns.md](references/subagent-patterns.md)
+- 详细协议见 [execution-state.md](references/execution-state.md)、[agent-brief.md](references/agent-brief.md)、[validation-and-recovery.md](references/validation-and-recovery.md)
+
 ## 核心原则
 
 只执行已经批准的业务契约。以磁盘中的 Spec（业务规格）、主 Plan（主执行计划）、子 Plan、代码和证据为准，不依赖上一段对话或 Agent（智能体）记忆。业务切片通过验收并留下证据后才算完成。
@@ -30,15 +53,48 @@ description: Use when the user or another Easypower skill explicitly asks to exe
 
 一个切片即将进入 `Ready（可领取）` 时，根据最新代码展开或刷新对应子 Plan。细化实现步骤不需要重新审批；改变业务范围、验收、不变量、公共接口、数据模型或关键架构时，将切片标为 `Blocked（受阻）` 并升级审批。
 
-## 4. 调度任务
+## 4. 调度任务（必须使用 Agent 工具）
 
-读取 [agent-brief.md](references/agent-brief.md)。由协调 Agent 独占主 Plan、Spec 和跨切片公共契约的写权限。执行 Agent 只接收当前切片所需的事实链接、依赖产物、所有权、完成定义和升级条件。
+**每个非平凡切片都应通过 Agent 工具 spawn 子代理执行，不要在当前上下文连续实现多个切片。**
 
-只有任务之间不存在顺序依赖、公共契约争用、共享状态冲突和文件所有权重叠时才并行。存在共享接口或 Schema 时，先建立并完成契约冻结切片，或将相关任务串行化。
+LLM 默认会复用当前上下文实现所有任务,这会让大型项目的实现细节污染决策上下文,导致后续切片判断时被无关代码记忆干扰。子代理隔离是质量保障,不是性能优化。
 
-环境不支持子代理时，保持同一切片和状态协议顺序执行，不伪造独立代理或并行结果。
+### 何时必须 spawn 子代理
 
-展开或刷新子 Plan 是协调 Agent 的自主行为，不需要中断用户等待审批。用户批准主 Plan 时已经授权了全部切片的目标和验收；子 Plan 只是将授权展开为实施细节。只有当展开过程发现必须改变已批准契约时才升级（见第 7 节）。
+满足以下任一条件时,使用 Agent 工具 spawn 子代理:
+
+- 切片预计改动超过 50 行代码,或涉及 2 个以上文件
+- 切片之间存在顺序依赖但实现路径独立(适合 Frontier 并行)
+- 切片需要独立验证视角(避免实现者自证)
+- 切片涉及公共契约、Schema、迁移或性能关键路径
+
+只在以下情况直接在当前上下文实现:
+
+- 切片预计 < 50 行代码,且无独立验证需求
+- 调试 / 一次性验证脚本
+- 用户明确要求不分发
+
+### 调用 Agent 工具时
+
+读取 [agent-brief.md](references/agent-brief.md) 获取标准 prompt 模板,按场景选择 [subagent-patterns.md](references/subagent-patterns.md) 中的子代理模式:
+
+- `subagent_type`: 选择合适的专门 Agent(如 `general-purpose`)
+- `isolation`: `worktree` 用于大型项目或长期演进,小切片可不传
+- `prompt`: 必须包含切片 ID、Spec/Plan 路径、所有权边界、升级条件、返回契约
+
+### 协调 Agent 独占内容
+
+协调 Agent 独占主 Plan、Spec、跨切片公共契约、执行者分配、文件所有权、Frontier 和最终证据索引的写权限。执行 Agent 通过返回结果包更新状态,不直接竞争写入。
+
+### 并行判定
+
+只有任务之间不存在顺序依赖、公共契约争用、共享状态冲突和文件所有权重叠时才并行。存在共享接口或 Schema 时,先建立并完成契约冻结切片,或将相关任务串行化。
+
+环境不支持 Agent 工具时,保持同一切片和状态协议顺序执行,不伪造独立代理或并行结果。
+
+### 自主展开边界
+
+展开或刷新子 Plan 是协调 Agent 的自主行为,不需要中断用户等待审批。用户批准主 Plan 时已经授权了全部切片的目标和验收;子 Plan 只是将授权展开为实施细节。只有当展开过程发现必须改变已批准契约时才升级(见第 7 节)。
 
 ## 5. 完成切片循环
 
