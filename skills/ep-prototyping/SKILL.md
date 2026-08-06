@@ -1,6 +1,7 @@
 ---
 name: ep-prototyping
-description: Use when the user or another Easypower skill explicitly asks to build a throwaway logic, state, interaction, UI, or technical prototype because an important business decision cannot be resolved reliably through discussion or existing evidence
+description: Use when building a throwaway prototype to answer a business decision unresolved by discussion
+weight: heavy
 ---
 
 # 用原型验证决策

@@ -1,6 +1,7 @@
 ---
 name: ep-domain-modeling
-description: Use when the user or another Easypower skill explicitly asks to resolve ambiguous or overloaded business language, distinguish domain concepts and boundaries, define concrete scenarios and invariants, or decide whether a consequential domain decision deserves a sparse ADR before approving a Spec or Plan
+description: Use when resolving ambiguous business language, scenarios, boundaries, or ADR-worthy domain decisions
+weight: heavy
 ---
 
 # 业务领域建模

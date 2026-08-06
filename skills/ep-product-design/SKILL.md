@@ -1,6 +1,7 @@
 ---
 name: ep-product-design
-description: Use when the user or another Easypower skill explicitly asks to shape a software product before approving its Spec because important user journeys, information hierarchy, interaction states, or tradeoffs between user value, business scope, and architecture remain unclear
+description: Use when shaping a product before Spec approval: user journeys, information hierarchy, interactions
+weight: heavy
 ---
 
 # 塑造产品体验

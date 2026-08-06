@@ -1,6 +1,7 @@
 ---
 name: ep-planning
-description: Use when the user explicitly asks to turn a substantial business requirement into an approved spec and progressive plan for autonomous or subagent-driven implementation
+description: Use when turning a substantial business requirement into an approved spec and progressive plan
+weight: heavy
 ---
 
 # 业务驱动开发

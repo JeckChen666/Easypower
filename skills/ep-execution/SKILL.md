@@ -1,6 +1,7 @@
 ---
 name: ep-execution
-description: Use when the user or another Easypower skill explicitly asks to execute an approved business Spec and main Plan across multiple tasks, contexts, or subagents
+description: Use when executing an approved Spec and main Plan across multiple tasks, contexts, or subagents
+weight: heavy
 ---
 
 # 执行业务计划

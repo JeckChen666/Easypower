@@ -1,6 +1,7 @@
 ---
 name: ep-large-project
-description: Use when the user explicitly asks to organize and progressively clarify a business initiative that is too large for one agent context and still too ambiguous for an approvable Spec or Plan, by maintaining a durable decision map, current frontier, dependencies, unresolved fog, and cross-session handoff
+description: Use for cross-context ambiguous initiatives needing a decision map, frontier, and cross-session handoff
+weight: heavy
 ---
 
 # 大型工作导航

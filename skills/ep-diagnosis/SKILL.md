@@ -1,6 +1,7 @@
 ---
 name: ep-diagnosis
-description: Use when the user or another Easypower skill explicitly asks to diagnose and repair an observed wrong business result, regression, intermittent production failure, or performance degradation using reproducible evidence
+description: Use when diagnosing wrong business results, regressions, intermittent failures, or performance degradation
+weight: heavy
 ---
 
 # 诊断业务故障

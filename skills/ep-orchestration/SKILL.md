@@ -1,6 +1,7 @@
 ---
 name: ep-orchestration
-description: Use when the user explicitly asks to run or design a YAML-defined multi-role workflow with real subagents, dependency-aware parallelism, decision gates, durable outputs, and cross-session recovery. Also use when multiple specialist roles must independently review, research, decide, or synthesize one shared task outside an approved business implementation Plan.
+description: Use when running or designing a YAML multi-role workflow with subagents, decision gates, and recovery
+weight: heavy
 ---
 
 # 多角色工作流编排

@@ -1,6 +1,7 @@
 ---
 name: ep-delivery-review
-description: Use when the user or another Easypower skill explicitly asks to review a completed or high-risk business slice, branch, pull request, or delivery against an approved business contract and engineering risks
+description: Use when reviewing a slice, PR, or delivery against business contract and engineering risks
+weight: heavy
 ---
 
 # 评审业务交付

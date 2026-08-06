@@ -1,6 +1,7 @@
 ---
 name: ep-chinese-writing
-description: Use whenever writing Chinese user explanations, updates, reviews, specifications, plans, or technical and business documents. Keep established terms in English, add a contextual Chinese gloss on first use as English（中文）, and avoid literal translation.
+description: Use when writing Chinese. Keep English terms, gloss on first use, avoid literal translation.
+weight: light
 ---
 
 # 自然技术中文

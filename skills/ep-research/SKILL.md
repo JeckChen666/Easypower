@@ -1,6 +1,7 @@
 ---
 name: ep-research
-description: Use when the user or another Easypower skill explicitly asks to investigate external facts from primary sources, official documentation, source code, specifications, or first-party APIs so a business, architecture, or implementation decision can cite reliable evidence
+description: Use when investigating external facts from primary sources so a decision can cite reliable evidence
+weight: heavy
 ---
 
 # 调研决策依据

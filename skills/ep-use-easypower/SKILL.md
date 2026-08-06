@@ -1,6 +1,7 @@
 ---
 name: ep-use-easypower
-description: Use when the user explicitly invokes ep-use-easypower or clearly asks to use Easypower, and the current context must be routed to the smallest suitable Easypower workflow
+description: Use when explicitly invoking or asking to use Easypower. Routes to smallest suitable workflow.
+weight: heavy
 ---
 
 # 使用 Easypower

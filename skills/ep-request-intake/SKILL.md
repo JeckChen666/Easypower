@@ -1,6 +1,7 @@
 ---
 name: ep-request-intake
-description: Use when the user explicitly asks to evaluate, verify, prioritize, deduplicate, or route incoming business requests, bug reports, support escalations, issues, or external pull requests and turn sufficiently grounded items into durable business briefs for Easypower planning
+description: Use when evaluating external requests, bugs, issues, or PRs into durable business briefs for planning
+weight: heavy
 ---
 
 # 业务请求分流

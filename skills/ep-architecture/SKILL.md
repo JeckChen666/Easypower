@@ -1,6 +1,7 @@
 ---
 name: ep-architecture
-description: Use when the user or another Easypower skill explicitly asks to compare and approve a consequential architecture decision involving computation, storage, interfaces, consistency, scaling, migration, or system structure for a business capability
+description: Use when comparing architecture decisions: computation, storage, interfaces, migration, system structure
+weight: heavy
 ---
 
 # 设计业务架构

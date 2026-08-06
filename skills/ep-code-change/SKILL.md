@@ -1,6 +1,7 @@
 ---
 name: ep-code-change
-description: Use automatically whenever the user asks to create, modify, fix, refactor, or delete source code, or make a bounded configuration, data, or developer operation, unless a specific Easypower workflow already governs the request; keeps bounded changes fast and routes unresolved business or architecture decisions to ep-use-easypower
+description: Use automatically for bounded code changes. Routes complex or cross-domain work to ep-use-easypower.
+weight: light
 ---
 
 # 轻量代码修改
