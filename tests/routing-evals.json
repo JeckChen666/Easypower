@@ -33,5 +33,91 @@
     "prompt": "重新设计角色继承和默认权限，业务规则还没有确定。",
     "expected_route": "ep-use-easypower",
     "must_not": ["direct-change", "routing-loop"]
+  },
+  {
+    "id": "production-incident-with-evidence",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 修一个生产 bug，错误日志和截图都有，用户报告订单状态错误更新。",
+    "expected_route": "ep-diagnosis",
+    "must_not": ["create-spec", "routing-loop"]
+  },
+  {
+    "id": "external-pr-needs-verification",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 评估一个外部 PR，它修改了退款规则的边界。",
+    "expected_route": "ep-request-intake",
+    "must_not": ["start-implementation", "direct-merge"]
+  },
+  {
+    "id": "research-only-question",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 查清楚这个第三方 API 的速率限制和分页行为。",
+    "expected_route": "ep-research",
+    "must_not": ["create-spec", "create-plan"]
+  },
+  {
+    "id": "prototype-decision",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 做一个原型，看下新筛选交互哪种更好。",
+    "expected_route": "ep-prototyping",
+    "must_not": ["create-spec", "start-implementation"]
+  },
+  {
+    "id": "completed-slice-needs-review",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 评审一下刚完成的报表核心闭环切片。",
+    "expected_route": "ep-delivery-review",
+    "must_not": ["create-spec", "routing-loop"]
+  },
+  {
+    "id": "ambiguous-domain-term",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 澄清账户这个术语在我们业务里到底指什么，目前代码和文档用法不一致。",
+    "expected_route": "ep-domain-modeling",
+    "must_not": ["start-implementation", "create-spec"]
+  },
+  {
+    "id": "ambiguous-storage-choice",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 决定这个报表应该用 Postgres 还是 ClickHouse，负载特征需要分析。",
+    "expected_route": "ep-architecture",
+    "must_not": ["direct-implementation", "routing-loop"]
+  },
+  {
+    "id": "user-journey-decision",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 确定这个功能的用户路径，目前有三种合理的交互形态。",
+    "expected_route": "ep-product-design",
+    "must_not": ["start-implementation", "create-spec"]
+  },
+  {
+    "id": "multi-role-review",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 启动一个多角色评审，让架构师、安全和性能三个角色独立看。",
+    "expected_route": "ep-orchestration",
+    "must_not": ["start-implementation", "routing-loop"]
+  },
+  {
+    "id": "ambiguous-trap-permission",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 处理权限相关需求。",
+    "expected_route": "ep-use-easypower",
+    "must_not": ["direct-change", "routing-loop"],
+    "note": "权限不必然升级;需要追问对象、范围、授权、影响才能路由"
+  },
+  {
+    "id": "ambiguous-trap-amount",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 修一个金额计算不对的问题。",
+    "expected_route": "ep-use-easypower",
+    "must_not": ["direct-change", "create-spec"],
+    "note": "金额不必然升级;若已有失败证据走 diagnosis,若对象清楚走 code-change"
+  },
+  {
+    "id": "light-default-tendency",
+    "entry": "ep-use-easypower",
+    "prompt": "使用 Easypower 把这个接口的返回字段加上分页。",
+    "expected_route": "ep-code-change",
+    "must_not": ["create-spec", "create-plan"]
   }
 ]

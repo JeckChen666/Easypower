@@ -1,9 +1,32 @@
 ---
 name: ep-prototyping
-description: Use when the user or another Easypower skill explicitly asks to build a throwaway logic, state, interaction, UI, or technical prototype because an important business decision cannot be resolved reliably through discussion or existing evidence
+description: Use when building a throwaway prototype to answer a business decision unresolved by discussion
+weight: heavy
 ---
 
 # 用原型验证决策
+
+## 不要进入本 Skill
+
+- 问题可以用文档、官方资料或现有证据回答 → 走 `$ep-research`
+- 问题是长期系统取舍（数据库/中间件/部署拓扑）→ 走 `$ep-architecture`
+- 已有明确决策,只是要"做个样子" → 直接拒绝
+- 一次性生产实现 → 不叫原型,叫产品
+
+## 入口检查
+
+- [ ] 必须运行、操作或观看后才能判断
+- [ ] 有清晰的判定标准（什么观察能区分候选答案）
+- [ ] 能用一次性代码 / 一次性页面回答
+- [ ] 没有更好的入口（外部事实走 `$ep-research`,长期架构走 `$ep-architecture`,业务术语歧义走 `$ep-domain-modeling`）
+
+## 输出契约
+
+- 决策问题 + 候选答案 + 判定标准
+- 可运行的最小验证产物（一条命令或一个 URL）
+- 观察记录 + 推荐 + 用户决定
+- 决定回写 Spec,原型代码标记清理方式
+- 详细协议见 [logic-prototype.md](references/logic-prototype.md)、[ui-prototype.md](references/ui-prototype.md)、[technical-spike.md](references/technical-spike.md)
 
 ## 核心原则
 

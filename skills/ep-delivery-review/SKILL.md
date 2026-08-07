@@ -1,9 +1,32 @@
 ---
 name: ep-delivery-review
-description: Use when the user or another Easypower skill explicitly asks to review a completed or high-risk business slice, branch, pull request, or delivery against an approved business contract and engineering risks
+description: Use when reviewing a slice, PR, or delivery against business contract and engineering risks
+weight: heavy
 ---
 
 # 评审业务交付
+
+## 不要进入本 Skill
+
+- 低风险切片 + 已有直接业务证据 → 由 `ep-execution` 完成局部检查
+- 还未实现完成的代码 → 不评审空壳
+- 只是为了通过合并而走流程 → 不进入
+- 与业务契约无关的纯代码风格讨论 → 留给 Code Review 工具
+
+## 入口检查
+
+- [ ] 已有可评审的实际代码差异、产物和证据
+- [ ] Spec 已被批准或明确为"无法评估"
+- [ ] 切片属于核心闭环、高风险、公共契约变化或最终交付
+- [ ] 没有更好的入口（请求/缺陷验证走 `$ep-request-intake`,失败诊断走 `$ep-diagnosis`）
+
+## 输出契约
+
+- 业务契约检查：`Pass` / `Fail` / `Not assessable`
+- 工程风险检查：`Pass` / `Fail` / `Pass with follow-ups`
+- Findings 按 Blocker / Important / Minor / Question 排序
+- 最终决定：`Approved` / `Approved with follow-ups` / `Not approved`
+- 详细协议见 [business-contract-axis.md](references/business-contract-axis.md)、[engineering-risk-axis.md](references/engineering-risk-axis.md)、[feedback-and-gate.md](references/feedback-and-gate.md)
 
 ## 核心原则
 
@@ -45,6 +68,8 @@ Spec 缺失或未批准时仍可检查工程风险，但 Contract Review（业�
 读取 [engineering-risk-axis.md](references/engineering-risk-axis.md)。从实际代码差异、调用方和数据流出发，优先检查可能改变业务结果或恢复能力的问题：正确性、安全与权限、数据生命周期、并发与幂等、接口兼容、性能成本、失败恢复和可观测性。
 
 仓库规范优先于通用偏好。工具已可靠执行的格式或静态规则不重复人工报告。代码气味只有在造成当前风险、修改扩散或验证困难时才成为 Finding（评审发现），不要为尚未出现的需求推动抽象。
+
+**第一性原理（评审纪律）：评审目标是确认交付恰好等于 Spec。** 对 Spec 未要求、Agent 自行添加的"防御性"功能或边缘场景覆盖，即使是 Minor 也建议标记为"应移除"——超额覆盖不是优点，是返工成本。如果 Agent 实现了 Spec 之外的能力但没有触发理由，记录并建议回退；如果 Agent 漏掉了 Spec 的某项要求，无论工程上多么合理，都必须修复。
 
 ## 5. 按业务影响定级
 

@@ -1,9 +1,33 @@
 ---
 name: ep-execution
-description: Use when the user or another Easypower skill explicitly asks to execute an approved business Spec and main Plan across multiple tasks, contexts, or subagents
+description: Use when executing an approved Spec and main Plan across multiple tasks, contexts, or subagents
+weight: heavy
 ---
 
 # 执行业务计划
+
+## 不要进入本 Skill
+
+- Spec 或主 Plan 尚未批准 → 停在规划阶段
+- 只是局部代码修改、无需按切片交付 → 走 `$ep-code-change`
+- 业务结果已经出错需要诊断 → 走 `$ep-diagnosis`
+- 想做小型多角色评审 → 走 `$ep-delivery-review`,不要 spawn 整套 Plan
+
+## 入口检查
+
+- [ ] Spec 状态为"已批准"或"执行中"
+- [ ] 主 Plan 状态为"已批准"或"执行中",包含全局进度区
+- [ ] 核心业务闭环、切片依赖、验收摘要和自主边界已定义
+- [ ] 仓库、环境、权限和基线可用
+- [ ] 没有需要用户先决定的阻塞问题
+
+## 输出契约
+
+- 主 Plan 状态表持续更新（切片 ID + 状态 + 执行者 + 证据）
+- 每个切片留下 `evidence/<ID>/`（输入、期望、实际、命令、核心回归、风险）
+- 每切片进度汇报 + 全部完成时的业务交付报告
+- 子代理模式选择见 [subagent-patterns.md](references/subagent-patterns.md)
+- 详细协议见 [execution-state.md](references/execution-state.md)、[agent-brief.md](references/agent-brief.md)、[validation-and-recovery.md](references/validation-and-recovery.md)
 
 ## 核心原则
 
@@ -20,6 +44,29 @@ description: Use when the user or another Easypower skill explicitly asks to exe
 
 任何前提不成立时不要开始实现。报告缺口并停在规划阶段。
 
+## 1.5 选择执行模式
+
+启动检查通过后，**询问用户选择执行模式**（用户已指定则跳过）：
+
+| 模式 | 适用场景 | 特点 |
+|---|---|---|
+| 当前窗口派子代理 | 默认选择；用户能持续在线 | `ep-execution` 在当前窗口调度 Agent 工具；用户随时打断 |
+| 其他窗口执行 | 用户要离开当前窗口；适合超长任务 | 生成 Standalone Goal Prompt，用户复制到其他窗口运行；详见 [standalone-goal-prompt.md](references/standalone-goal-prompt.md) |
+| 协同模式（Collaborative） | 用户希望逐步审批每个关键步骤，建立代码 ownership | 每个数据形态、契约、骨架、实现节点都等用户审批；详见 [collaborative-web.md](references/collaborative-web.md) |
+
+**协同模式的触发条件：**
+- 用户在启动时显式选择 "协同模式" 或说"逐步确认""每步带我走""我想看清楚每一步"
+- 任务规模属于中等或重度
+- 用户能够持续在线回复（协同不适合异步/跨天）
+
+**协同模式的颗粒度（按规模）：**
+- 中等：按 Plan 切片审批（每切片整体一次审批）
+- 重度：按 Phase 审批（几个切片为一组，每组一次审批）；每个切片内部仍自主
+
+**协同模式的核心目的不是效率，是 ownership**——用户通过逐步审批建立对每行代码的深度理解，让代码"像是自己写的"。牺牲速度换信任，这是 feature 不是 bug。
+
+**不要默认启用协同模式。** 默认执行模式是"当前窗口派子代理"，只在用户显式选择时才进入协同。
+
 ## 2. 恢复执行状态
 
 读取 [execution-state.md](references/execution-state.md)。以主 Plan 的状态表为执行账本，结合 Git 状态、子 Plan 和 `evidence/` 目录恢复真实进度。不要因为进程中断就重跑已验证任务，也不要把“代码存在”推断为“业务已经通过”。
@@ -30,15 +77,48 @@ description: Use when the user or another Easypower skill explicitly asks to exe
 
 一个切片即将进入 `Ready（可领取）` 时，根据最新代码展开或刷新对应子 Plan。细化实现步骤不需要重新审批；改变业务范围、验收、不变量、公共接口、数据模型或关键架构时，将切片标为 `Blocked（受阻）` 并升级审批。
 
-## 4. 调度任务
+## 4. 调度任务（必须使用 Agent 工具）
 
-读取 [agent-brief.md](references/agent-brief.md)。由协调 Agent 独占主 Plan、Spec 和跨切片公共契约的写权限。执行 Agent 只接收当前切片所需的事实链接、依赖产物、所有权、完成定义和升级条件。
+**每个非平凡切片都应通过 Agent 工具 spawn 子代理执行，不要在当前上下文连续实现多个切片。**
 
-只有任务之间不存在顺序依赖、公共契约争用、共享状态冲突和文件所有权重叠时才并行。存在共享接口或 Schema 时，先建立并完成契约冻结切片，或将相关任务串行化。
+LLM 默认会复用当前上下文实现所有任务,这会让大型项目的实现细节污染决策上下文,导致后续切片判断时被无关代码记忆干扰。子代理隔离是质量保障,不是性能优化。
 
-环境不支持子代理时，保持同一切片和状态协议顺序执行，不伪造独立代理或并行结果。
+### 何时必须 spawn 子代理
 
-展开或刷新子 Plan 是协调 Agent 的自主行为，不需要中断用户等待审批。用户批准主 Plan 时已经授权了全部切片的目标和验收；子 Plan 只是将授权展开为实施细节。只有当展开过程发现必须改变已批准契约时才升级（见第 7 节）。
+满足以下任一条件时,使用 Agent 工具 spawn 子代理:
+
+- 切片预计改动超过 50 行代码,或涉及 2 个以上文件
+- 切片之间存在顺序依赖但实现路径独立(适合 Frontier 并行)
+- 切片需要独立验证视角(避免实现者自证)
+- 切片涉及公共契约、Schema、迁移或性能关键路径
+
+只在以下情况直接在当前上下文实现:
+
+- 切片预计 < 50 行代码,且无独立验证需求
+- 调试 / 一次性验证脚本
+- 用户明确要求不分发
+
+### 调用 Agent 工具时
+
+读取 [agent-brief.md](references/agent-brief.md) 获取标准 prompt 模板,按场景选择 [subagent-patterns.md](references/subagent-patterns.md) 中的子代理模式:
+
+- `subagent_type`: 选择合适的专门 Agent(如 `general-purpose`)
+- `isolation`: `worktree` 用于大型项目或长期演进,小切片可不传
+- `prompt`: 必须包含切片 ID、Spec/Plan 路径、所有权边界、升级条件、返回契约
+
+### 协调 Agent 独占内容
+
+协调 Agent 独占主 Plan、Spec、跨切片公共契约、执行者分配、文件所有权、Frontier 和最终证据索引的写权限。执行 Agent 通过返回结果包更新状态,不直接竞争写入。
+
+### 并行判定
+
+只有任务之间不存在顺序依赖、公共契约争用、共享状态冲突和文件所有权重叠时才并行。存在共享接口或 Schema 时,先建立并完成契约冻结切片,或将相关任务串行化。
+
+环境不支持 Agent 工具时,保持同一切片和状态协议顺序执行,不伪造独立代理或并行结果。
+
+### 自主展开边界
+
+展开或刷新子 Plan 是协调 Agent 的自主行为,不需要中断用户等待审批。用户批准主 Plan 时已经授权了全部切片的目标和验收;子 Plan 只是将授权展开为实施细节。只有当展开过程发现必须改变已批准契约时才升级(见第 7 节)。
 
 ## 5. 完成切片循环
 
@@ -55,6 +135,8 @@ description: Use when the user or another Easypower skill explicitly asks to exe
 9. 核心闭环、高风险切片、公共契约变化或最终交付明确调用 `$ep-delivery-review`；评审通过后进入 `Completed（已完成）`；
 10. 低风险且已有直接证据的切片不强制独立评审，可以从 Verified 进入 Completed；
 11. 根据依赖关系更新 Frontier 并调度下一批任务。
+
+**第一性原理（实现纪律）：实现路径默认只覆盖核心闭环。** Spec 列为"识别但不实现"的边缘场景保留识别记录，但**不进入实现步骤、不进入验证范围**。执行过程中如果发现 Spec 未覆盖的实际触发条件，先升级回 Spec，而不是顺带实现；如果发现已经实现的某个边界处理在当前业务里没有触发场景，回退比保留更省成本。
 
 不要为每个切片固定运行全量测试、双阶段评审或独立审查代理。验证和评审强度由业务风险、影响范围和证据可信度决定。
 

@@ -1,9 +1,32 @@
 ---
 name: ep-domain-modeling
-description: Use when the user or another Easypower skill explicitly asks to resolve ambiguous or overloaded business language, distinguish domain concepts and boundaries, define concrete scenarios and invariants, or decide whether a consequential domain decision deserves a sparse ADR before approving a Spec or Plan
+description: Use when resolving ambiguous business language, scenarios, boundaries, or ADR-worthy domain decisions
+weight: heavy
 ---
 
 # 业务领域建模
+
+## 不要进入本 Skill
+
+- 术语清晰、无歧义 → 直接写 Spec
+- 只是数据库表/类名/字段定义 → 留给执行 Agent
+- 想把所有业务名词都塞进词汇表 → 直接拒绝
+- 还没有真实业务场景验证就建模 → 等具体场景
+
+## 入口检查
+
+- [ ] 至少有一个术语/边界/不变量存在多种合理解释
+- [ ] 解释错误会改变业务结果（数值、权限、状态、契约）
+- [ ] 能用具体 Given/When/Then 场景验证边界
+- [ ] 没有更好的入口（外部事实走 `$ep-research`,长期架构走 `$ep-architecture`）
+
+## 输出契约
+
+- 规范术语清单（每个术语的内涵/外延/适用上下文）
+- 关键场景 + 反例（Given/When/Then）
+- 不变量清单（描述业务结果,不绑定实现）
+- ADR 仅在"难以逆转 + 脱离背景会意外 + 存在真实取舍"三个条件都满足时创建
+- 详细协议见 [domain-language.md](references/domain-language.md)、[scenario-and-invariants.md](references/scenario-and-invariants.md)、[context-and-adr.md](references/context-and-adr.md)
 
 ## 核心原则
 

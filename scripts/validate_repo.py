@@ -11,6 +11,7 @@ from urllib.parse import unquote
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS = ROOT / "skills"
 EXPECTED_IMPLICIT = {"ep-chinese-writing", "ep-code-change"}
+EXPECTED_LIGHT = EXPECTED_IMPLICIT
 ERRORS: list[str] = []
 
 
@@ -90,6 +91,12 @@ def validate_skills() -> set[str]:
             fail(f"{skill_path.relative_to(ROOT)}: name must match directory")
         if not values.get("description"):
             fail(f"{skill_path.relative_to(ROOT)}: description is required")
+        weight = values.get("weight")
+        expected_weight = "light" if directory.name in EXPECTED_LIGHT else "heavy"
+        if weight != expected_weight:
+            fail(
+                f"{skill_path.relative_to(ROOT)}: weight must be {expected_weight!r}, got {weight!r}"
+            )
 
         metadata = metadata_path.read_text(encoding="utf-8")
         if f"${directory.name}" not in metadata:

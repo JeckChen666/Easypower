@@ -1,13 +1,37 @@
 ---
 name: ep-architecture
-description: Use when the user or another Easypower skill explicitly asks to compare and approve a consequential architecture decision involving computation, storage, interfaces, consistency, scaling, migration, or system structure for a business capability
+description: Use when comparing architecture decisions: computation, storage, interfaces, migration, system structure
+weight: heavy
 ---
 
 # 设计业务架构
 
+## 不要进入本 Skill
+
+- 普通实现选择（库选型、字段命名、局部重构）→ 留给执行 Agent
+- 仅靠讨论或现有证据就能决定 → 返回 `ep-planning` 直接拍板
+- 已有确定方案,只缺架构文档 → 写 ADR,不进入本 Skill
+- 只是为了看起来专业而制造设计阶段 → 直接拒绝
+
+## 入口检查
+
+- [ ] 决定会影响 Spec 或多个业务切片
+- [ ] 存在至少两个实质不同的系统方案
+- [ ] 业务负载、不变量或迁移路径有可观察的区分维度
+- [ ] 没有更好的入口（事实不清走 `$ep-research`,长期系统取舍走 `$ep-architecture`,状态/计算/交互不清走 `$ep-prototyping`）
+
+## 输出契约
+
+- 推荐方案 + 至少一个被否决的替代方案（同一决策矩阵比较）
+- 业务负载模型（不只是单个性能数字）
+- 业务契约、Schema、迁移、回滚约束回写到 Spec / 主 Plan
+- 详细协议见 [decision-framework.md](references/decision-framework.md)、[architecture-patterns.md](references/architecture-patterns.md)
+
 ## 核心原则
 
 架构服务于已知的业务场景、负载和不变量。先证明决定解决了什么业务问题，再比较系统级方案；不要从技术品牌、单一性能数字或抽象偏好反推需求。
+
+**第一性原理：不为尚未出现的负载、租户、规模或迁移路径预留方案。** 方案比较只看当前业务问题，不被未来场景倒推。如果方案在 6 个月内不可逆，才进入"难以逆转"清单要求慎重；否则按"现在简单、以后再升级"处理。出现"以后可能用到"的扩展点假设时直接砍掉，等真实需求出现再加。
 
 本 Skill 只处理会影响 Spec（业务规格）或多个业务切片的重要决定。普通实现选择留给 Agent（执行代理）；没有重要架构未知项时返回上游流程，不制造额外设计阶段。
 

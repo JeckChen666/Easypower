@@ -13,8 +13,8 @@ Easypower 目前有十五个正式 Skill：
 
 - [ep-use-easypower](skills/ep-use-easypower/SKILL.md)：在用户明确要求使用 Easypower 时，根据上下文选择最小且足够的正式流程。
 - [ep-code-change](skills/ep-code-change/SKILL.md)：自动区分快速代码或开发操作和需要正式规划的复杂任务，避免为小改动机械新增测试。
-- [ep-planning](skills/ep-planning/SKILL.md)：与用户形成并批准业务 Spec 和渐进式 Plan；
-- [ep-execution](skills/ep-execution/SKILL.md)：在全新上下文中消费已批准的 Spec 和 Plan，持续执行并留下业务证据。
+- [ep-planning](skills/ep-planning/SKILL.md)：与用户形成并批准业务 Spec 和渐进式 Plan；重度任务在 Spec/Plan 完成后、用户审批前自动进行对抗性审查（多视角评审）。
+- [ep-execution](skills/ep-execution/SKILL.md)：在全新上下文中消费已批准的 Spec 和 Plan，通过 Agent 工具派发子代理持续执行并留下业务证据。支持当前窗口派子代理、其他窗口（Goal Prompt）与协同模式三种执行方式。
 - [ep-architecture](skills/ep-architecture/SKILL.md)：围绕业务负载比较计算、存储、接口和迁移方案，形成可批准的架构决定。
 - [ep-diagnosis](skills/ep-diagnosis/SKILL.md)：从错误业务结果、间歇故障或性能退化建立 Feedback Loop（反馈闭环），定位根因并证明恢复。
 - [ep-delivery-review](skills/ep-delivery-review/SKILL.md)：分别审查业务契约符合度、工程风险和交付证据可信度。
@@ -33,16 +33,23 @@ Easypower 目前有十五个正式 Skill：
 
 完整候选能力、来源映射和建设顺序见 [Easypower Skill 能力地图](SKILL-MAP.md)。
 
+任务的概念框架（三阶段 × 三规模 × 两模式）见 [Easypower 任务形态](TASK-SHAPE.md)。
+
 它解决以下问题：
 
 - 日常对话不应自动进入重型开发流程；
 - 清晰、局部且可逆的代码修改应快速完成，不机械新增测试；
-- Spec 应先明确业务目标、规则和验收依据；
+- 注释和日志强度应匹配代码的生命周期与重要性，不为临时脚本强行加注；
+- Spec 应先明确业务目标、规则和验收依据，且不默认包含未验证的边缘场景；
 - 重要用户路径和产品形态应在 Spec 批准前完成走查；
+- 重度任务的 Spec/Plan 在用户审批前应经过多视角对抗性审查；
 - Plan 应按端到端业务切片组织，而不是按技术层拆分；
 - 大型 Plan 应使用主 Plan 和按需子 Plan 渐进展开；
 - 核心业务闭环应先完成并验证，再推进增强能力；
 - 测试强度应由业务风险和影响范围决定；
+- 执行阶段通过真实子代理隔离大型任务的实现细节与决策上下文；
+- 用户可以选择协同模式逐步审批每个关键节点，建立对代码的 ownership；
+- 跨窗口执行可通过 Standalone Goal Prompt 自包含地运行整个 Plan；
 - 用户批准范围内可以由子代理持续执行，重大变化必须升级审批。
 
 ## 安装
@@ -180,8 +187,13 @@ Easypower 保留工程团队常用的英文术语，第一次出现时使用 `En
 - [Spec 协议](skills/ep-planning/references/spec-protocol.md)
 - [Plan 协议](skills/ep-planning/references/plan-protocol.md)
 - [BI 报表规划示例](skills/ep-planning/references/bi-report-example.md)
+- [对抗性审查协议](skills/ep-planning/references/adversarial-review.md)（重度任务多视角评审）
 - [执行状态协议](skills/ep-execution/references/execution-state.md)
+- [Agent Brief 模板](skills/ep-execution/references/agent-brief.md)
+- [子代理模式](skills/ep-execution/references/subagent-patterns.md)
 - [风险验证与恢复](skills/ep-execution/references/validation-and-recovery.md)
+- [协同模式 Web 参考](skills/ep-execution/references/collaborative-web.md)
+- [Standalone Goal Prompt](skills/ep-execution/references/standalone-goal-prompt.md)
 - [业务架构决策框架](skills/ep-architecture/references/decision-framework.md)
 - [Feedback Loop（业务反馈闭环）](skills/ep-diagnosis/references/feedback-loops.md)
 - [业务契约评审轴](skills/ep-delivery-review/references/business-contract-axis.md)

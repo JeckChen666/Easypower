@@ -1,9 +1,32 @@
 ---
 name: ep-product-design
-description: Use when the user or another Easypower skill explicitly asks to shape a software product before approving its Spec because important user journeys, information hierarchy, interaction states, or tradeoffs between user value, business scope, and architecture remain unclear
+description: Use when shaping a product before Spec approval: user journeys, information hierarchy, interactions
+weight: heavy
 ---
 
 # 塑造产品体验
+
+## 不要进入本 Skill
+
+- 没有用户操作环节的纯后端任务 → 不进入
+- 文案微调、视觉调整、已有明确交互的小改动 → 留给执行 Agent
+- "真实用户 Agent" 凭空代表真实用户 → 直接拒绝
+- 架构 / 数据模型取舍 → 走 `$ep-architecture`,不冒充产品决策
+
+## 入口检查
+
+- [ ] 重要用户路径、信息层级或交互存在多种合理方案
+- [ ] 需要在 Spec 批准前确定产品形态
+- [ ] 有用户证据或可构造的假设清单
+- [ ] 没有更好的入口（运行验证走 `$ep-prototyping`,外部事实走 `$ep-research`,多角色评审走 `$ep-orchestration`）
+
+## 输出契约
+
+- 体验契约：主要用户 + 关键任务 + 目标路径 + 信息优先级 + 关键状态 + 效率要求
+- 2-3 个结构明显不同的候选方案（同一高频任务走查）
+- 被否决方案 + 待验证假设
+- 结论回写 Spec,不形成第二份长期业务规格
+- 详细协议见 [experience-protocol.md](references/experience-protocol.md)、[role-contracts.md](references/role-contracts.md)
 
 ## 核心原则
 

@@ -1,9 +1,32 @@
 ---
 name: ep-large-project
-description: Use when the user explicitly asks to organize and progressively clarify a business initiative that is too large for one agent context and still too ambiguous for an approvable Spec or Plan, by maintaining a durable decision map, current frontier, dependencies, unresolved fog, and cross-session handoff
+description: Use for cross-context ambiguous initiatives needing a decision map, frontier, and cross-session handoff
+weight: heavy
 ---
 
 # 大型工作导航
+
+## 不要进入本 Skill
+
+- 需求已经清楚 → 走 `$ep-planning`
+- 已有批准 Spec 和主 Plan → 走 `$ep-execution`
+- 只是单个未知项（术语、外部事实、运行问题）→ 走对应的 `$ep-research` / `$ep-prototyping` / `$ep-domain-modeling`
+- 想做长期项目管理或排期跟踪 → 不是本 Skill 的职责
+
+## 入口检查
+
+- [ ] 目标/影响范围超过一个 Agent 上下文
+- [ ] 关键业务边界/口径/方案仍模糊,无法写可批准 Spec
+- [ ] 多个后续决策需要共享前序结论并跨会话恢复
+- [ ] 用户明确希望用本 Skill（不自动触发）
+
+## 输出契约
+
+- Decision Map：Destination、已决事项、Frontier、Fog、范围外
+- Decision Ticket：单问题 + 业务影响 + 依赖 + 决策者 + 完成证据
+- 跨会话恢复：磁盘状态 + Frontier 入口
+- 最终交付：`Ready for Spec` 状态 + 地图和票据路径,然后交接 `$ep-planning`
+- 详细协议见 [decision-map.md](references/decision-map.md)、[decision-ticket.md](references/decision-ticket.md)、[frontier-and-recovery.md](references/frontier-and-recovery.md)
 
 ## 核心原则
 
